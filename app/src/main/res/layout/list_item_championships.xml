@@ -10,7 +10,7 @@
 
 
     <TextView
-        android:id="@+id/championship_list_number"
+        android:id="@+id/championshipListNumber"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_weight="0"
@@ -29,7 +29,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/championship_list_name"
+            android:id="@+id/championshipListName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -40,7 +40,7 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/championship_list_logo"
+        android:id="@+id/championshipListLogo"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_weight="1"

@@ -27,7 +27,7 @@ public class DBManagerUser {
         dbHelper.close();
     }
 
-    public void insert(String name , String lastname, String birthdate, String email, String address , String username, String password, int favorite_number, int favorite_car, int favorite_track, int hated_track, byte[] profile_picture) {
+    public void insert(String name, String lastname, String birthdate, String email, String address, String username, String password, int favorite_number, String favorite_car, String favorite_track, String hated_track, byte[] profile_picture) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("name", name);
         contentValues.put("lastname", lastname);
@@ -45,7 +45,7 @@ public class DBManagerUser {
     }
 
     public Cursor fetch() {
-        String[] columns = {"name" , "lastname", "birthdate", "email", "address", "username", "password", "favorite_number", "favorite_car", "favorite_track", "hated_track", "profile_picture"};
+        String[] columns = {"name", "lastname", "birthdate", "email", "address", "username", "password", "favorite_number", "favorite_car", "favorite_track", "hated_track", "profile_picture"};
         Cursor cursor = database.query("user", columns, null, null, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();
@@ -53,7 +53,7 @@ public class DBManagerUser {
         return cursor;
     }
 
-    public int update(String name , String lastname, String birthdate, String email, String address , String username, String password, int favorite_number, int favorite_car, int favorite_track, int hated_track, Byte profile_picture) {
+    public int update(String name, String lastname, String birthdate, String email, String address, String username, String password, int favorite_number, String favorite_car, String favorite_track, String hated_track, Byte profile_picture) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("name", name);
         contentValues.put("lastname", lastname);
@@ -71,7 +71,7 @@ public class DBManagerUser {
         return columnsAffected;
     }
 
-    public void delete() {
-        database.delete("user", null, null);
+    public void delete(String username) {
+        database.delete("user", "username=?", new String[]{username});
     }
 }

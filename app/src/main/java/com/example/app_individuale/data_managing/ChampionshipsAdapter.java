@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -37,9 +36,9 @@ public class ChampionshipsAdapter extends RecyclerView.Adapter<ChampionshipsAdap
 
             super(itemView);
 
-            nameTextView = itemView.findViewById(R.id.championship_list_name);
-            numberListTextView = itemView.findViewById(R.id.championship_list_number);
-            logo = itemView.findViewById(R.id.championship_list_logo);
+            nameTextView = itemView.findViewById(R.id.championshipListName);
+            numberListTextView = itemView.findViewById(R.id.championshipListNumber);
+            logo = itemView.findViewById(R.id.championshipListLogo);
 
         }
     }
@@ -51,7 +50,7 @@ public class ChampionshipsAdapter extends RecyclerView.Adapter<ChampionshipsAdap
     public ChampionshipsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View itemView = inflater.inflate(R.layout.list_item, parent, false);
+        View itemView = inflater.inflate(R.layout.list_item_championships, parent, false);
         ViewHolder viewHolder = new ViewHolder(itemView);
         return viewHolder;
     }
