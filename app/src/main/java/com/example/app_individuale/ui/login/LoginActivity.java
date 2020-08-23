@@ -21,10 +21,14 @@ import com.example.app_individuale.database.dbmanager.DBManagerUser;
 import com.example.app_individuale.ui.signup.SignupActivity;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.time.Duration;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class LoginActivity extends AppCompatActivity {
+
+    Boolean accountCreated= false;
 
     private DBManagerPreferences dbManagerPreferences = null;
     private DBManagerUser dbManagerUser = null;
@@ -51,6 +55,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        accountCreated = getIntent().getBooleanExtra("accountCreated",false);
 
         dbManagerPreferences = new DBManagerPreferences(this);
         dbManagerPreferences.open();
@@ -75,6 +80,12 @@ public class LoginActivity extends AppCompatActivity {
             setContentView(R.layout.activity_login);
             ButterKnife.bind(this);
 
+            if(accountCreated){
+                Toast toast = Toast.makeText(this, "Account creato!", Toast.LENGTH_LONG);
+                toast.show();
+            }
+
+
             _signupLink.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -84,11 +95,6 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });
 
-
-            Cursor userCursor = dbManagerUser.fetch();
-            if(userCursor.getCount()==1) {
-                _signupLink.setVisibility(View.GONE);
-            }
 
             _loginButton.setOnClickListener(new View.OnClickListener() {
                 @Override

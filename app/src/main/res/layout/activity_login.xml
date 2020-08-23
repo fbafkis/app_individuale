@@ -40,13 +40,6 @@
             android:backgroundTint="#00FFFFFF"
             android:hint="username">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/signupUsernameEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#00FFFFFF"
-                android:inputType="text" />
-
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -131,6 +124,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/signupUsernameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#00FFFFFF"
+        android:inputType="text"
+        tools:layout_editor_absoluteX="-34dp"
+        tools:layout_editor_absoluteY="630dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -27,7 +27,7 @@ public class DBManagerUser {
         dbHelper.close();
     }
 
-    public void insert(String name, String lastname, String birthdate, String email, String address, String username, String password, int favorite_number, String favorite_car, String favorite_track, String hated_track, byte[] profile_picture) {
+    public void insert(String name, String lastname, String birthdate, String email, String address, String username, String password, int favorite_number, String favorite_car, String favorite_track, String hated_track, boolean hasCustomPicture,  byte[] profile_picture) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("name", name);
         contentValues.put("lastname", lastname);
@@ -40,12 +40,13 @@ public class DBManagerUser {
         contentValues.put("favorite_car", favorite_car);
         contentValues.put("favorite_track", favorite_track);
         contentValues.put("hated_track", hated_track);
+        contentValues.put("hasCustomPicture", hasCustomPicture);
         contentValues.put("profile_picture", profile_picture);
-        database.insert("user", null, contentValues);
+         database.insert("user", null, contentValues);
     }
 
     public Cursor fetch() {
-        String[] columns = {"name", "lastname", "birthdate", "email", "address", "username", "password", "favorite_number", "favorite_car", "favorite_track", "hated_track", "profile_picture"};
+        String[] columns = {"name", "lastname", "birthdate", "email", "address", "username", "password", "favorite_number", "favorite_car", "favorite_track", "hated_track","hasCustomPicture", "profile_picture"};
         Cursor cursor = database.query("user", columns, null, null, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();
@@ -53,7 +54,7 @@ public class DBManagerUser {
         return cursor;
     }
 
-    public int update(String name, String lastname, String birthdate, String email, String address, String username, String password, int favorite_number, String favorite_car, String favorite_track, String hated_track, Byte profile_picture) {
+    public int update(String name, String lastname, String birthdate, String email, String address, String username, String password, int favorite_number, String favorite_car, String favorite_track, String hated_track, Boolean hasCustomPicture, Byte profile_picture) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("name", name);
         contentValues.put("lastname", lastname);
@@ -67,6 +68,7 @@ public class DBManagerUser {
         contentValues.put("favorite_track", favorite_track);
         contentValues.put("hated_track", hated_track);
         contentValues.put("profile_picture", profile_picture);
+        contentValues.put("hasCustomPicture", hasCustomPicture);
         int columnsAffected = database.update("user", contentValues, null, null);
         return columnsAffected;
     }

@@ -141,7 +141,7 @@ public class SignupActivity extends AppCompatActivity implements DatePickerDialo
         String password="";
         String email="";
 
-        /*
+
 
         if (_signupNameEditText.getText().toString().isEmpty()) {
             setErrorTheme(_signupNameTextInputLayout);
@@ -251,7 +251,7 @@ public class SignupActivity extends AppCompatActivity implements DatePickerDialo
 
 
         if(nameOK && lastnameOK && addressOK && birthdateOK && emailOK && usernameOK && passwordOK && passwordConfirmOK){
-*/
+
             Intent intent = new Intent(getApplicationContext(), SignupActivity2.class);
             intent.putExtra("name", name);
             intent.putExtra("lastname", lastname);
@@ -264,7 +264,7 @@ public class SignupActivity extends AppCompatActivity implements DatePickerDialo
 
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 
-      //  }
+       }
 
 
     }
