@@ -1,8 +1,9 @@
-package com.example.app_individuale.ui.signup;
+package com.francescobertamini.app_individuale.ui.signup;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -10,12 +11,15 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import com.example.app_individuale.R;
+import android.widget.Toast;
 
+import com.francescobertamini.app_individuale.R;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
+import com.francescobertamini.app_individuale.database.DBHelper;
+import com.francescobertamini.app_individuale.database.dbmanager.DBManagerUser;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Calendar;
@@ -78,6 +82,14 @@ public class SignupActivity extends AppCompatActivity implements DatePickerDialo
             }
         });
 
+        _signupBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+
+            }
+        });
 
         _signupNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,18 +98,7 @@ public class SignupActivity extends AppCompatActivity implements DatePickerDialo
             }
         });
 
-        _signupBackButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                    finish();
-                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-
-            }
-        });
-
     }
-
-
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -121,7 +122,6 @@ public class SignupActivity extends AppCompatActivity implements DatePickerDialo
         _signupBirthDateEditText.setText(currentDateString);
     }
 
-
     public void checkFields() {
 
         Boolean birthdateOK = false;
@@ -133,99 +133,91 @@ public class SignupActivity extends AppCompatActivity implements DatePickerDialo
         Boolean usernameOK = false;
         Boolean addressOK = false;
 
-        String name="";
-        String lastname="";
-        String address="";
-        String birthdate="";
-        String username="";
-        String password="";
-        String email="";
+        String name = "";
+        String lastname = "";
+        String address = "";
+        String birthdate = "";
+        String username = "";
+        String password = "";
+        String email = "";
 
-
-
-        if (_signupNameEditText.getText().toString().isEmpty()) {
+        if (_signupNameEditText.getText().toString().trim().isEmpty()) {
             setErrorTheme(_signupNameTextInputLayout);
             _signupNameTextInputLayout.setHint("Inserisci il tuo nome!");
             nameOK = false;
-        } else if (!validateName(_signupNameEditText.getText().toString())) {
+        } else if (!validateName(_signupNameEditText.getText().toString().trim())) {
             setErrorTheme(_signupNameTextInputLayout);
             _signupNameTextInputLayout.setHint("Inserisci un nome valido!");
             nameOK = false;
         } else {
             nameOK = true;
-            name =_signupNameEditText.getText().toString();
+            name = _signupNameEditText.getText().toString().trim();
         }
 
-
-        if (_signupLastnameEditText.getText().toString().isEmpty()) {
+        if (_signupLastnameEditText.getText().toString().trim().isEmpty()) {
             setErrorTheme(_signupLastnameTextInputLayout);
             _signupLastnameTextInputLayout.setHint("Inserisci il tuo cognome!");
             lastnameOK = false;
-        } else if (!validateName(_signupLastnameEditText.getText().toString())) {
+        } else if (!validateName(_signupLastnameEditText.getText().toString().trim())) {
             setErrorTheme(_signupLastnameTextInputLayout);
             _signupLastnameTextInputLayout.setHint("Inserisci un cognome valido!");
             lastnameOK = false;
         } else {
             lastnameOK = true;
-            lastname = _signupLastnameEditText.getText().toString();
+            lastname = _signupLastnameEditText.getText().toString().trim();
         }
 
-
-        if (_signupAddressEditText.getText().toString().isEmpty()) {
+        if (_signupAddressEditText.getText().toString().trim().isEmpty()) {
             setErrorTheme(_signupAddressTextInputLayout);
             _signupAddressTextInputLayout.setHint("Inserisci il tuo indirizzo!");
             addressOK = false;
         } else {
 
-            addressOK=true;
-            address= _signupAddressEditText.getText().toString();
+            addressOK = true;
+            address = _signupAddressEditText.getText().toString().trim();
 
         }
 
-
-        if (_signupBirthDateEditText.getText().toString().isEmpty()) {
+        if (_signupBirthDateEditText.getText().toString().trim().isEmpty()) {
             setErrorTheme(_signupBirthdateInputLayout);
             _signupBirthdateInputLayout.setHint("Inserisci ls data di nascita!");
             birthdateOK = false;
-        } else if (!validateBirthDate(_signupBirthDateEditText.getText().toString())) {
+        } else if (!validateBirthDate(_signupBirthDateEditText.getText().toString().trim())) {
             setErrorTheme(_signupBirthdateInputLayout);
             _signupBirthdateInputLayout.setHint("Inserisci una data valida!");
             birthdateOK = false;
         } else {
             birthdateOK = true;
-            birthdate = _signupBirthDateEditText.getText().toString();
+            birthdate = _signupBirthDateEditText.getText().toString().trim();
         }
 
-
-        if (_signupEmailEditText.getText().toString().isEmpty()) {
+        if (_signupEmailEditText.getText().toString().trim().isEmpty()) {
             setErrorTheme(_signupEmailTextInputLayout);
             _signupEmailTextInputLayout.setHint("Inserisci la tua mail!");
             emailOK = false;
-        } else if (!validateMail(_signupEmailEditText.getText().toString())) {
+        } else if (!validateMail(_signupEmailEditText.getText().toString().trim())) {
             setErrorTheme(_signupEmailTextInputLayout);
             _signupEmailTextInputLayout.setHint("Inserisci una mail valida!");
             emailOK = false;
         } else {
             emailOK = true;
-            email = _signupEmailEditText.getText().toString();
+            email = _signupEmailEditText.getText().toString().trim();
         }
 
-
-        if (_signupUsernameEditText.getText().toString().isEmpty()) {
+        if (_signupUsernameEditText.getText().toString().trim().isEmpty()) {
             setErrorTheme(_signupUsernameTextInputLayout);
             _signupUsernameTextInputLayout.setHint("Scegli l'username!");
             usernameOK = false;
         } else {
             usernameOK = true;
-            username = _signupUsernameEditText.getText().toString();
+            username = _signupUsernameEditText.getText().toString().trim();
         }
 
-
-        if (_signupPasswordEditText.getText().toString().isEmpty()) {
+        if (_signupPasswordEditText.getText().toString().trim().isEmpty()) {
             setErrorTheme(_signupPasswordTextInputLayout);
             _signupPasswordTextInputLayout.setHint("Inserisci la tua password!");
             passwordOK = false;
-        } else if (_signupPasswordEditText.getText().toString().length() < 8) {
+        } else if (_signupPasswordEditText.getText().toString().trim().length() < 8) {
             setErrorTheme(_signupPasswordTextInputLayout);
             _signupPasswordTextInputLayout.setHint("Almeno 8 caratteri");
             passwordOK = false;
@@ -233,42 +225,57 @@ public class SignupActivity extends AppCompatActivity implements DatePickerDialo
             passwordOK = true;
         }
 
-
-        if (_signupConfirmPasswordEditText.getText().toString().isEmpty()) {
+        if (_signupConfirmPasswordEditText.getText().toString().trim().isEmpty()) {
             setErrorTheme(_signupConfirmPasswordTextInputLayout);
             _signupConfirmPasswordTextInputLayout.setHint("Conferma la tua password!");
             passwordConfirmOK = false;
-        } else if (!_signupPasswordEditText.getText().toString().equals(_signupConfirmPasswordEditText.getText().toString())) {
+        } else if (!_signupPasswordEditText.getText().toString().trim().equals(_signupConfirmPasswordEditText.getText().toString().trim())) {
             setErrorTheme(_signupConfirmPasswordTextInputLayout);
             _signupConfirmPasswordTextInputLayout.setHint("Password non corrispondenti!");
             passwordConfirmOK = false;
         } else {
             passwordConfirmOK = true;
         }
-        if(passwordOK && passwordConfirmOK){
-            password= _signupPasswordEditText.getText().toString();
+        if (passwordOK && passwordConfirmOK) {
+            password = _signupPasswordEditText.getText().toString().trim();
         }
 
+        if (nameOK && lastnameOK && addressOK && birthdateOK && emailOK && usernameOK && passwordOK && passwordConfirmOK) {
 
-        if(nameOK && lastnameOK && addressOK && birthdateOK && emailOK && usernameOK && passwordOK && passwordConfirmOK){
+            if (checkDuplicateUsers(username, email) == 1) {
 
-            Intent intent = new Intent(getApplicationContext(), SignupActivity2.class);
-            intent.putExtra("name", name);
-            intent.putExtra("lastname", lastname);
-            intent.putExtra("email", email);
-            intent.putExtra("address", address);
-            intent.putExtra("username", username);
-            intent.putExtra("birthdate", birthdate);
-            intent.putExtra("password",password);
-            startActivity(intent);
+                Toast duplicateUsernameWarningToast = Toast.makeText(this, "Esiste già un utente con username uguale!", Toast.LENGTH_LONG);
+                duplicateUsernameWarningToast.show();
 
-            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            } else if (checkDuplicateUsers(username, email) == 2) {
 
-       }
+                Toast duplicateEmailWarningToast = Toast.makeText(this, "Esiste già un utente con email uguale!", Toast.LENGTH_LONG);
+                duplicateEmailWarningToast.show();
 
+            } else if (checkDuplicateUsers(username, email) == 3) {
+
+                Toast duplicateUserWarningToast = Toast.makeText(this, "Esiste già un utente con username e email uguali!", Toast.LENGTH_LONG);
+                duplicateUserWarningToast.show();
+
+            } else {
+
+                Intent intent = new Intent(getApplicationContext(), SignupActivity2.class);
+                intent.putExtra("name", name);
+                intent.putExtra("lastname", lastname);
+                intent.putExtra("email", email);
+                intent.putExtra("address", address);
+                intent.putExtra("username", username);
+                intent.putExtra("birthdate", birthdate);
+                intent.putExtra("password", password);
+                startActivity(intent);
+
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+
+            }
+
+        }
 
     }
-
 
     private void setErrorTheme(TextInputLayout t) {
 
@@ -303,6 +310,27 @@ public class SignupActivity extends AppCompatActivity implements DatePickerDialo
 
         String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
         return email.matches(regex);
+
+    }
+
+    private int checkDuplicateUsers(String username, String email) {
+
+        DBHelper dbHelper = new DBHelper(this);
+        DBManagerUser dbManagerUser = new DBManagerUser(this);
+        dbManagerUser.open();
+
+        Cursor userCursor = dbManagerUser.fetchByUsername(username);
+        Cursor emailCursor = dbManagerUser.fetchByEmail(email);
+
+        if (userCursor.getCount() > 0)
+            return 1;
+        if (emailCursor.getCount() > 0)
+            return 2;
+        if (userCursor.getCount() > 0 && emailCursor.getCount() > 0)
+            return 3;
+
+        return 0;
+
 
     }
 }

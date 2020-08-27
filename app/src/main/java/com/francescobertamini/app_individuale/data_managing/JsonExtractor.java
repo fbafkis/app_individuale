@@ -1,11 +1,9 @@
-package com.example.app_individuale.data_managing;
+package com.francescobertamini.app_individuale.data_managing;
 
-import android.app.Activity;
 import android.content.Context;
 
-import com.example.app_individuale.R;
+import com.francescobertamini.app_individuale.R;
 import com.google.gson.JsonArray;
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 

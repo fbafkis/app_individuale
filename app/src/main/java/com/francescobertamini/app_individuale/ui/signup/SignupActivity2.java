@@ -1,4 +1,4 @@
-package com.example.app_individuale.ui.signup;
+package com.francescobertamini.app_individuale.ui.signup;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.esafirm.imagepicker.model.Image;
@@ -23,16 +22,15 @@ import com.esafirm.imagepicker.features.ImagePicker;
 import com.esafirm.imagepicker.features.ImagePickerComponentHolder;
 import com.esafirm.imagepicker.features.ReturnMode;
 import com.esafirm.imagepicker.features.imageloader.DefaultImageLoader;
-import com.example.app_individuale.database.DBHelper;
-import com.example.app_individuale.database.dbmanager.DBManagerUser;
-import com.example.app_individuale.ui.login.LoginActivity;
+import com.francescobertamini.app_individuale.database.dbmanager.DBManagerUser;
+import com.francescobertamini.app_individuale.ui.login.LoginActivity;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.JsonObject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import com.example.app_individuale.R;
+import com.francescobertamini.app_individuale.R;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -114,6 +112,7 @@ public class SignupActivity2 extends AppCompatActivity {
         _signupBackButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 finish();
                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
@@ -121,8 +120,6 @@ public class SignupActivity2 extends AppCompatActivity {
         });
 
     }
-
-
 
     public void checkFields() {
 
@@ -132,8 +129,7 @@ public class SignupActivity2 extends AppCompatActivity {
         Boolean hatedCircuitOK = false;
         Boolean hasCustomPicture = false;
 
-
-        if (_signupFavouriteNumberEditText.getText().toString().isEmpty()) {
+        if (_signupFavouriteNumberEditText.getText().toString().trim().isEmpty()) {
             setErrorTheme(_signupFavouriteNumberTextInputLayout);
             _signupFavouriteNumberTextInputLayout.setHint("Inserisci il tuo numero di gara!");
             numberOK = false;
@@ -145,10 +141,10 @@ public class SignupActivity2 extends AppCompatActivity {
         } else {
 
             numberOK = true;
-            favNumber = Integer.parseInt(_signupFavouriteNumberEditText.getText().toString());
+            favNumber = Integer.parseInt(_signupFavouriteNumberEditText.getText().toString().trim());
         }
 
-        if (_signupFavouriteCarEditText.getText().toString().isEmpty()) {
+        if (_signupFavouriteCarEditText.getText().toString().trim().isEmpty()) {
             setErrorTheme(_signupFavouriteCarTextInputLayout);
             _signupFavouriteCarTextInputLayout.setHint("Inserisci la tua auto preferita!");
             carOK = false;
@@ -156,10 +152,10 @@ public class SignupActivity2 extends AppCompatActivity {
         } else {
 
             carOK = true;
-            favCar = _signupFavouriteCarEditText.getText().toString();
+            favCar = _signupFavouriteCarEditText.getText().toString().trim();
         }
 
-        if (_signupFavouriteCircuitEditText.getText().toString().isEmpty()) {
+        if (_signupFavouriteCircuitEditText.getText().toString().trim().isEmpty()) {
             setErrorTheme(_signupFavouriteCircuitTextInputLayout);
             _signupFavouriteCircuitTextInputLayout.setHint("Inserisci il tuo circuito preferito!");
             favCicuitOK = false;
@@ -167,10 +163,10 @@ public class SignupActivity2 extends AppCompatActivity {
         } else {
 
             favCicuitOK = true;
-            favCirucit = _signupFavouriteCircuitEditText.getText().toString();
+            favCirucit = _signupFavouriteCircuitEditText.getText().toString().trim();
         }
 
-        if (_signupHatedCircuitNameEditText.getText().toString().isEmpty()) {
+        if (_signupHatedCircuitNameEditText.getText().toString().trim().isEmpty()) {
             setErrorTheme(_signupHatedCircuitTextInputLayout);
             _signupHatedCircuitTextInputLayout.setHint("Inserisci il tuo circuito più odiato!");
             hatedCircuitOK = false;
@@ -178,10 +174,10 @@ public class SignupActivity2 extends AppCompatActivity {
         } else {
 
             hatedCircuitOK = true;
-            hatedCircuit = _signupHatedCircuitNameEditText.getText().toString();
+            hatedCircuit = _signupHatedCircuitNameEditText.getText().toString().trim();
         }
 
-        if (images.size()==0 )
+        if (images.size() == 0)
             hasCustomPicture = false;
         else
             hasCustomPicture = true;
@@ -197,35 +193,38 @@ public class SignupActivity2 extends AppCompatActivity {
 
     private void createUser(Boolean hasCustomPicture) {
 
-        DBManagerUser dbManagerUser = new DBManagerUser(this);
-        dbManagerUser.open();
 
-        if(hasCustomPicture) {
 
-            image = images.get(0);
+            DBManagerUser dbManagerUser = new DBManagerUser(this);
+            dbManagerUser.open();
 
-            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-            Bitmap bitmap = BitmapFactory.decodeFile(image.getPath(), bmOptions);
-            bitmap = Bitmap.createBitmap(bitmap);
-            byte[] byteImage = getBitmapAsByteArray(bitmap);
+            if (hasCustomPicture) {
 
-            dbManagerUser.insert(name, lastname, birthdate, email, address, username, password, favNumber, favCar, favCirucit, hatedCircuit, true, byteImage);
-        } else {
+                image = images.get(0);
 
-            dbManagerUser.insert(name, lastname, birthdate, email, address, username, password, favNumber, favCar, favCirucit, hatedCircuit, false, null);
+                BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+                Bitmap bitmap = BitmapFactory.decodeFile(image.getPath(), bmOptions);
+                bitmap = Bitmap.createBitmap(bitmap);
+                byte[] byteImage = getBitmapAsByteArray(bitmap);
+
+                dbManagerUser.insert(name, lastname, birthdate, email, address, username, password, favNumber, favCar, favCirucit, hatedCircuit, true, byteImage, false);
+            } else {
+
+                dbManagerUser.insert(name, lastname, birthdate, email, address, username, password, favNumber, favCar, favCirucit, hatedCircuit, false, null, false);
+
+            }
+
+            dbManagerUser.close();
+
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+            intent.putExtra("accountCreated", true);
+            intent.putExtra("new_user_username", username);
+            startActivity(intent);
+            finish();
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 
         }
 
-
-        dbManagerUser.close();
-
-        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-        intent.putExtra("accountCreated", true);
-        startActivity(intent);
-        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-
-
-    }
 
     public byte[] getBitmapAsByteArray(Bitmap bitmap) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -291,6 +290,8 @@ public class SignupActivity2 extends AppCompatActivity {
                 .load(images.get(0).getPath())
                 .into(_signupProfilePictureImageView);
     }
+
+
 }
 
 

@@ -1,4 +1,4 @@
-package com.example.app_individuale.ui.home;
+package com.francescobertamini.app_individuale.ui.home;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

@@ -1,4 +1,4 @@
-package com.example.app_individuale.database.dbmanager;
+package com.francescobertamini.app_individuale.database.dbmanager;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,19 +6,19 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.app_individuale.database.DBHelper;
+import com.francescobertamini.app_individuale.database.DBHelper;
 
-public class DBManagerPreferences {
+public class DBManagerStatus {
 
     private DBHelper dbHelper;
     private Context context;
     private SQLiteDatabase database;
 
-    public DBManagerPreferences(Context c) {
+    public DBManagerStatus(Context c) {
         context = c;
     }
 
-    public DBManagerPreferences open() throws SQLException {
+    public DBManagerStatus open() throws SQLException {
         dbHelper = new DBHelper(context);
         database = dbHelper.getWritableDatabase();
         return this;
@@ -31,22 +31,22 @@ public class DBManagerPreferences {
     //Insert non necessario.
 
     public Cursor fetch() {
-        String[] columns = {"remember_me"};
-        Cursor cursor = database.query("preferences", columns, null, null, null, null, null);
+        String[] columns = {"is_user_logged", "user_logged"};
+        Cursor cursor = database.query("status", columns, null, null, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();
         }
         return cursor;
     }
 
-    public int updateRememberMe(int remember_me) {
+    public int update(boolean isUserLogged, String userLogged ) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put("remember_me", remember_me);
-        int columnsAffected = database.update("preferences", contentValues, null, null);
+        contentValues.put("is_user_logged", isUserLogged);
+        contentValues.put("user_logged", userLogged);
+
+        int columnsAffected = database.update("status", contentValues, null, null);
         return columnsAffected;
     }
-
-
 
 
     //Delete non necessario.

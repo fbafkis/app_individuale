@@ -1,4 +1,4 @@
-package com.example.app_individuale.data_managing;
+package com.francescobertamini.app_individuale.data_managing;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,7 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.app_individuale.R;
+import com.francescobertamini.app_individuale.R;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 

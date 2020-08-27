@@ -1,4 +1,4 @@
-package com.example.app_individuale.ui.championshipList;
+package com.francescobertamini.app_individuale.ui.championshipList;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,10 +13,10 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.app_individuale.data_managing.ChampionshipsAdapter;
-import com.example.app_individuale.data_managing.JsonExtractor;
+import com.francescobertamini.app_individuale.data_managing.ChampionshipsAdapter;
+import com.francescobertamini.app_individuale.data_managing.JsonExtractor;
 
-import com.example.app_individuale.R;
+import com.francescobertamini.app_individuale.R;
 
 import java.io.IOException;
 

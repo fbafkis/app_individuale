@@ -1,4 +1,4 @@
-package com.example.app_individuale;
+package com.francescobertamini.app_individuale;
 
 import android.os.Bundle;
 import android.view.Menu;

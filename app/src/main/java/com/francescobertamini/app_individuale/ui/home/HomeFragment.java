@@ -1,18 +1,15 @@
-package com.example.app_individuale.ui.home;
+package com.francescobertamini.app_individuale.ui.home;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.example.app_individuale.R;
+import com.francescobertamini.app_individuale.R;
 
 public class HomeFragment extends Fragment {
 

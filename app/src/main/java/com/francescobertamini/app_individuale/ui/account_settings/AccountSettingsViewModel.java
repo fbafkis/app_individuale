@@ -1,4 +1,4 @@
-package com.example.app_individuale.ui.account_settings;
+package com.francescobertamini.app_individuale.ui.account_settings;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

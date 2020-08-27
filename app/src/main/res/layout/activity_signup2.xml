@@ -83,7 +83,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="#00FFFFFF"
-                android:inputType="text" />
+                android:inputType="textPersonName|text" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -117,7 +117,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#00FFFFFF"
-                android:inputType="text" />
+                android:inputType="textPersonName|text" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -134,7 +134,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#00FFFFFF"
-                android:inputType="text" />
+                android:inputType="textPersonName|text" />
 
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>

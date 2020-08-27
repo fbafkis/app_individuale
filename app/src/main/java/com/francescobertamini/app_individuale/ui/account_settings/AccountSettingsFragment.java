@@ -1,4 +1,4 @@
-package com.example.app_individuale.ui.account_settings;
+package com.francescobertamini.app_individuale.ui.account_settings;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.example.app_individuale.R;
+import com.francescobertamini.app_individuale.R;
 
 public class AccountSettingsFragment extends Fragment {
 

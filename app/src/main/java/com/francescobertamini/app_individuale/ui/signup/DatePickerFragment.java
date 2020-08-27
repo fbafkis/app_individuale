@@ -1,4 +1,4 @@
-package com.example.app_individuale.ui.signup;
+package com.francescobertamini.app_individuale.ui.signup;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import java.util.Calendar;
+import java.util.Date;
 
 public class DatePickerFragment extends DialogFragment {
 
@@ -21,7 +22,10 @@ public class DatePickerFragment extends DialogFragment {
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
         DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(),(DatePickerDialog.OnDateSetListener) getActivity(), day, month, year);
-        datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
+
+        datePickerDialog.getDatePicker().setMaxDate(new Date(102,0,1 ).getTime());
+        datePickerDialog.getDatePicker().setMinDate(new Date(0,0,1).getTime());
+
         return datePickerDialog;
     }
 }
