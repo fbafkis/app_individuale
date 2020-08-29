@@ -1,10 +1,18 @@
 package com.francescobertamini.app_individuale;
 
+import androidx.fragment.app.FragmentManager;
+
+import androidx.fragment.app.FragmentTransaction;
+
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -13,9 +21,25 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import java.io.IOException;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
+    public static String username;
+
+    @BindView(R.id.homeChampionshipLink)
+    LinearLayout _homeChampionshipLink;
+    @BindView(R.id.homeAccountSettingsLink)
+    LinearLayout _homeAccountSettingsLink;
+    @BindView(R.id.homeStandingsLink)
+    LinearLayout _homeStandingsLink;
+    @BindView(R.id.homeGalleryLink)
+    LinearLayout _homeGalleryLink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +47,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        username = getIntent().getStringExtra("username");
+
+
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -50,4 +78,7 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
+
 }
+

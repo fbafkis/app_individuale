@@ -27,7 +27,7 @@ public class DBManagerUser {
         dbHelper.close();
     }
 
-    public void insert(String name, String lastname, String birthdate, String email, String address, String username, String password, int favorite_number, String favorite_car, String favorite_track, String hated_track, boolean has_custom_picture,  byte[] profile_picture, Boolean remember_me) {
+    public void insert(String name, String lastname, String birthdate, String email, String address, String username, String password, int favorite_number, String favorite_car, String favorite_track, String hated_track, boolean has_custom_picture, byte[] profile_picture, Boolean remember_me) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("name", name);
         contentValues.put("lastname", lastname);
@@ -43,30 +43,26 @@ public class DBManagerUser {
         contentValues.put("has_custom_picture", has_custom_picture);
         contentValues.put("profile_picture", profile_picture);
         contentValues.put("remember_me", remember_me);
-         database.insert("user", null, contentValues);
+        database.insert("user", null, contentValues);
     }
 
-
-
     public Cursor fetchByUsername(String username) {
-        String[] columns = {"name", "lastname", "birthdate", "email", "address", "username", "password", "favorite_number", "favorite_car", "favorite_track", "hated_track","has_custom_picture", "profile_picture", "remember_me"};
-        Cursor cursor = database.query("user", columns, "username like '" + username + "'" , null, null, null, null);
+        String[] columns = {"name", "lastname", "birthdate", "email", "address", "username", "password", "favorite_number", "favorite_car", "favorite_track", "hated_track", "has_custom_picture", "profile_picture", "remember_me"};
+        Cursor cursor = database.query("user", columns, "username like '" + username + "'", null, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();
         }
         return cursor;
     }
 
-
     public Cursor fetchByEmail(String email) {
-        String[] columns = {"name", "lastname", "birthdate", "email", "address", "username", "password", "favorite_number", "favorite_car", "favorite_track", "hated_track","has_custom_picture", "profile_picture", "remember_me"};
+        String[] columns = {"name", "lastname", "birthdate", "email", "address", "username", "password", "favorite_number", "favorite_car", "favorite_track", "hated_track", "has_custom_picture", "profile_picture", "remember_me"};
         Cursor cursor = database.query("user", columns, "email like '" + email + "'", null, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();
         }
         return cursor;
     }
-
 
     public int update(String name, String lastname, String birthdate, String email, String address, String username, String password, int favorite_number, String favorite_car, String favorite_track, String hated_track, Boolean hasCustomPicture, Byte profile_picture, Boolean remember_me) {
         ContentValues contentValues = new ContentValues();
@@ -83,7 +79,7 @@ public class DBManagerUser {
         contentValues.put("hated_track", hated_track);
         contentValues.put("profile_picture", profile_picture);
         contentValues.put("has_custom_picture", hasCustomPicture);
-        contentValues.put("remember_me",  remember_me);
+        contentValues.put("remember_me", remember_me);
         int columnsAffected = database.update("user", contentValues, null, null);
         return columnsAffected;
     }
@@ -92,13 +88,24 @@ public class DBManagerUser {
         database.delete("user", "username=?", new String[]{username});
     }
 
-
-    public void updateRememberMe(String username, Boolean remember_me) {
+    public int updateRememberMeByUsername(String username, Boolean remember_me) {
 
         ContentValues contentValues = new ContentValues();
         contentValues.put("remember_me", remember_me);
-        database.update("user", contentValues, "username" + "= ?", new String[] {username});
+        int columnsAffected = database.update("user", contentValues, "username" + "= ?", new String[]{username});
 
+        return columnsAffected;
+
+
+    }
+
+    public int updateRememberMeByEmail(String email, Boolean remember_me) {
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("remember_me", remember_me);
+        int columnsAffected = database.update("user", contentValues, "email" + "= ?", new String[]{email});
+
+        return columnsAffected;
 
 
     }

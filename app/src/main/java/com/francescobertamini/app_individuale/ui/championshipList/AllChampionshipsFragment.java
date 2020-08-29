@@ -13,27 +13,28 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.francescobertamini.app_individuale.data_managing.ChampionshipsAdapter;
+import com.francescobertamini.app_individuale.data_managing.AllChampionshipsAdapter;
 import com.francescobertamini.app_individuale.data_managing.JsonExtractor;
 
 import com.francescobertamini.app_individuale.R;
 
 import java.io.IOException;
 
-public class ChampionshipListFragment extends Fragment {
+public class AllChampionshipsFragment extends Fragment{
 
     private ChampionshipListViewModel championshipListViewModel;
 
-    ChampionshipsAdapter championshipListAdapter;
+    AllChampionshipsAdapter adapter;
 
-    public ChampionshipListFragment() throws IOException {
+    public AllChampionshipsFragment() throws IOException {
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         championshipListViewModel =
                 ViewModelProviders.of(this).get(ChampionshipListViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_championship_list, container, false);
+        View root = inflater.inflate(R.layout.fragment_all_championships, container, false);
+
         championshipListViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
@@ -44,7 +45,7 @@ public class ChampionshipListFragment extends Fragment {
         JsonExtractor jsonExtractor = new JsonExtractor(this.getContext());
 
         try {
-             championshipListAdapter = new ChampionshipsAdapter(jsonExtractor.readJson(), this.getContext());
+            adapter = new AllChampionshipsAdapter(jsonExtractor.readJson(), this.getContext());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -52,13 +53,15 @@ public class ChampionshipListFragment extends Fragment {
 
         RecyclerView recyclerView = (RecyclerView) root.findViewById(R.id.championships_view);
 
-        recyclerView.setAdapter(championshipListAdapter);
+        recyclerView.setAdapter(adapter);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
 
         return root;
     }
+
+
 
 
 

@@ -2,7 +2,8 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mobile_navigation">
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/nav_home">
 
     <fragment
         android:id="@+id/nav_home"
@@ -10,23 +11,20 @@
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" >
         <action
-            android:id="@+id/action_nav_home_to_nav_gallery"
-            app:destination="@id/nav_championships"
-            app:enterAnim="@android:anim/slide_in_left" />
-        <action
             android:id="@+id/action_nav_home_to_nav_account_settings"
             app:destination="@id/nav_account_settings" />
+        <action
+            android:id="@+id/action_nav_home_to_championshipsFragment2"
+            app:destination="@id/nav_championships"/>
     </fragment>
-
-    <fragment
-        android:id="@+id/nav_championships"
-        android:name="com.francescobertamini.app_individuale.ui.championshipList.ChampionshipListFragment"
-        android:label="Championships"
-        tools:layout="@layout/fragment_championship_list" />
 
     <fragment
         android:id="@+id/nav_account_settings"
         android:name="com.francescobertamini.app_individuale.ui.account_settings.AccountSettingsFragment"
         android:label="Account settings"
         tools:layout="@layout/fragment_account_settings" />
+    <fragment
+        android:id="@+id/nav_championships"
+        android:name="com.francescobertamini.app_individuale.ui.championshipList.ChampionshipsFragment"
+        android:label="ChampionshipsFragment" />
 </navigation>

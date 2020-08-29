@@ -14,14 +14,14 @@ import com.francescobertamini.app_individuale.R;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-public class ChampionshipsAdapter extends RecyclerView.Adapter<ChampionshipsAdapter.ViewHolder> {
+public class AllChampionshipsAdapter extends RecyclerView.Adapter<AllChampionshipsAdapter.ViewHolder> {
 
-    JsonArray campionati;
+    JsonArray championships;
     Context context;
 
 
-    public ChampionshipsAdapter(JsonArray campionati, Context context) {
-        this.campionati = campionati;
+    public AllChampionshipsAdapter(JsonArray championships, Context context) {
+        this.championships = championships;
         this.context = context;
     }
 
@@ -47,18 +47,18 @@ public class ChampionshipsAdapter extends RecyclerView.Adapter<ChampionshipsAdap
     @NonNull
 
     @Override
-    public ChampionshipsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public AllChampionshipsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View itemView = inflater.inflate(R.layout.list_item_championships, parent, false);
+        View itemView = inflater.inflate(R.layout.list_item_all_championships, parent, false);
         ViewHolder viewHolder = new ViewHolder(itemView);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ChampionshipsAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull AllChampionshipsAdapter.ViewHolder holder, int position) {
 
-        JsonObject campionato = campionati.get(position).getAsJsonObject();
+        JsonObject campionato = championships.get(position).getAsJsonObject();
 
         TextView nameTextView = holder.nameTextView;
         TextView numberListTextView = holder.numberListTextView;
@@ -74,7 +74,6 @@ public class ChampionshipsAdapter extends RecyclerView.Adapter<ChampionshipsAdap
 
         int logo_drawable_id = context.getResources().getIdentifier( logo_res, "drawable", context.getPackageName());
 
-
         logo.setImageDrawable(context.getResources().getDrawable(logo_drawable_id));
 
     }
@@ -82,9 +81,9 @@ public class ChampionshipsAdapter extends RecyclerView.Adapter<ChampionshipsAdap
     @Override
     public int getItemCount() {
 
-        if (campionati.size() == 0)
+        if (championships.size() == 0)
             return 0;
-        else return campionati.size();
+        else return championships.size();
 
     }
 

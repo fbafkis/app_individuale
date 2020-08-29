@@ -13,12 +13,14 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.francescobertamini.app_individuale.MainActivity;
 import com.francescobertamini.app_individuale.R;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.francescobertamini.app_individuale.database.dbmanager.DBManagerStatus;
 import com.francescobertamini.app_individuale.database.dbmanager.DBManagerUser;
+import com.francescobertamini.app_individuale.ui.home.HomeFragment;
 import com.francescobertamini.app_individuale.ui.signup.SignupActivity;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -127,19 +129,35 @@ public class LoginActivity extends AppCompatActivity {
 
             if (loginResult) {
 
-                ///controllare per email!
-                if (_rememberMeCheckBox.isChecked())
-                    dbManagerUser.updateRememberMe(username, true);
+                if (_rememberMeCheckBox.isChecked()) {
+                    int columnAffected = dbManagerUser.updateRememberMeByUsername(username, true);
+                    if (columnAffected == 0)
+                        dbManagerUser.updateRememberMeByEmail(username, true);
+                }
 
-                loginProgressThemeEnd();
+                String actualUsername;
+                Cursor cursor = dbManagerUser.fetchByUsername(username);
+
+                if (cursor.getCount() > 0)
+                    actualUsername = username;
+                else {
+                    cursor = dbManagerUser.fetchByEmail(username);
+                    actualUsername = cursor.getString(cursor.getColumnIndex("username"));
+                }
+
+                dbManagerStatus.close();
+                dbManagerUser.close();
+
+
 
                 System.out.println("Login effettuato");
 
-                Toast successLoginToast = Toast.makeText(this, "Login effettuato!", Toast.LENGTH_LONG);
-                successLoginToast.show();
-
-                //  Intent intent = new Intent(getApplicationContext(), )
-
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                intent.putExtra("username", actualUsername);
+                startActivity(intent);
+                loginProgressThemeEnd();
+                finish();
             }
 
 
