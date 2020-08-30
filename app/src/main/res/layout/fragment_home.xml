@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.HomeFragment"
-    android:background="@drawable/home_bg">
+    android:background="@drawable/bg_home"
+    tools:context=".ui.home.HomeFragment">
 
 
     <TableLayout
@@ -160,7 +160,7 @@
             android:id="@+id/homeProfilePicture"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@drawable/ic_baseline_account_circle_24"
+            android:src="@drawable/ic_baseline_account_circle_100"
             app:civ_border_color="#FFFFFF"
             app:civ_border_width="3dp" />
 

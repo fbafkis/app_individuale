@@ -64,7 +64,7 @@ public class DBManagerUser {
         return cursor;
     }
 
-    public int update(String name, String lastname, String birthdate, String email, String address, String username, String password, int favorite_number, String favorite_car, String favorite_track, String hated_track, Boolean hasCustomPicture, Byte profile_picture, Boolean remember_me) {
+    public int update(String name, String lastname, String birthdate, String email, String address, String username, String password, int favorite_number, String favorite_car, String favorite_track, String hated_track, Boolean hasCustomPicture, byte[] profile_picture, Boolean remember_me) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("name", name);
         contentValues.put("lastname", lastname);
@@ -81,6 +81,14 @@ public class DBManagerUser {
         contentValues.put("has_custom_picture", hasCustomPicture);
         contentValues.put("remember_me", remember_me);
         int columnsAffected = database.update("user", contentValues, null, null);
+        return columnsAffected;
+    }
+
+    public int updatePicture(String username, Boolean hasCustomPicture, byte[] profile_picture) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("profile_picture", profile_picture);
+        contentValues.put("has_custom_picture", hasCustomPicture);
+        int columnsAffected = database.update("user", contentValues, "username" + "= ?", new String[]{username});
         return columnsAffected;
     }
 

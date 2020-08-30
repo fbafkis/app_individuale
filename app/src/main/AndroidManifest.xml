@@ -13,23 +13,18 @@
         <activity
             android:name="com.francescobertamini.app_individuale.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
-
-        <activity android:name="com.francescobertamini.app_individuale.ui.login.LoginActivity">
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name="com.francescobertamini.app_individuale.ui.login.LoginActivity"
+            android:windowSoftInputMode="stateVisible|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name="com.francescobertamini.app_individuale.ui.signup.SignupActivity"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:windowSoftInputMode="stateVisible|adjustResize"></activity>
         <activity android:name="com.francescobertamini.app_individuale.ui.signup.SignupActivity2"></activity>
-
-
     </application>
-
 </manifest>

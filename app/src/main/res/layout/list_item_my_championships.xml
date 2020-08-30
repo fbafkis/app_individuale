@@ -14,7 +14,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_weight="0"
-        android:background="@drawable/bg_championship_list"
+        android:background="@drawable/bg_championship_number"
         android:gravity="center"
         android:text="1"
         android:textColor="#FFFFFF"

@@ -131,49 +131,46 @@ public class SignupActivity2 extends AppCompatActivity {
 
         if (_signupFavouriteNumberEditText.getText().toString().trim().isEmpty()) {
             setErrorTheme(_signupFavouriteNumberTextInputLayout);
-            _signupFavouriteNumberTextInputLayout.setHint("Inserisci il tuo numero di gara!");
+            _signupFavouriteNumberTextInputLayout.setError("Inserisci il tuo numero di gara!");
             numberOK = false;
 
         } else if (_signupFavouriteNumberEditText.getText().length() > 3) {
             setErrorTheme(_signupFavouriteNumberTextInputLayout);
-            _signupFavouriteNumberTextInputLayout.setHint("Inserisci un numero valido!");
+            _signupFavouriteNumberTextInputLayout.setError("Inserisci un numero valido!");
             numberOK = false;
         } else {
-
             numberOK = true;
+            unsetErrorTheme(_signupFavouriteNumberTextInputLayout);
             favNumber = Integer.parseInt(_signupFavouriteNumberEditText.getText().toString().trim());
         }
 
         if (_signupFavouriteCarEditText.getText().toString().trim().isEmpty()) {
             setErrorTheme(_signupFavouriteCarTextInputLayout);
-            _signupFavouriteCarTextInputLayout.setHint("Inserisci la tua auto preferita!");
+            _signupFavouriteCarTextInputLayout.setError("Inserisci la tua auto preferita!");
             carOK = false;
-
         } else {
-
             carOK = true;
+            unsetErrorTheme(_signupFavouriteCarTextInputLayout);
             favCar = _signupFavouriteCarEditText.getText().toString().trim();
         }
 
         if (_signupFavouriteCircuitEditText.getText().toString().trim().isEmpty()) {
             setErrorTheme(_signupFavouriteCircuitTextInputLayout);
-            _signupFavouriteCircuitTextInputLayout.setHint("Inserisci il tuo circuito preferito!");
+            _signupFavouriteCircuitTextInputLayout.setError("Inserisci il tuo circuito preferito!");
             favCicuitOK = false;
-
         } else {
-
             favCicuitOK = true;
+            unsetErrorTheme(_signupFavouriteCircuitTextInputLayout);
             favCirucit = _signupFavouriteCircuitEditText.getText().toString().trim();
         }
 
         if (_signupHatedCircuitNameEditText.getText().toString().trim().isEmpty()) {
             setErrorTheme(_signupHatedCircuitTextInputLayout);
-            _signupHatedCircuitTextInputLayout.setHint("Inserisci il tuo circuito più odiato!");
+            _signupHatedCircuitTextInputLayout.setError("Inserisci il tuo circuito più odiato!");
             hatedCircuitOK = false;
-
         } else {
-
             hatedCircuitOK = true;
+            unsetErrorTheme(_signupHatedCircuitTextInputLayout);
             hatedCircuit = _signupHatedCircuitNameEditText.getText().toString().trim();
         }
 
@@ -232,10 +229,15 @@ public class SignupActivity2 extends AppCompatActivity {
         return outputStream.toByteArray();
     }
 
+
     private void setErrorTheme(TextInputLayout t) {
 
-        t.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#fa8282")));
+        t.setErrorEnabled(true);
+        t.setErrorIconDrawable(R.drawable.ic_baseline_error_outline_24);
+    }
 
+    private void unsetErrorTheme(TextInputLayout t) {
+        t.setErrorEnabled(false);
     }
 
     private ImagePicker getImagePicker() {

@@ -1,8 +1,10 @@
 package com.francescobertamini.app_individuale.ui.signup;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -27,51 +29,53 @@ import java.util.Calendar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import com.francescobertamini.app_individuale.R.*;
+
 public class SignupActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
-    @BindView(R.id.signupNameTextInputLayout)
+    @BindView(id.signupNameTextInputLayout)
     TextInputLayout _signupNameTextInputLayout;
-    @BindView(R.id.signupNameEditText)
+    @BindView(id.signupNameEditText)
     EditText _signupNameEditText;
-    @BindView(R.id.signupLastnameTextInputLayout)
+    @BindView(id.signupLastnameTextInputLayout)
     TextInputLayout _signupLastnameTextInputLayout;
-    @BindView(R.id.signupLastnameEditText)
+    @BindView(id.signupLastnameEditText)
     EditText _signupLastnameEditText;
-    @BindView(R.id.signupUsernameTextInputLayout)
+    @BindView(id.signupUsernameTextInputLayout)
     TextInputLayout _signupUsernameTextInputLayout;
-    @BindView(R.id.signupUsernameEditText)
+    @BindView(id.signupUsernameEditText)
     EditText _signupUsernameEditText;
-    @BindView(R.id.signupBirthdateInputLayout)
+    @BindView(id.signupBirthdateInputLayout)
     TextInputLayout _signupBirthdateInputLayout;
-    @BindView(R.id.signupBirthDateEditText)
+    @BindView(id.signupBirthDateEditText)
     EditText _signupBirthDateEditText;
-    @BindView(R.id.signupAddressTextInputLayout)
+    @BindView(id.signupAddressTextInputLayout)
     TextInputLayout _signupAddressTextInputLayout;
-    @BindView(R.id.signupAddressEditText)
+    @BindView(id.signupAddressEditText)
     EditText _signupAddressEditText;
-    @BindView(R.id.signupEmailTextInputLayout)
+    @BindView(id.signupEmailTextInputLayout)
     TextInputLayout _signupEmailTextInputLayout;
-    @BindView(R.id.signupEmailEditText)
+    @BindView(id.signupEmailEditText)
     EditText _signupEmailEditText;
-    @BindView(R.id.signupPasswordTextInputLayout)
+    @BindView(id.signupPasswordTextInputLayout)
     TextInputLayout _signupPasswordTextInputLayout;
-    @BindView(R.id.signupPasswordEditText)
+    @BindView(id.signupPasswordEditText)
     EditText _signupPasswordEditText;
-    @BindView(R.id.signupConfirmPasswordTextInputLayout)
+    @BindView(id.signupConfirmPasswordTextInputLayout)
     TextInputLayout _signupConfirmPasswordTextInputLayout;
-    @BindView(R.id.signupConfirmPasswordEditText)
+    @BindView(id.signupConfirmPasswordEditText)
     EditText _signupConfirmPasswordEditText;
-    @BindView(R.id.signupDatePickerButton)
+    @BindView(id.signupDatePickerButton)
     ImageButton _signupDatePickerButton;
-    @BindView(R.id.signupNextButton)
+    @BindView(id.signupNextButton)
     Button _signupNextButton;
-    @BindView(R.id.signupBackButton)
+    @BindView(id.signupBackButton)
     ImageButton _signupBackButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signup);
+        setContentView(layout.activity_signup);
         ButterKnife.bind(this);
 
         _signupDatePickerButton.setOnClickListener(new View.OnClickListener() {
@@ -86,7 +90,7 @@ public class SignupActivity extends AppCompatActivity implements DatePickerDialo
             @Override
             public void onClick(View v) {
                 finish();
-                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                overridePendingTransition(anim.slide_in_left, anim.slide_out_right);
 
             }
         });
@@ -143,98 +147,105 @@ public class SignupActivity extends AppCompatActivity implements DatePickerDialo
 
         if (_signupNameEditText.getText().toString().trim().isEmpty()) {
             setErrorTheme(_signupNameTextInputLayout);
-            _signupNameTextInputLayout.setHint("Inserisci il tuo nome!");
+            _signupNameTextInputLayout.setError("Inserisci il tuo nome!");
             nameOK = false;
         } else if (!validateName(_signupNameEditText.getText().toString().trim())) {
             setErrorTheme(_signupNameTextInputLayout);
-            _signupNameTextInputLayout.setHint("Inserisci un nome valido!");
+            _signupNameTextInputLayout.setError("Inserisci un nome valido!");
             nameOK = false;
         } else {
             nameOK = true;
+            unsetErrorTheme(_signupNameTextInputLayout);
             name = _signupNameEditText.getText().toString().trim();
         }
 
         if (_signupLastnameEditText.getText().toString().trim().isEmpty()) {
             setErrorTheme(_signupLastnameTextInputLayout);
-            _signupLastnameTextInputLayout.setHint("Inserisci il tuo cognome!");
+            _signupLastnameTextInputLayout.setError("Inserisci il tuo cognome!");
             lastnameOK = false;
         } else if (!validateName(_signupLastnameEditText.getText().toString().trim())) {
             setErrorTheme(_signupLastnameTextInputLayout);
-            _signupLastnameTextInputLayout.setHint("Inserisci un cognome valido!");
+            _signupLastnameTextInputLayout.setError("Inserisci un cognome valido!");
             lastnameOK = false;
         } else {
             lastnameOK = true;
+            unsetErrorTheme(_signupLastnameTextInputLayout);
             lastname = _signupLastnameEditText.getText().toString().trim();
         }
 
         if (_signupAddressEditText.getText().toString().trim().isEmpty()) {
             setErrorTheme(_signupAddressTextInputLayout);
-            _signupAddressTextInputLayout.setHint("Inserisci il tuo indirizzo!");
+            _signupAddressTextInputLayout.setError("Inserisci il tuo indirizzo!");
             addressOK = false;
         } else {
-
             addressOK = true;
+            unsetErrorTheme(_signupAddressTextInputLayout);
             address = _signupAddressEditText.getText().toString().trim();
 
         }
 
         if (_signupBirthDateEditText.getText().toString().trim().isEmpty()) {
             setErrorTheme(_signupBirthdateInputLayout);
-            _signupBirthdateInputLayout.setHint("Inserisci ls data di nascita!");
+            _signupBirthdateInputLayout.setError("Inserisci ls data di nascita!");
             birthdateOK = false;
         } else if (!validateBirthDate(_signupBirthDateEditText.getText().toString().trim())) {
             setErrorTheme(_signupBirthdateInputLayout);
-            _signupBirthdateInputLayout.setHint("Inserisci una data valida!");
+            _signupBirthdateInputLayout.setError("Inserisci una data in formato gg/mm/aaaa!");
             birthdateOK = false;
         } else {
             birthdateOK = true;
+            unsetErrorTheme(_signupBirthdateInputLayout);
             birthdate = _signupBirthDateEditText.getText().toString().trim();
         }
 
         if (_signupEmailEditText.getText().toString().trim().isEmpty()) {
             setErrorTheme(_signupEmailTextInputLayout);
-            _signupEmailTextInputLayout.setHint("Inserisci la tua mail!");
+            _signupEmailTextInputLayout.setError("Inserisci la tua mail!");
             emailOK = false;
         } else if (!validateMail(_signupEmailEditText.getText().toString().trim())) {
             setErrorTheme(_signupEmailTextInputLayout);
-            _signupEmailTextInputLayout.setHint("Inserisci una mail valida!");
+            _signupEmailTextInputLayout.setError("Inserisci una mail valida!");
             emailOK = false;
         } else {
             emailOK = true;
+            unsetErrorTheme(_signupEmailTextInputLayout);
             email = _signupEmailEditText.getText().toString().trim();
         }
 
         if (_signupUsernameEditText.getText().toString().trim().isEmpty()) {
             setErrorTheme(_signupUsernameTextInputLayout);
-            _signupUsernameTextInputLayout.setHint("Scegli l'username!");
+            _signupUsernameTextInputLayout.setError("Scegli l'username!");
             usernameOK = false;
         } else {
             usernameOK = true;
+            unsetErrorTheme(_signupUsernameTextInputLayout);
             username = _signupUsernameEditText.getText().toString().trim();
         }
 
         if (_signupPasswordEditText.getText().toString().trim().isEmpty()) {
             setErrorTheme(_signupPasswordTextInputLayout);
-            _signupPasswordTextInputLayout.setHint("Inserisci la tua password!");
+            _signupPasswordTextInputLayout.setError("Inserisci la tua password!");
             passwordOK = false;
         } else if (_signupPasswordEditText.getText().toString().trim().length() < 8) {
             setErrorTheme(_signupPasswordTextInputLayout);
-            _signupPasswordTextInputLayout.setHint("Almeno 8 caratteri");
+            _signupPasswordTextInputLayout.setError("Almeno 8 caratteri");
             passwordOK = false;
         } else {
             passwordOK = true;
+            unsetErrorTheme(_signupPasswordTextInputLayout);
         }
 
         if (_signupConfirmPasswordEditText.getText().toString().trim().isEmpty()) {
             setErrorTheme(_signupConfirmPasswordTextInputLayout);
-            _signupConfirmPasswordTextInputLayout.setHint("Conferma la tua password!");
+            _signupConfirmPasswordTextInputLayout.setError("Conferma la tua password!");
             passwordConfirmOK = false;
         } else if (!_signupPasswordEditText.getText().toString().trim().equals(_signupConfirmPasswordEditText.getText().toString().trim())) {
             setErrorTheme(_signupConfirmPasswordTextInputLayout);
-            _signupConfirmPasswordTextInputLayout.setHint("Password non corrispondenti!");
+            _signupConfirmPasswordTextInputLayout.setError("Password non corrispondenti!");
             passwordConfirmOK = false;
         } else {
             passwordConfirmOK = true;
+            _signupConfirmPasswordTextInputLayout.setHint("Conferma password");
         }
         if (passwordOK && passwordConfirmOK) {
             password = _signupPasswordEditText.getText().toString().trim();
@@ -269,7 +280,7 @@ public class SignupActivity extends AppCompatActivity implements DatePickerDialo
                 intent.putExtra("password", password);
                 startActivity(intent);
 
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                overridePendingTransition(anim.slide_in_right, anim.slide_out_left);
 
             }
 
@@ -279,8 +290,12 @@ public class SignupActivity extends AppCompatActivity implements DatePickerDialo
 
     private void setErrorTheme(TextInputLayout t) {
 
-        t.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#fa8282")));
+        t.setErrorEnabled(true);
+        t.setErrorIconDrawable(drawable.ic_baseline_error_outline_24);
+    }
 
+    private void unsetErrorTheme(TextInputLayout t) {
+        t.setErrorEnabled(false);
     }
 
     private boolean validateBirthDate(String birthdate) {
