@@ -109,15 +109,16 @@ public class LoginActivity extends AppCompatActivity {
         if (_loginUsernameEditText.getText().toString().trim().isEmpty() || _loginPasswordEditText.getText().toString().trim().isEmpty()) {
 
             if (_loginUsernameEditText.getText().toString().trim().isEmpty()) {
-                _loginUsernameTextInputLayout.setHint("Inserisci l'username!");
                 setErrorTheme(_loginUsernameTextInputLayout);
+                _loginUsernameTextInputLayout.setError("Inserisci l'username!");
 
-            }
+            } else unsetErrorTheme(_loginUsernameTextInputLayout);
 
             if (_loginPasswordEditText.getText().toString().trim().isEmpty()) {
-                _loginPasswordTextInputLayout.setHint("Inserisci la password!");
                 setErrorTheme(_loginPasswordTextInputLayout);
-            }
+                _loginPasswordTextInputLayout.setError("Inserisci la password!");
+            } else unsetErrorTheme(_loginPasswordTextInputLayout);
+
         } else {
 
             String username = _loginUsernameEditText.getText().toString().trim();
@@ -147,8 +148,6 @@ public class LoginActivity extends AppCompatActivity {
 
                 dbManagerStatus.close();
                 dbManagerUser.close();
-
-
 
                 System.out.println("Login effettuato");
 
@@ -208,8 +207,12 @@ public class LoginActivity extends AppCompatActivity {
 
     private void setErrorTheme(TextInputLayout t) {
 
-        t.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#fa8282")));
+        t.setErrorEnabled(true);
+        t.setErrorIconDrawable(R.drawable.ic_baseline_error_outline_24);
+    }
 
+    private void unsetErrorTheme(TextInputLayout t) {
+        t.setErrorEnabled(false);
     }
 
     private void loginProgressTheme() {

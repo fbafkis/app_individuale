@@ -92,30 +92,78 @@ public class DBManagerUser {
         return columnsAffected;
     }
 
+    public int updateMail(String email) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("email", email);
+        int columnsAffected = database.update("user", contentValues, "email" + "= ?", new String[]{email});
+        return columnsAffected;
+    }
+
+    public int updateAddress(String address, String username) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("address", address);
+        int columnsAffected = database.update("user", contentValues, "username" + "= ?", new String[]{username});
+        return columnsAffected;
+    }
+
+    public int updatePassword(String password, String username) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("password", password);
+        int columnsAffected = database.update("user", contentValues, "username" + "= ?", new String[]{username});
+        return columnsAffected;
+    }
+
+    public int updateRemeberMe(Boolean rememberMe, String username) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("remember_me", rememberMe);
+        int columnsAffected = database.update("user", contentValues, "username" + "= ?", new String[]{username});
+        return columnsAffected;
+    }
+
+    public int updateFavoriteNumber(int favoriteNumber, String username) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("favorite_number", favoriteNumber);
+        int columnsAffected = database.update("user", contentValues, "username" + "= ?", new String[]{username});
+        return columnsAffected;
+    }
+
+    public int updateFavoriteCar(String favoriteCar, String username) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("favorite_car", favoriteCar);
+        int columnsAffected = database.update("user", contentValues, "username" + "= ?", new String[]{username});
+        return columnsAffected;
+    }
+
+    public int updateFavoriteCircuit(String favoriteCircuit, String username) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("favorite_track", favoriteCircuit);
+        int columnsAffected = database.update("user", contentValues, "username" + "= ?", new String[]{username});
+        return columnsAffected;
+    }
+
+    public int updateHatedCircuit(String hatedCircuit, String username) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("hated_track", hatedCircuit);
+        int columnsAffected = database.update("user", contentValues, "username" + "= ?", new String[]{username});
+        return columnsAffected;
+    }
+
     public void delete(String username) {
         database.delete("user", "username=?", new String[]{username});
     }
 
     public int updateRememberMeByUsername(String username, Boolean remember_me) {
-
         ContentValues contentValues = new ContentValues();
         contentValues.put("remember_me", remember_me);
         int columnsAffected = database.update("user", contentValues, "username" + "= ?", new String[]{username});
-
         return columnsAffected;
-
-
     }
 
     public int updateRememberMeByEmail(String email, Boolean remember_me) {
-
         ContentValues contentValues = new ContentValues();
         contentValues.put("remember_me", remember_me);
         int columnsAffected = database.update("user", contentValues, "email" + "= ?", new String[]{email});
-
         return columnsAffected;
-
-
     }
 
 

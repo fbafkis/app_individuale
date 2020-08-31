@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigationProfileSettings"
+        android:enabled="true"
+        android:icon="@drawable/ic_arrow_back_24dp"
+        android:title="Dio"/>
+    <item
+        android:id="@+id/navigationAccountSettings"
+        android:enabled="true"
+        android:icon="@drawable/ic_outline_edit_24"
+        android:title="Porco"/>
+</menu>
+
