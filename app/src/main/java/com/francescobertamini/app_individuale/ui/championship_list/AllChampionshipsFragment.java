@@ -1,4 +1,4 @@
-package com.francescobertamini.app_individuale.ui.championshipList;
+package com.francescobertamini.app_individuale.ui.championship_list;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

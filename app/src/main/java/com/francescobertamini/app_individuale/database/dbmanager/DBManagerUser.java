@@ -99,6 +99,13 @@ public class DBManagerUser {
         return columnsAffected;
     }
 
+    public int updateMailByUsername(String username, String email) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("email", email);
+        int columnsAffected = database.update("user", contentValues, "username" + "= ?", new String[]{username});
+        return columnsAffected;
+    }
+
     public int updateAddress(String address, String username) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("address", address);
@@ -134,14 +141,14 @@ public class DBManagerUser {
         return columnsAffected;
     }
 
-    public int updateFavoriteCircuit(String favoriteCircuit, String username) {
+    public int updateFavoriteTrack(String favoriteCircuit, String username) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("favorite_track", favoriteCircuit);
         int columnsAffected = database.update("user", contentValues, "username" + "= ?", new String[]{username});
         return columnsAffected;
     }
 
-    public int updateHatedCircuit(String hatedCircuit, String username) {
+    public int updateHatedTrack(String hatedCircuit, String username) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("hated_track", hatedCircuit);
         int columnsAffected = database.update("user", contentValues, "username" + "= ?", new String[]{username});

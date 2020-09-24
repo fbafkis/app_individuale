@@ -1,4 +1,4 @@
-package com.francescobertamini.app_individuale.ui.championshipList;
+package com.francescobertamini.app_individuale.ui.championship_list;
 
 import android.database.Cursor;
 import android.os.Bundle;
@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.francescobertamini.app_individuale.MainActivity;
 import com.francescobertamini.app_individuale.R;
-import com.francescobertamini.app_individuale.data_managing.AllChampionshipsAdapter;
 import com.francescobertamini.app_individuale.data_managing.JsonExtractor;
 import com.francescobertamini.app_individuale.data_managing.MyChampionshipsAdapter;
 import com.francescobertamini.app_individuale.database.dbmanager.DBManagerUser;

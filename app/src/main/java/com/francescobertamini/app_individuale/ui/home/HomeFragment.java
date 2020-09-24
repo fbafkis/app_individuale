@@ -18,7 +18,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.francescobertamini.app_individuale.R;
 import com.francescobertamini.app_individuale.database.dbmanager.DBManagerUser;
-import com.francescobertamini.app_individuale.ui.championshipList.ChampionshipsFragment;
+import com.francescobertamini.app_individuale.ui.championship_list.ChampionshipsFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

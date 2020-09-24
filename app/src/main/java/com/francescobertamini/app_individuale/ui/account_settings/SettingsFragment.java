@@ -1,6 +1,7 @@
 package com.francescobertamini.app_individuale.ui.account_settings;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -11,11 +12,13 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -30,7 +33,8 @@ import com.francescobertamini.app_individuale.R;
 import com.francescobertamini.app_individuale.database.dbmanager.DBManagerUser;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.internal.NavigationMenuItemView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -39,13 +43,14 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class SettingsFragment extends Fragment implements BottomNavigationView.OnNavigationItemSelectedListener{
+public class SettingsFragment extends Fragment implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     private ArrayList<Image> images = new ArrayList<>();
 
     private SettingsViewModel accountSettingsViewModel;
 
     Image image;
+
 
     @BindView(R.id.settingsProfilePicture)
     ImageView _settingsProfilePicture;
@@ -58,6 +63,10 @@ public class SettingsFragment extends Fragment implements BottomNavigationView.O
     TextView _settingsMail;
     @BindView(R.id.settingsUsername)
     TextView _settingsUsername;
+    @BindView(R.id.editMail)
+    FloatingActionButton _editMail;
+
+
     /*
     @BindView(R.id.settingsBirthdate)
     TextView _settingsBirthdate;
@@ -82,6 +91,10 @@ public class SettingsFragment extends Fragment implements BottomNavigationView.O
                 ViewModelProviders.of(this).get(SettingsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_settings, container, false);
 
+        LayoutInflater layoutInflater = SettingsFragment.this.getLayoutInflater();
+        View emailEditDialog = inflater.inflate(R.layout.dialog_edit_mail, null);
+
+
         ButterKnife.bind(this, root);
 
 
@@ -103,13 +116,26 @@ public class SettingsFragment extends Fragment implements BottomNavigationView.O
         });
 
 
-        _settingsName.setText(cursor.getString(cursor.getColumnIndex("name"))+" "+ cursor.getString(cursor.getColumnIndex("lastname")));
+        _settingsName.setText(cursor.getString(cursor.getColumnIndex("name")) + " " + cursor.getString(cursor.getColumnIndex("lastname")));
 
         _settingsMail.setText(cursor.getString(cursor.getColumnIndex("email")));
 
         _settingsUsername.setText(cursor.getString(cursor.getColumnIndex("username")));
 
+
+        _editMail.setOnClickListener(v -> {
+
+            editMail();
+
+
+        });
+
+
 /*
+
+
+
+
 
         _settingsBirthdate.setText(cursor.getString(cursor.getColumnIndex("birthdate")));
 
@@ -131,6 +157,8 @@ public class SettingsFragment extends Fragment implements BottomNavigationView.O
 
 
 */
+
+
         loadFragment(new ProfileSettingsFragment());
 
         BottomNavigationView navigation = _settingsBottomNavigation;
@@ -152,6 +180,76 @@ public class SettingsFragment extends Fragment implements BottomNavigationView.O
             return true;
         }
         return false;
+    }
+
+
+    private void editMail() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("Modifica email");
+
+        final View customLayout = getLayoutInflater().inflate(R.layout.dialog_edit_mail, null);
+        builder.setView(customLayout);
+        EditText _editMailEditText = customLayout.findViewById(R.id.editMailEditText);
+        TextInputLayout _editMailtextInputLayout = customLayout.findViewById(R.id.editMailTextInputLayout);
+
+
+        builder.setPositiveButton("Invia", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+
+            }
+        });
+
+
+        builder.setNegativeButton("Annulla", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
+
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String email = _editMailEditText.getText().toString();
+
+                if (email.isEmpty()) {
+                    setErrorTheme(_editMailtextInputLayout);
+                    _editMailtextInputLayout.setError("Inserisci la tua mail!");
+
+                } else if (!validateMail(email)) {
+                    setErrorTheme(_editMailtextInputLayout);
+                    _editMailtextInputLayout.setError("Inserisci una mail valida!");
+                } else {
+
+                    unsetErrorTheme(_editMailtextInputLayout);
+                    String newEmail = _editMailEditText.getText().toString();
+                    DBManagerUser dbManagerUser = new DBManagerUser(getContext());
+                    dbManagerUser.open();
+                    int result = dbManagerUser.updateMailByUsername(MainActivity.username, newEmail);
+
+                    if (result > 0) {
+                        _settingsMail.setText(newEmail);
+                        dialog.dismiss();
+                        Toast toast = Toast.makeText(getContext(), "Email aggiornata correttamente", Toast.LENGTH_LONG);
+                        toast.show();
+                        dbManagerUser.close();
+                    } else {
+
+                        Toast toast = Toast.makeText(getContext(), "Errore nell'aggiornare l'email.", Toast.LENGTH_LONG);
+                        toast.show();
+
+                    }
+
+                }
+            }
+        });
+
+
     }
 
 
@@ -229,7 +327,6 @@ public class SettingsFragment extends Fragment implements BottomNavigationView.O
     }
 
 
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Fragment fragment = null;
@@ -247,4 +344,25 @@ public class SettingsFragment extends Fragment implements BottomNavigationView.O
 
         return loadFragment(fragment);
     }
+
+
+    private void setErrorTheme(TextInputLayout t) {
+
+        t.setErrorEnabled(true);
+        t.setErrorIconDrawable(R.drawable.ic_baseline_error_outline_24);
+    }
+
+    private void unsetErrorTheme(TextInputLayout t) {
+        t.setErrorEnabled(false);
+    }
+
+
+    private boolean validateMail(String email) {
+
+        String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
+        return email.matches(regex);
+
+    }
+
+
 }

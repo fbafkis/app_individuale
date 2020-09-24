@@ -25,6 +25,6 @@
         tools:layout="@layout/fragment_settings" />
     <fragment
         android:id="@+id/nav_championships"
-        android:name="com.francescobertamini.app_individuale.ui.championshipList.ChampionshipsFragment"
+        android:name="com.francescobertamini.app_individuale.ui.championship_list.ChampionshipsFragment"
         android:label="ChampionshipsFragment" />
 </navigation>

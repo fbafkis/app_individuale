@@ -16,7 +16,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
 
-
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -41,23 +40,27 @@
                         android:layout_height="wrap_content"
                         android:text="Numero di gara preferito:"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
-                        android:textSize="12sp"
+                        android:textSize="15sp"
                         android:textStyle="bold" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/settingsFavouriteNumber"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:backgroundTint="#B11C1C"
-                        android:text="69" />
+                        android:backgroundTint="#8C8C8C"
+                        android:text="69"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/imageView9"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/ic_outline_edit_24" />
+                <ImageButton
+                    android:id="@+id/editFavNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:backgroundTint="#00FFFFFF"
+                    android:scaleType="center"
+                    app:srcCompat="@drawable/ic_outline_edit_24" />
 
 
             </TableRow>
@@ -80,7 +83,7 @@
                         android:layout_height="wrap_content"
                         android:text="Auto preferita:"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
-                        android:textSize="12sp"
+                        android:textSize="15sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -90,14 +93,19 @@
                         android:layout_marginStart="10dp"
                         android:text="TextView"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/imageView6"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/ic_outline_edit_24" />
+
+                <ImageButton
+                    android:id="@+id/editFavCar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:backgroundTint="#00FFFFFF"
+                    android:scaleType="center"
+                    app:srcCompat="@drawable/ic_outline_edit_24" />
 
 
             </TableRow>
@@ -120,7 +128,7 @@
                         android:layout_height="wrap_content"
                         android:text="Circuito preferito:"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
-                        android:textSize="12sp"
+                        android:textSize="15sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -130,14 +138,19 @@
                         android:layout_marginStart="10dp"
                         android:text="TextView"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/imageView8"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/ic_outline_edit_24" />
+
+                <ImageButton
+                    android:id="@+id/editFavTrack"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:backgroundTint="#00FFFFFF"
+                    android:scaleType="center"
+                    app:srcCompat="@drawable/ic_outline_edit_24" />
 
 
             </TableRow>
@@ -160,7 +173,7 @@
                         android:layout_height="wrap_content"
                         android:text="Circuito odiato:"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
-                        android:textSize="12sp"
+                        android:textSize="15sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -170,13 +183,19 @@
                         android:layout_marginStart="10dp"
                         android:text="TextView"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/ic_outline_edit_24" />
+
+                <ImageButton
+                    android:id="@+id/editHatedTrack"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:backgroundTint="#00FFFFFF"
+                    android:scaleType="center"
+                    app:srcCompat="@drawable/ic_outline_edit_24" />
 
 
             </TableRow>

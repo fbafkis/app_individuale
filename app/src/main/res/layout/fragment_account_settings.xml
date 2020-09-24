@@ -8,7 +8,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -16,10 +17,10 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
 
+
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:paddingStart="20dp"
             android:paddingEnd="20dp">
 
@@ -52,7 +53,8 @@
                         android:layout_marginStart="10dp"
                         android:text="TextView"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
 
@@ -74,7 +76,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Indirizzo: "
+                        android:text="Indirizzo:"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
                         android:textSize="15sp"
                         android:textStyle="bold" />
@@ -86,13 +88,19 @@
                         android:layout_marginStart="10dp"
                         android:text="TextView"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/ic_outline_edit_24" />
+
+                <ImageButton
+                    android:id="@+id/editAddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:backgroundTint="#00FFFFFF"
+                    android:scaleType="center"
+                    app:srcCompat="@drawable/ic_outline_edit_24" />
 
 
             </TableRow>
@@ -113,25 +121,51 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Password:"
+                        android:text="Password"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
                         android:textSize="15sp"
                         android:textStyle="bold" />
 
+
                     <TextView
-                        android:id="@+id/settingsPassword"
+                        android:id="@+id/settingsPasswordHidden"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
+                        android:inputType="textPassword"
                         android:text="TextView"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/settingsPasswordShown"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"
+                        android:text="TextView"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
                 </LinearLayout>
 
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/ic_outline_edit_24" />
+                <ImageButton
+                    android:id="@+id/showPassword"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#00FFFFFF"
+                    app:srcCompat="@drawable/ic_outline_remove_red_eye_24" />
+
+                <ImageButton
+                    android:id="@+id/editPassword"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:backgroundTint="#00FFFFFF"
+                    android:scaleType="center"
+                    app:srcCompat="@drawable/ic_outline_edit_24" />
 
 
             </TableRow>
@@ -161,6 +195,7 @@
                         style="@style/Widget.MaterialComponents.CompoundButton.CheckBox"
                         android:layout_width="30dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
                         android:buttonTint="@color/colorPrimary"
                         android:gravity="center" />
 
@@ -180,6 +215,7 @@
             android:background="@color/colorPrimary"
             android:backgroundTint="@color/colorPrimary"
             android:visibility="visible" />
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
