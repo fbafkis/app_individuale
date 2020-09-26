@@ -5,6 +5,7 @@ import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -13,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.francescobertamini.app_individuale.BasicActivity;
 import com.francescobertamini.app_individuale.MainActivity;
 import com.francescobertamini.app_individuale.R;
 
@@ -27,7 +29,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BasicActivity {
 
     Boolean accountCreated = false;
 
@@ -63,16 +65,26 @@ public class LoginActivity extends AppCompatActivity {
         dbManagerUser.open();
 
         Cursor statusCursor = dbManagerStatus.fetch();
-        Boolean isUserLogged = ((statusCursor.getInt(statusCursor.getInt(statusCursor.getColumnIndex("is_user_logged")))) == 1);
+        int isUserLogged =statusCursor.getInt(statusCursor.getColumnIndex("is_user_logged"));
 
-        if (isUserLogged) {
+        Log.e("UserLogged", Integer.toString(isUserLogged));
+
+        if (isUserLogged==1) {
+
+            String actualUsername = statusCursor.getString(statusCursor.getColumnIndex("user_logged"));
+
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            intent.putExtra("username", actualUsername);
+            startActivity(intent);
+
+            finish();
 
             dbManagerUser.close();
             dbManagerStatus.close();
 
-            //Mandare all'activity home
 
-        } else if (!isUserLogged) {
+
+        } else if (isUserLogged==0) {
 
             setContentView(R.layout.activity_login);
             ButterKnife.bind(this);
@@ -145,6 +157,16 @@ public class LoginActivity extends AppCompatActivity {
                     cursor = dbManagerUser.fetchByEmail(username);
                     actualUsername = cursor.getString(cursor.getColumnIndex("username"));
                 }
+
+                int result = dbManagerStatus.update(1, actualUsername);
+                Log.e("ResultUpdate", Integer.toString(result));
+
+
+                Cursor statusCursor = dbManagerStatus.fetch();
+
+                int isUserLogged = statusCursor.getInt(statusCursor.getColumnIndex("is_user_logged"));
+
+                Log.e("UserLogged", Integer.toString(isUserLogged));
 
                 dbManagerStatus.close();
                 dbManagerUser.close();

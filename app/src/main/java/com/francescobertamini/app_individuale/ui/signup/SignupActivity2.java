@@ -1,29 +1,28 @@
 package com.francescobertamini.app_individuale.ui.signup;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.esafirm.imagepicker.model.Image;
-
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.esafirm.imagepicker.features.ImagePicker;
-import com.esafirm.imagepicker.features.ImagePickerComponentHolder;
-import com.esafirm.imagepicker.features.ReturnMode;
-import com.esafirm.imagepicker.features.imageloader.DefaultImageLoader;
 import com.francescobertamini.app_individuale.database.dbmanager.DBManagerUser;
 import com.francescobertamini.app_individuale.ui.login.LoginActivity;
+import com.francescobertamini.app_individuale.utils.ImagePickerActivity;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.JsonObject;
 
@@ -31,6 +30,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import com.francescobertamini.app_individuale.R;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -45,11 +49,13 @@ public class SignupActivity2 extends AppCompatActivity {
     String email;
     String username;
     String password;
-    Image image;
+    String image;
+    Boolean hasCustomPicture = false;
 
-    private ArrayList<Image> images = new ArrayList<>();
 
-    JsonObject campionati;
+
+    public static final int REQUEST_IMAGE = 100;
+
 
     int favNumber;
     String favCar;
@@ -98,7 +104,23 @@ public class SignupActivity2 extends AppCompatActivity {
         _editPictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                start();
+                Dexter.withActivity(SignupActivity2.this)
+                        .withPermissions(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        .withListener(new MultiplePermissionsListener() {
+                            @Override
+                            public void onPermissionsChecked(MultiplePermissionsReport report) {
+                                if (report.areAllPermissionsGranted()) {
+                                    showImagePickerOptions();
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "Devi concedere i permessi all'applicazione!", Toast.LENGTH_LONG);
+                                }
+                            }
+
+                            @Override
+                            public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                                token.continuePermissionRequest();
+                            }
+                        }).check();
             }
         });
 
@@ -127,7 +149,6 @@ public class SignupActivity2 extends AppCompatActivity {
         Boolean numberOK = false;
         Boolean favCicuitOK = false;
         Boolean hatedCircuitOK = false;
-        Boolean hasCustomPicture = false;
 
         if (_signupFavouriteNumberEditText.getText().toString().trim().isEmpty()) {
             setErrorTheme(_signupFavouriteNumberTextInputLayout);
@@ -174,10 +195,6 @@ public class SignupActivity2 extends AppCompatActivity {
             hatedCircuit = _signupHatedCircuitNameEditText.getText().toString().trim();
         }
 
-        if (images.size() == 0)
-            hasCustomPicture = false;
-        else
-            hasCustomPicture = true;
 
         if (numberOK && carOK && favCicuitOK && hatedCircuitOK) {
 
@@ -191,44 +208,25 @@ public class SignupActivity2 extends AppCompatActivity {
     private void createUser(Boolean hasCustomPicture) {
 
 
+        DBManagerUser dbManagerUser = new DBManagerUser(this);
+        dbManagerUser.open();
 
-            DBManagerUser dbManagerUser = new DBManagerUser(this);
-            dbManagerUser.open();
-
-            if (hasCustomPicture) {
-
-                image = images.get(0);
-
-                BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-                Bitmap bitmap = BitmapFactory.decodeFile(image.getPath(), bmOptions);
-                bitmap = Bitmap.createBitmap(bitmap);
-                byte[] byteImage = getBitmapAsByteArray(bitmap);
-
-                dbManagerUser.insert(name, lastname, birthdate, email, address, username, password, favNumber, favCar, favCirucit, hatedCircuit, true, byteImage, false);
-            } else {
-
-                dbManagerUser.insert(name, lastname, birthdate, email, address, username, password, favNumber, favCar, favCirucit, hatedCircuit, false, null, false);
-
-            }
-
-            dbManagerUser.close();
-
-            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-            intent.putExtra("accountCreated", true);
-            intent.putExtra("new_user_username", username);
-            startActivity(intent);
-            finish();
-            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-
+        if (hasCustomPicture) {
+            dbManagerUser.insert(name, lastname, birthdate, email, address, username, password, favNumber, favCar, favCirucit, hatedCircuit, true, image, false);
+        } else {
+            dbManagerUser.insert(name, lastname, birthdate, email, address, username, password, favNumber, favCar, favCirucit, hatedCircuit, false, null, false);
         }
 
+        dbManagerUser.close();
 
-    public byte[] getBitmapAsByteArray(Bitmap bitmap) {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 0, outputStream);
-        return outputStream.toByteArray();
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        intent.putExtra("accountCreated", true);
+        intent.putExtra("new_user_username", username);
+        startActivity(intent);
+        finish();
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+
     }
-
 
     private void setErrorTheme(TextInputLayout t) {
 
@@ -240,57 +238,66 @@ public class SignupActivity2 extends AppCompatActivity {
         t.setErrorEnabled(false);
     }
 
-    private ImagePicker getImagePicker() {
+    private void showImagePickerOptions() {
+        ImagePickerActivity.showImagePickerOptions(SignupActivity2.this, new ImagePickerActivity.PickerOptionListener() {
+            @Override
+            public void onTakeCameraSelected() {
+                launchCameraIntent();
+            }
 
-        @SuppressLint("ResourceAsColor") ImagePicker imagePicker = ImagePicker.create(this)
-                .language("in") // Set image picker language
-
-                .returnMode(ReturnMode.ALL)
-
-                .folderMode(false) // set folder mode (false by default)
-                .includeVideo(false) // include video (false by default)
-                .onlyVideo(false) // include video (false by default)
-                .toolbarArrowColor(R.color.colorPrimary) // set toolbar arrow up color
-                .toolbarFolderTitle("Folder") // folder selection title
-                .toolbarImageTitle("Tap to select") // image selection title
-                .toolbarDoneButtonText("DONE"); // done button text
-
-        ImagePickerComponentHolder.getInstance()
-                .setImageLoader(new DefaultImageLoader());
-
-        imagePicker.single();
-
-        return imagePicker.limit(1) // max images can be selected (99 by default)
-                .showCamera(true) // show camera or not (true by default)
-                .imageDirectory("Camera")   // captured image directory name ("Camera" folder by default)
-                .imageFullDirectory(Environment.getExternalStorageDirectory().getPath()); // can be full path
+            @Override
+            public void onChooseGallerySelected() {
+                launchGalleryIntent();
+            }
+        });
     }
 
-    private void start() {
-        getImagePicker().start(); // start image picker activity with request code
+    private void launchCameraIntent() {
+        Intent intent = new Intent(SignupActivity2.this, ImagePickerActivity.class);
+        intent.putExtra(ImagePickerActivity.INTENT_IMAGE_PICKER_OPTION, ImagePickerActivity.REQUEST_IMAGE_CAPTURE);
+
+        // setting aspect ratio
+        intent.putExtra(ImagePickerActivity.INTENT_LOCK_ASPECT_RATIO, true);
+        intent.putExtra(ImagePickerActivity.INTENT_ASPECT_RATIO_X, 1); // 16x9, 1x1, 3:4, 3:2
+        intent.putExtra(ImagePickerActivity.INTENT_ASPECT_RATIO_Y, 1);
+
+        // setting maximum bitmap width and height
+        intent.putExtra(ImagePickerActivity.INTENT_SET_BITMAP_MAX_WIDTH_HEIGHT, true);
+        intent.putExtra(ImagePickerActivity.INTENT_BITMAP_MAX_WIDTH, 1000);
+        intent.putExtra(ImagePickerActivity.INTENT_BITMAP_MAX_HEIGHT, 1000);
+
+        startActivityForResult(intent, REQUEST_IMAGE);
+    }
+
+    private void launchGalleryIntent() {
+        Intent intent = new Intent(SignupActivity2.this, ImagePickerActivity.class);
+        intent.putExtra(ImagePickerActivity.INTENT_IMAGE_PICKER_OPTION, ImagePickerActivity.REQUEST_GALLERY_IMAGE);
+
+        // setting aspect ratio
+        intent.putExtra(ImagePickerActivity.INTENT_LOCK_ASPECT_RATIO, true);
+        intent.putExtra(ImagePickerActivity.INTENT_ASPECT_RATIO_X, 1); // 16x9, 1x1, 3:4, 3:2
+        intent.putExtra(ImagePickerActivity.INTENT_ASPECT_RATIO_Y, 1);
+        startActivityForResult(intent, REQUEST_IMAGE);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, final int resultCode, Intent data) {
-        if (ImagePicker.shouldHandle(requestCode, resultCode, data)) {
-            images = (ArrayList<Image>) ImagePicker.getImages(data);
-            printImages(images);
-            return;
-        }
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-    }
+        if (requestCode == REQUEST_IMAGE) {
+            if (resultCode == Activity.RESULT_OK) {
 
-    private void printImages(List<Image> images) {
-        if (images == null) return;
+                Uri uri = data.getParcelableExtra("path");
 
-        StringBuilder stringBuffer = new StringBuilder();
-        for (int i = 0, l = images.size(); i < l; i++) {
+                DBManagerUser dbManagerUser = new DBManagerUser(SignupActivity2.this);
 
-            stringBuffer.append(images.get(i).getPath()).append("\n");
+                image = uri.getPath();
+                hasCustomPicture=true;
+
+                Bitmap image = BitmapFactory.decodeFile(uri.getPath());
+                _signupProfilePictureImageView.setImageBitmap(image);
+
+            }
         }
-        Glide.with(_signupProfilePictureImageView)
-                .load(images.get(0).getPath())
-                .into(_signupProfilePictureImageView);
     }
 
 

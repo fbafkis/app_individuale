@@ -168,7 +168,7 @@ public class ProfileSettingsFragment extends Fragment {
     private void editFavCar() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("Modificala tua auto preferita");
+        builder.setMessage("Modifica la tua auto preferita");
 
         final View customLayout = getLayoutInflater().inflate(R.layout.dialog_edit_fav_car, null);
         builder.setView(customLayout);

@@ -27,7 +27,7 @@ public class DBManagerUser {
         dbHelper.close();
     }
 
-    public void insert(String name, String lastname, String birthdate, String email, String address, String username, String password, int favorite_number, String favorite_car, String favorite_track, String hated_track, boolean has_custom_picture, byte[] profile_picture, Boolean remember_me) {
+    public void insert(String name, String lastname, String birthdate, String email, String address, String username, String password, int favorite_number, String favorite_car, String favorite_track, String hated_track, boolean has_custom_picture, String profile_picture, boolean remember_me) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("name", name);
         contentValues.put("lastname", lastname);
@@ -64,7 +64,7 @@ public class DBManagerUser {
         return cursor;
     }
 
-    public int update(String name, String lastname, String birthdate, String email, String address, String username, String password, int favorite_number, String favorite_car, String favorite_track, String hated_track, Boolean hasCustomPicture, byte[] profile_picture, Boolean remember_me) {
+    public int update(String name, String lastname, String birthdate, String email, String address, String username, String password, int favorite_number, String favorite_car, String favorite_track, String hated_track, Boolean hasCustomPicture, String profile_picture, Boolean remember_me) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("name", name);
         contentValues.put("lastname", lastname);
@@ -84,7 +84,7 @@ public class DBManagerUser {
         return columnsAffected;
     }
 
-    public int updatePicture(String username, Boolean hasCustomPicture, byte[] profile_picture) {
+    public int updatePicture(String username, Boolean hasCustomPicture, String profile_picture) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("profile_picture", profile_picture);
         contentValues.put("has_custom_picture", hasCustomPicture);
@@ -155,8 +155,9 @@ public class DBManagerUser {
         return columnsAffected;
     }
 
-    public void delete(String username) {
-        database.delete("user", "username=?", new String[]{username});
+    public int delete(String username) {
+        int columnsAffected = database.delete("user", "username=?", new String[]{username});
+        return columnsAffected;
     }
 
     public int updateRememberMeByUsername(String username, Boolean remember_me) {

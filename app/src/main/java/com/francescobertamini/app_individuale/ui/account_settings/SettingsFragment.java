@@ -1,13 +1,20 @@
 package com.francescobertamini.app_individuale.ui.account_settings;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
+import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,25 +25,30 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.bumptech.glide.Glide;
-import com.esafirm.imagepicker.features.ImagePicker;
-import com.esafirm.imagepicker.features.ImagePickerComponentHolder;
-import com.esafirm.imagepicker.features.ReturnMode;
-import com.esafirm.imagepicker.features.imageloader.DefaultImageLoader;
-import com.esafirm.imagepicker.model.Image;
 import com.francescobertamini.app_individuale.MainActivity;
 import com.francescobertamini.app_individuale.R;
 import com.francescobertamini.app_individuale.database.dbmanager.DBManagerUser;
+import com.francescobertamini.app_individuale.ui.home.HomeFragment;
+import com.francescobertamini.app_individuale.utils.ImagePickerActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputLayout;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,11 +57,11 @@ import butterknife.ButterKnife;
 
 public class SettingsFragment extends Fragment implements BottomNavigationView.OnNavigationItemSelectedListener {
 
-    private ArrayList<Image> images = new ArrayList<>();
+
+    public static final int REQUEST_IMAGE = 100;
+
 
     private SettingsViewModel accountSettingsViewModel;
-
-    Image image;
 
 
     @BindView(R.id.settingsProfilePicture)
@@ -91,6 +103,9 @@ public class SettingsFragment extends Fragment implements BottomNavigationView.O
                 ViewModelProviders.of(this).get(SettingsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_settings, container, false);
 
+        NavigationView navigationView = (NavigationView) getActivity().findViewById(R.id.nav_view);
+        navigationView.getMenu().getItem(2).setChecked(true);
+
         LayoutInflater layoutInflater = SettingsFragment.this.getLayoutInflater();
         View emailEditDialog = inflater.inflate(R.layout.dialog_edit_mail, null);
 
@@ -104,17 +119,65 @@ public class SettingsFragment extends Fragment implements BottomNavigationView.O
         Cursor cursor = dbManagerUser.fetchByUsername(MainActivity.username);
 
         if (cursor.getInt(cursor.getColumnIndex("has_custom_picture")) == 1) {
-            byte[] byteImage = cursor.getBlob(cursor.getColumnIndex("profile_picture"));
-            _settingsProfilePicture.setImageBitmap(BitmapFactory.decodeByteArray(byteImage, 0, byteImage.length));
+            String imagePath = cursor.getString(cursor.getColumnIndex("profile_picture"));
+            File image = new File(imagePath);
+            if (image.exists()) {
+                Bitmap bitmapImage = BitmapFactory.decodeFile(image.getAbsolutePath());
+                int rotate = 0;
+                ExifInterface exif = null;
+                try {
+                    exif = new ExifInterface(image.getAbsolutePath());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                        ExifInterface.ORIENTATION_UNDEFINED);
+                switch (orientation) {
+                    case ExifInterface.ORIENTATION_NORMAL:
+                        rotate = 0;
+                        break;
+                    case ExifInterface.ORIENTATION_ROTATE_270:
+                        rotate = 270;
+                        break;
+                    case ExifInterface.ORIENTATION_ROTATE_180:
+                        rotate = 180;
+                        break;
+                    case ExifInterface.ORIENTATION_ROTATE_90:
+                        rotate = 90;
+                        break;
+                }
+
+                Matrix matrix = new Matrix();
+                matrix.postRotate(rotate);
+                Bitmap rotateBitmap = Bitmap.createBitmap(bitmapImage, 0, 0, bitmapImage.getWidth(), bitmapImage.getHeight(), matrix, true);
+                _settingsProfilePicture.setImageBitmap(rotateBitmap);
+
+                } else _settingsProfilePicture.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_account_circle_100, null));
         }
 
 
-        _settingsEditPictureButton.setOnClickListener(v -> {
+        _settingsProfilePicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Dexter.withActivity(getActivity())
+                        .withPermissions(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        .withListener(new MultiplePermissionsListener() {
+                            @Override
+                            public void onPermissionsChecked(MultiplePermissionsReport report) {
+                                if (report.areAllPermissionsGranted()) {
+                                    showImagePickerOptions();
+                                } else {
+                                    Toast.makeText(getContext(),"Devi concedere i permessi all'applicazione!", Toast.LENGTH_LONG);
+                                }
+                            }
 
-            start();
-
+                            @Override
+                            public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                                token.continuePermissionRequest();
+                            }
+                        }).check();
+            }
         });
-
 
         _settingsName.setText(cursor.getString(cursor.getColumnIndex("name")) + " " + cursor.getString(cursor.getColumnIndex("lastname")));
 
@@ -122,53 +185,63 @@ public class SettingsFragment extends Fragment implements BottomNavigationView.O
 
         _settingsUsername.setText(cursor.getString(cursor.getColumnIndex("username")));
 
-
         _editMail.setOnClickListener(v -> {
-
             editMail();
-
-
         });
-
-
-/*
-
-
-
-
-
-        _settingsBirthdate.setText(cursor.getString(cursor.getColumnIndex("birthdate")));
-
-        _settingsAddress.setText(cursor.getString(cursor.getColumnIndex("address")));
-
-        _settingsPassword.setText(cursor.getString(cursor.getColumnIndex("password")));
-
-        if(cursor.getInt(cursor.getColumnIndex("remember_me"))==1){
-            _settingsRememberMe.setChecked(true);
-        } else _settingsRememberMe.setChecked(false);
-
-        _settingsFavouriteNumber.setText(Integer.toString(cursor.getInt(cursor.getColumnIndex("favorite_number"))));
-
-        _settingsFavouriteCar.setText(cursor.getString(cursor.getColumnIndex("favorite_car")));
-
-        _settingsFavouriteTrack.setText(cursor.getString(cursor.getColumnIndex("favorite_track")));
-
-        _settingsHatedTrack.setText(cursor.getString(cursor.getColumnIndex("hated_track")));
-
-
-*/
-
 
         loadFragment(new ProfileSettingsFragment());
 
         BottomNavigationView navigation = _settingsBottomNavigation;
         navigation.setOnNavigationItemSelectedListener(this);
 
-
         dbManagerUser.close();
         return root;
 
     }
+
+
+    private void showImagePickerOptions() {
+        ImagePickerActivity.showImagePickerOptions(getContext(), new ImagePickerActivity.PickerOptionListener() {
+            @Override
+            public void onTakeCameraSelected() {
+                launchCameraIntent();
+            }
+
+            @Override
+            public void onChooseGallerySelected() {
+                launchGalleryIntent();
+            }
+        });
+    }
+
+    private void launchCameraIntent() {
+        Intent intent = new Intent(getContext(), ImagePickerActivity.class);
+        intent.putExtra(ImagePickerActivity.INTENT_IMAGE_PICKER_OPTION, ImagePickerActivity.REQUEST_IMAGE_CAPTURE);
+
+        // setting aspect ratio
+        intent.putExtra(ImagePickerActivity.INTENT_LOCK_ASPECT_RATIO, true);
+        intent.putExtra(ImagePickerActivity.INTENT_ASPECT_RATIO_X, 1); // 16x9, 1x1, 3:4, 3:2
+        intent.putExtra(ImagePickerActivity.INTENT_ASPECT_RATIO_Y, 1);
+
+        // setting maximum bitmap width and height
+        intent.putExtra(ImagePickerActivity.INTENT_SET_BITMAP_MAX_WIDTH_HEIGHT, true);
+        intent.putExtra(ImagePickerActivity.INTENT_BITMAP_MAX_WIDTH, 1000);
+        intent.putExtra(ImagePickerActivity.INTENT_BITMAP_MAX_HEIGHT, 1000);
+
+        startActivityForResult(intent, REQUEST_IMAGE);
+    }
+
+    private void launchGalleryIntent() {
+        Intent intent = new Intent(getContext(), ImagePickerActivity.class);
+        intent.putExtra(ImagePickerActivity.INTENT_IMAGE_PICKER_OPTION, ImagePickerActivity.REQUEST_GALLERY_IMAGE);
+
+        // setting aspect ratio
+        intent.putExtra(ImagePickerActivity.INTENT_LOCK_ASPECT_RATIO, true);
+        intent.putExtra(ImagePickerActivity.INTENT_ASPECT_RATIO_X, 1); // 16x9, 1x1, 3:4, 3:2
+        intent.putExtra(ImagePickerActivity.INTENT_ASPECT_RATIO_Y, 1);
+        startActivityForResult(intent, REQUEST_IMAGE);
+    }
+
 
     private boolean loadFragment(Fragment fragment) {
         //switching fragment
@@ -253,77 +326,24 @@ public class SettingsFragment extends Fragment implements BottomNavigationView.O
     }
 
 
-    private ImagePicker getImagePicker() {
-
-        @SuppressLint("ResourceAsColor") ImagePicker imagePicker = ImagePicker.create(this)
-                .language("in") // Set image picker language
-
-                .returnMode(ReturnMode.ALL)
-
-                .folderMode(false) // set folder mode (false by default)
-                .includeVideo(false) // include video (false by default)
-                .onlyVideo(false) // include video (false by default)
-                .toolbarArrowColor(R.color.colorPrimary) // set toolbar arrow up color
-                .toolbarFolderTitle("Folder") // folder selection title
-                .toolbarImageTitle("Tap to select") // image selection title
-                .toolbarDoneButtonText("DONE"); // done button text
-
-        ImagePickerComponentHolder.getInstance()
-                .setImageLoader(new DefaultImageLoader());
-
-        imagePicker.single();
-
-        return imagePicker.limit(1) // max images can be selected (99 by default)
-                .showCamera(true) // show camera or not (true by default)
-                .imageDirectory("Camera")   // captured image directory name ("Camera" folder by default)
-                .imageFullDirectory(Environment.getExternalStorageDirectory().getPath()); // can be full path
-    }
-
-    private void start() {
-        getImagePicker().start(); // start image picker activity with request code
-    }
-
-
     @Override
-    public void onActivityResult(int requestCode, final int resultCode, Intent data) {
-        if (ImagePicker.shouldHandle(requestCode, resultCode, data)) {
-            images = (ArrayList<Image>) ImagePicker.getImages(data);
-            printImages(images);
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == REQUEST_IMAGE) {
+            if (resultCode == Activity.RESULT_OK) {
 
-            DBManagerUser dbManagerUser = new DBManagerUser(getContext());
-            dbManagerUser.open();
+                Uri uri = data.getParcelableExtra("path");
 
-            image = images.get(0);
+                DBManagerUser dbManagerUser = new DBManagerUser(getContext());
+                dbManagerUser.open();
 
-            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-            Bitmap bitmap = BitmapFactory.decodeFile(image.getPath(), bmOptions);
-            bitmap = Bitmap.createBitmap(bitmap);
-            byte[] byteImage = getBitmapAsByteArray(bitmap);
-            dbManagerUser.updatePicture(MainActivity.username, true, byteImage);
-            dbManagerUser.close();
+                dbManagerUser.updatePicture(MainActivity.username, true, uri.getPath());
+                dbManagerUser.close();
 
-            return;
+                Bitmap image = BitmapFactory.decodeFile(uri.getPath());
+                _settingsProfilePicture.setImageBitmap(image);
+
+            }
         }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    public byte[] getBitmapAsByteArray(Bitmap bitmap) {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 0, outputStream);
-        return outputStream.toByteArray();
-    }
-
-    private void printImages(List<Image> images) {
-        if (images == null) return;
-
-        StringBuilder stringBuffer = new StringBuilder();
-        for (int i = 0, l = images.size(); i < l; i++) {
-
-            stringBuffer.append(images.get(i).getPath()).append("\n");
-        }
-        Glide.with(_settingsProfilePicture)
-                .load(images.get(0).getPath())
-                .into(_settingsProfilePicture);
     }
 
 

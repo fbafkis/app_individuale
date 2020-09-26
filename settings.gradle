@@ -1,2 +1,3 @@
+include ':ucrop-2.2.0'
 include ':app'
 rootProject.name = "app_individuale"

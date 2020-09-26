@@ -3,12 +3,12 @@
     <item
         android:id="@+id/navigationProfileSettings"
         android:enabled="true"
-        android:icon="@drawable/ic_arrow_back_24dp"
-        android:title="Dio"/>
+        android:icon="@drawable/ic_outline_face_24"
+        android:title="Profilo" />
     <item
         android:id="@+id/navigationAccountSettings"
         android:enabled="true"
-        android:icon="@drawable/ic_outline_edit_24"
-        android:title="Porco"/>
+        android:icon="@drawable/ic_outline_settings_applications_24"
+        android:title="Account" />
 </menu>
 

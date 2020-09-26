@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.francescobertamini.app_individuale.BasicActivity;
 import com.francescobertamini.app_individuale.R;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -181,7 +182,6 @@ public class SignupActivity extends AppCompatActivity implements DatePickerDialo
             addressOK = true;
             unsetErrorTheme(_signupAddressTextInputLayout);
             address = _signupAddressEditText.getText().toString().trim();
-
         }
 
         if (_signupBirthDateEditText.getText().toString().trim().isEmpty()) {
@@ -278,9 +278,10 @@ public class SignupActivity extends AppCompatActivity implements DatePickerDialo
                 intent.putExtra("username", username);
                 intent.putExtra("birthdate", birthdate);
                 intent.putExtra("password", password);
-                startActivity(intent);
 
                 overridePendingTransition(anim.slide_in_right, anim.slide_out_left);
+                startActivity(intent);
+
 
             }
 

@@ -39,7 +39,7 @@ public class DBManagerStatus {
         return cursor;
     }
 
-    public int update(boolean isUserLogged, String userLogged ) {
+    public int update(int isUserLogged, String userLogged ) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("is_user_logged", isUserLogged);
         contentValues.put("user_logged", userLogged);

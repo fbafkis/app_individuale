@@ -14,7 +14,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String sql1 = "CREATE TABLE user (name TEXT, lastname TEXT, birthdate TEXT, email TEXT, address TEXT, username TEXT, password TEXT, favorite_number INTEGER, favorite_car TEXT, favorite_track TEXT, hated_track TEXT, has_custom_picture INTEGER, profile_picture BLOB, remember_me INTEGER)";
+        String sql1 = "CREATE TABLE user (name TEXT, lastname TEXT, birthdate TEXT, email TEXT, address TEXT, username TEXT, password TEXT, favorite_number INTEGER, favorite_car TEXT, favorite_track TEXT, hated_track TEXT, has_custom_picture INTEGER, profile_picture TEXT, remember_me INTEGER)";
         String sql2 = "CREATE TABLE status (is_user_logged INTEGER, user_logged TEXT)";
         String sql3 = "INSERT INTO status (is_user_logged, user_logged) VALUES (0, null)";
         db.execSQL(sql1);
