@@ -112,6 +112,7 @@ public class SettingsFragment extends Fragment implements BottomNavigationView.O
 
         ButterKnife.bind(this, root);
 
+        MainActivity.toolbar.setTitle("Impostazioni");
 
         DBManagerUser dbManagerUser = new DBManagerUser(getContext());
         dbManagerUser.open();

@@ -111,4 +111,8 @@ public class MyChampionshipsAdapter extends RecyclerView.Adapter<MyChampionships
 
         return itemCount;
     }
+
+    public JsonObject getItem (int position){
+        return championships.get(position).getAsJsonObject();
+    }
 }

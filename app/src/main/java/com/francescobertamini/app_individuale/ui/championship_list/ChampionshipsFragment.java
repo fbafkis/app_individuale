@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.francescobertamini.app_individuale.MainActivity;
 import com.francescobertamini.app_individuale.R;
 import com.francescobertamini.app_individuale.data_managing.AllChampionshipsAdapter;
 import com.google.android.material.navigation.NavigationView;
@@ -29,6 +30,7 @@ public class ChampionshipsFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_championships, container, false);
 
 
+
     }
 
     @Override
@@ -37,7 +39,9 @@ public class ChampionshipsFragment extends Fragment {
         NavigationView navigationView = (NavigationView) getActivity().findViewById(R.id.nav_view);
         navigationView.getMenu().getItem(1).setChecked(true);
 
-        viewPager = view.findViewById(R.id.pager);
+
+
+        viewPager = view.findViewById(R.id.championships_pager);
         viewPager.setAdapter(new ChampionshipsAdapter(this));
         TabLayout tabLayout = view.findViewById(R.id.tab_layout);
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
@@ -49,8 +53,9 @@ public class ChampionshipsFragment extends Fragment {
             }
         }
         ).attach();
-    }
 
+        MainActivity.toolbar.setTitle("Campionati");
+    }
 
 }
 

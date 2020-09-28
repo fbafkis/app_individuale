@@ -2,6 +2,7 @@ package com.francescobertamini.app_individuale.ui.championship_list;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,10 +21,14 @@ import com.francescobertamini.app_individuale.R;
 import com.francescobertamini.app_individuale.data_managing.JsonExtractor;
 import com.francescobertamini.app_individuale.data_managing.MyChampionshipsAdapter;
 import com.francescobertamini.app_individuale.database.dbmanager.DBManagerUser;
+import com.francescobertamini.app_individuale.ui.championship.SubChampionshipsDialog;
+import com.francescobertamini.app_individuale.ui.championship.UnsubChampionshipsDialog;
+import com.francescobertamini.app_individuale.utils.RecyclerItemClickListener;
+import com.google.gson.JsonArray;
 
 import java.io.IOException;
 
-public class MyChampionshipsFragment extends Fragment{
+public class MyChampionshipsFragment extends Fragment {
 
     private ChampionshipListViewModel championshipListViewModel;
 
@@ -42,7 +48,7 @@ public class MyChampionshipsFragment extends Fragment{
         championshipListViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
-             //   textView.setText(s);
+                //   textView.setText(s);
             }
         });
 
@@ -66,14 +72,30 @@ public class MyChampionshipsFragment extends Fragment{
 
         recyclerView.setAdapter(adapter);
 
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+
+                String id = adapter.getItem(position).getAsJsonObject().get("id").getAsString();
+
+                SubChampionshipsDialog dialog = new SubChampionshipsDialog();
+                FragmentManager fragmentManager = getParentFragmentManager();
+                dialog.display(fragmentManager, id);
+            }
+
+
+            @Override
+            public void onLongItemClick(View view, int position) {
+                // do whatever
+            }
+        }));
+
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
 
         return root;
     }
-
-
-
 
 
 }

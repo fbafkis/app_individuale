@@ -19,6 +19,7 @@ public class MainActivity extends BasicActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     public static String username;
+    public static Toolbar toolbar;
 
     @BindView(R.id.homeChampionshipLink)
     LinearLayout _homeChampionshipLink;
@@ -33,7 +34,7 @@ public class MainActivity extends BasicActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         username = getIntent().getStringExtra("username");

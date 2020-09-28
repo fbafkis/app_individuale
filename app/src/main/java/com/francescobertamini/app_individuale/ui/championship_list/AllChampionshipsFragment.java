@@ -1,6 +1,8 @@
 package com.francescobertamini.app_individuale.ui.championship_list;
 
+import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,19 +10,29 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.francescobertamini.app_individuale.MainActivity;
 import com.francescobertamini.app_individuale.data_managing.AllChampionshipsAdapter;
 import com.francescobertamini.app_individuale.data_managing.JsonExtractor;
 
 import com.francescobertamini.app_individuale.R;
+import com.francescobertamini.app_individuale.database.dbmanager.DBManagerUser;
+import com.francescobertamini.app_individuale.ui.championship.SubChampionshipsDialog;
+import com.francescobertamini.app_individuale.ui.championship.UnsubChampionshipsDialog;
+import com.francescobertamini.app_individuale.utils.RecyclerItemClickListener;
+import com.google.gson.JsonArray;
+
+import org.json.JSONArray;
 
 import java.io.IOException;
 
-public class AllChampionshipsFragment extends Fragment{
+public class AllChampionshipsFragment extends Fragment {
 
     private ChampionshipListViewModel championshipListViewModel;
 
@@ -38,7 +50,7 @@ public class AllChampionshipsFragment extends Fragment{
         championshipListViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
-             //   textView.setText(s);
+                //   textView.setText(s);
             }
         });
 
@@ -55,14 +67,59 @@ public class AllChampionshipsFragment extends Fragment{
 
         recyclerView.setAdapter(adapter);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+
+                String id = adapter.getItem(position).getAsJsonObject().get("id").getAsString();
+                Log.e("Championship", adapter.getItem(position).toString());
+
+                JsonArray partecipants = adapter.getItem(position).getAsJsonObject().get("piloti-iscritti").getAsJsonArray();
+
+                Log.e("Partecipants", partecipants.toString());
+
+                DBManagerUser dbManagerUser = new DBManagerUser(getContext());
+                dbManagerUser.open();
+                Cursor cursor = dbManagerUser.fetchByUsername(MainActivity.username);
+                String complete_name = cursor.getString(cursor.getColumnIndex("name")) + " " + cursor.getString(cursor.getColumnIndex("lastname"));
+                Log.e("Database name",complete_name);
+
+                Boolean has_user_sub = false;
+
+                for (int i = 0; i < partecipants.size(); i++) {
+                    if (partecipants.get(i).getAsJsonObject().get("nome").getAsString().equals(complete_name)) {
+                        has_user_sub = true;
+                    }
+                }
+
+                Log.e("Boolean sub", has_user_sub.toString());
+
+
+                if (has_user_sub) {
+                    SubChampionshipsDialog dialog = new SubChampionshipsDialog();
+                    FragmentManager fragmentManager = getParentFragmentManager();
+                    dialog.display(fragmentManager, id);
+                } else {
+                    UnsubChampionshipsDialog dialog = new UnsubChampionshipsDialog();
+                    FragmentManager fragmentManager = getParentFragmentManager();
+                    dialog.display(fragmentManager, id);
+                }
+            }
+
+
+            @Override
+            public void onLongItemClick(View view, int position) {
+                // do whatever
+            }
+        }));
+
+        recyclerView.setLayoutManager(new
+
+                LinearLayoutManager(this.getContext()));
 
 
         return root;
     }
-
-
-
 
 
 }

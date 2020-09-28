@@ -1,6 +1,7 @@
 package com.francescobertamini.app_individuale.ui.championship_list;
 
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -13,6 +14,8 @@ public class ChampionshipsAdapter extends FragmentStateAdapter {
         super(fragment);
     }
 
+
+
     @NonNull
     @Override
     public Fragment createFragment(int position) {
@@ -24,6 +27,7 @@ public class ChampionshipsAdapter extends FragmentStateAdapter {
 
             try {
                 fragment = new AllChampionshipsFragment();
+
             } catch (IOException e) {
                 e.printStackTrace();
             }

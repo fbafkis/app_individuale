@@ -11,10 +11,10 @@
         <item
             android:id="@+id/nav_championships"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Championships" />
+            android:title="Campionati" />
         <item
             android:id="@+id/nav_account_settings"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Account settings" />
+            android:title="Impostazioni" />
     </group>
 </menu>

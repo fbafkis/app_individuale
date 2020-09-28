@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -76,6 +77,7 @@ public class AllChampionshipsAdapter extends RecyclerView.Adapter<AllChampionshi
 
         logo.setImageDrawable(context.getResources().getDrawable(logo_drawable_id));
 
+
     }
 
     @Override
@@ -85,6 +87,10 @@ public class AllChampionshipsAdapter extends RecyclerView.Adapter<AllChampionshi
             return 0;
         else return championships.size();
 
+    }
+
+    public JsonObject getItem (int position){
+        return championships.get(position).getAsJsonObject();
     }
 
 
