@@ -52,8 +52,8 @@
 
             <ImageView
                 android:id="@+id/unsubChampLogo"
-                android:layout_width="290dp"
-                android:layout_height="150dp"
+                android:layout_width="145dp"
+                android:layout_height="75dp"
                 tools:srcCompat="@tools:sample/avatars" />
 
             <TextView

@@ -1,12 +1,10 @@
-package com.francescobertamini.app_individuale.ui.account_settings;
+package com.francescobertamini.app_individuale.ui.settings;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
 import com.francescobertamini.app_individuale.MainActivity;
@@ -28,7 +25,6 @@ import com.francescobertamini.app_individuale.R;
 import com.francescobertamini.app_individuale.database.dbmanager.DBManagerStatus;
 import com.francescobertamini.app_individuale.database.dbmanager.DBManagerUser;
 import com.francescobertamini.app_individuale.ui.login.LoginActivity;
-import com.francescobertamini.app_individuale.ui.signup.SignupActivity2;
 import com.google.android.material.textfield.TextInputLayout;
 
 import butterknife.BindView;

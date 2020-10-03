@@ -15,10 +15,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <include layout="@layout/top_bar_settings" />
+        <include layout="@layout/top_bar_champ_calendar" />
 
         <FrameLayout
-            android:id="@+id/fragment_container"
+            android:id="@+id/champ_calendar_fragment_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -28,12 +28,12 @@
 
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/settingsBottomNavigation"
+            android:id="@+id/champCalendarBottomNavigation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:menu="@menu/bottom_navigation_menu_settings" />
+            app:menu="@menu/bottom_navigation_menu_champ_calendar" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

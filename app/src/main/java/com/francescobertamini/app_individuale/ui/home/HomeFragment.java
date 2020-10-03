@@ -23,7 +23,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.francescobertamini.app_individuale.R;
 import com.francescobertamini.app_individuale.database.dbmanager.DBManagerUser;
-import com.francescobertamini.app_individuale.ui.account_settings.SettingsFragment;
+import com.francescobertamini.app_individuale.ui.settings.SettingsFragment;
 import com.francescobertamini.app_individuale.ui.championship_list.ChampionshipsFragment;
 import com.google.android.material.navigation.NavigationView;
 

@@ -132,6 +132,16 @@
           "seq": "7",
           "data": "23/05/2020",
           "circuito": "Adria"
+        },
+        {
+          "seq": "8",
+          "data": "23/12/2020",
+          "circuito": "Vignole"
+        },
+        {
+          "seq": "8",
+          "data": "26/12/2020",
+          "circuito": "Deva"
         }
       ],
       "impostazioni-gioco": [

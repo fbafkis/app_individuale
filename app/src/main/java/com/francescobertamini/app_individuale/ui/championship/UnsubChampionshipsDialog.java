@@ -1,8 +1,8 @@
 package com.francescobertamini.app_individuale.ui.championship;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,14 +10,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.francescobertamini.app_individuale.R;
 import com.francescobertamini.app_individuale.data_managing.JsonExtractor;
+import com.francescobertamini.app_individuale.ui.championship.champ_calendar.ChampionshipEventsActivity;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -113,6 +112,17 @@ public class UnsubChampionshipsDialog extends DialogFragment {
         int logo_drawable_id = getContext().getResources().getIdentifier( logo_res, "drawable", getContext().getPackageName());
 
         _unsubChampLogo.setImageDrawable(getContext().getResources().getDrawable(logo_drawable_id));
+
+        _unsubChampCalendarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), ChampionshipEventsActivity.class);
+                intent.putExtra("championship", championship.toString());
+                startActivity(intent);
+
+            }
+        });
+
 
         return root;
     }

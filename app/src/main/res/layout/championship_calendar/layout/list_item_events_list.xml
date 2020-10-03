@@ -21,7 +21,7 @@
         android:textSize="30sp" />
 
     <LinearLayout
-        android:layout_width="200dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginStart="10dp"
         android:layout_weight="0"
@@ -37,14 +37,17 @@
             android:text="TextView"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/champListEventDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="TextView"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textSize="14sp" />
 
-    <ImageView
-        android:id="@+id/championshipListLogo"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_weight="1"
-        tools:srcCompat="@tools:sample/avatars" />
+    </LinearLayout>
 
 </LinearLayout>
 

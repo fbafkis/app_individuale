@@ -1,4 +1,4 @@
-package com.francescobertamini.app_individuale.ui.account_settings;
+package com.francescobertamini.app_individuale.ui.settings;
 
 import android.content.DialogInterface;
 import android.database.Cursor;

@@ -1,7 +1,6 @@
-package com.francescobertamini.app_individuale.ui.account_settings;
+package com.francescobertamini.app_individuale.ui.settings;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,11 +9,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,7 +29,6 @@ import androidx.lifecycle.ViewModelProviders;
 import com.francescobertamini.app_individuale.MainActivity;
 import com.francescobertamini.app_individuale.R;
 import com.francescobertamini.app_individuale.database.dbmanager.DBManagerUser;
-import com.francescobertamini.app_individuale.ui.home.HomeFragment;
 import com.francescobertamini.app_individuale.utils.ImagePickerActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -46,10 +41,8 @@ import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -106,8 +99,6 @@ public class SettingsFragment extends Fragment implements BottomNavigationView.O
         NavigationView navigationView = (NavigationView) getActivity().findViewById(R.id.nav_view);
         navigationView.getMenu().getItem(2).setChecked(true);
 
-        LayoutInflater layoutInflater = SettingsFragment.this.getLayoutInflater();
-        View emailEditDialog = inflater.inflate(R.layout.dialog_edit_mail, null);
 
 
         ButterKnife.bind(this, root);
@@ -255,6 +246,8 @@ public class SettingsFragment extends Fragment implements BottomNavigationView.O
         }
         return false;
     }
+
+
 
 
     private void editMail() {

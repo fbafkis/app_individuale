@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigationChampEventsList"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_format_list_numbered_24"
+        android:title="Lista" />
+    <item
+        android:id="@+id/navigationChampEventsCalendar"
+        android:enabled="true"
+        android:icon="@drawable/ic_today_black_24dp"
+        android:title="Calendario" />
+</menu>
+
