@@ -145,15 +145,15 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/signupFavouriteCircuitTextInputLayout"
+                    android:id="@+id/signupFavouriteTrackTextInputLayout"
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
                     android:backgroundTint="#00FFFFFF"
-                    android:hint="Il tuo circuito preferito">
+                    android:hint="Il tuo Tracko preferito">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/signupFavouriteCircuitEditText"
+                        android:id="@+id/signupFavouriteTrackEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="#00FFFFFF"
@@ -162,15 +162,15 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/signupHatedCircuitTextInputLayout"
+                    android:id="@+id/signupHatedTrackTextInputLayout"
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
                     android:backgroundTint="#00FFFFFF"
-                    android:hint="Il tuo circuito più odiato">
+                    android:hint="Il tuo Tracko più odiato">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/signupHatedCircuitNameEditText"
+                        android:id="@+id/signupHatedTrackNameEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="#00FFFFFF"

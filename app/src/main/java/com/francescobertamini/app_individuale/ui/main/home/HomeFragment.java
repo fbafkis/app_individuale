@@ -22,9 +22,9 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.francescobertamini.app_individuale.R;
-import com.francescobertamini.app_individuale.database.dbmanager.DBManagerUser;
+import com.francescobertamini.app_individuale.database.dbmanagers.DBManagerUser;
 import com.francescobertamini.app_individuale.ui.settings.SettingsFragment;
-import com.francescobertamini.app_individuale.ui.championship_list.ChampionshipsFragment;
+import com.francescobertamini.app_individuale.ui.championships.championships_list.ChampionshipsFragment;
 import com.google.android.material.navigation.NavigationView;
 
 import java.io.File;
@@ -36,7 +36,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class HomeFragment extends Fragment {
     private HomeViewModel homeViewModel;
-
     DBManagerUser dbManagerUser;
 
     @BindView(R.id.homeProfilePicture)
@@ -53,19 +52,13 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
-
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-
         NavigationView navigationView = (NavigationView) getActivity().findViewById(R.id.navView);
         navigationView.getMenu().getItem(0).setChecked(true);
-
         dbManagerUser = new DBManagerUser(getContext());
         dbManagerUser.open();
-
         Cursor cursor = dbManagerUser.fetchByUsername(MainActivity.username);
-
         ButterKnife.bind(this, root);
-
         _homeName.setText(cursor.getString(cursor.getColumnIndex("name")) + " " + cursor.getString(cursor.getColumnIndex("lastname")));
         _homeUsername.setText(MainActivity.username);
 
@@ -97,20 +90,15 @@ public class HomeFragment extends Fragment {
                         rotate = 90;
                         break;
                 }
-
                 Matrix matrix = new Matrix();
                 matrix.postRotate(rotate);
                 Bitmap rotateBitmap = Bitmap.createBitmap(bitmapImage, 0, 0, bitmapImage.getWidth(), bitmapImage.getHeight(), matrix, true);
                 _homeProfilePicture.setImageBitmap(rotateBitmap);
-
-
             } else
                 _homeProfilePicture.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_account_circle_100, null));
         }
 
-
         _homeChampionshipLink.setOnClickListener(v -> {
-
             Fragment fragment = null;
             fragment = new ChampionshipsFragment();
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
@@ -123,8 +111,10 @@ public class HomeFragment extends Fragment {
             shake.setAnimationListener(new Animation.AnimationListener() {
                 public void onAnimationStart(Animation a) {
                 }
+
                 public void onAnimationRepeat(Animation a) {
                 }
+
                 public void onAnimationEnd(Animation a) {
                     fragmentTransaction.commit();
                 }
@@ -132,7 +122,6 @@ public class HomeFragment extends Fragment {
         });
 
         _homeSettingsLink.setOnClickListener(v -> {
-
             Fragment fragment = null;
             fragment = new SettingsFragment();
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
@@ -145,18 +134,15 @@ public class HomeFragment extends Fragment {
             shake.setAnimationListener(new Animation.AnimationListener() {
                 public void onAnimationStart(Animation a) {
                 }
+
                 public void onAnimationRepeat(Animation a) {
                 }
+
                 public void onAnimationEnd(Animation a) {
                     fragmentTransaction.commit();
                 }
             });
         });
-
         return root;
-
-
     }
-
-
 }

@@ -18,24 +18,17 @@ public class MainActivity extends BasicActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     public static String username;
-    public static Toolbar toolbar;
-
-
+    public static Toolbar mainToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
+        mainToolbar = findViewById(R.id.mainToolbar);
+        setSupportActionBar(mainToolbar);
         username = getIntent().getStringExtra("username");
-
-
-
         DrawerLayout drawer = findViewById(R.id.drawerLayout);
         NavigationView navigationView = findViewById(R.id.navView);
-
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.nav_championships, R.id.nav_account_settings)
                 .setDrawerLayout(drawer)
@@ -47,7 +40,6 @@ public class MainActivity extends BasicActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
@@ -58,7 +50,5 @@ public class MainActivity extends BasicActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
-
-
 }
 

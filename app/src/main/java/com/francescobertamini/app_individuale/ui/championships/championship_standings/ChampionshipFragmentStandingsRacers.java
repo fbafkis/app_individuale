@@ -1,4 +1,4 @@
-package com.francescobertamini.app_individuale.ui.championship.champ_standings;
+package com.francescobertamini.app_individuale.ui.championships.championship_standings;
 
 import android.os.Bundle;
 import android.util.Log;

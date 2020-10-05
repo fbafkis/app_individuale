@@ -19,16 +19,14 @@ import java.io.Writer;
 public class JsonExtractorChampionships {
 
     JsonObject jsonObject;
-    JsonArray campionati;
+    JsonArray championships;
     Context context;
 
-    public JsonExtractorChampionships(Context current){
+    public JsonExtractorChampionships(Context current) {
         this.context = current;
     }
 
-
     public JsonArray readJson() throws IOException {
-
         InputStream is = context.getResources().openRawResource(R.raw.campionati);
         Writer writer = new StringWriter();
         char[] buffer = new char[1024];
@@ -45,46 +43,25 @@ public class JsonExtractorChampionships {
         } finally {
             is.close();
         }
-
         String jsonString = writer.toString();
-
-
         jsonObject = JsonParser.parseString(jsonString).getAsJsonObject();
-
-        campionati = jsonObject.get("campionati").getAsJsonArray();
-
-
-
-        return campionati;
-
-
-
+        championships = jsonObject.get("campionati").getAsJsonArray();
+        return championships;
     }
-
-
 
 
     public JsonArray getCalendar(JsonObject campionato) {
-
         JsonArray calendar = campionato.get("calendario").getAsJsonArray();
         return calendar;
-
     }
 
     public JsonArray getSettings(JsonObject campionato) {
-
         JsonArray settings = campionato.get("impostazioni-gioco").getAsJsonArray();
         return settings;
-
     }
 
     public JsonArray getDrivers(JsonObject campionato) {
-
-        JsonArray drivers = campionato.get("piloti-iscritti").getAsJsonArray();
-        return drivers;
-
+        JsonArray racers = campionato.get("piloti-iscritti").getAsJsonArray();
+        return racers;
     }
-
-
-
 }

@@ -64,7 +64,7 @@ public class ImagePickerActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         if (intent == null) {
-            Toast.makeText(getApplicationContext(),"boh", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "boh", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -90,7 +90,7 @@ public class ImagePickerActivity extends AppCompatActivity {
         builder.setTitle("Scegli la fonte");
 
         // add a list
-        String[] animals = {"Fotocamera","Galleria"};
+        String[] animals = {"Fotocamera", "Galleria"};
         builder.setItems(animals, (dialog, which) -> {
             switch (which) {
                 case 0:

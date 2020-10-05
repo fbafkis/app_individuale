@@ -17,15 +17,13 @@ import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
 public class JsonExtractorStandings {
-
     JsonObject jsonObject;
-    JsonArray campionati;
+    JsonArray championships;
     Context context;
 
     public JsonExtractorStandings(Context current){
         this.context = current;
     }
-
 
     public JsonArray readJson() throws IOException {
 
@@ -45,19 +43,13 @@ public class JsonExtractorStandings {
         } finally {
             is.close();
         }
-
         String jsonString = writer.toString();
-
-
         jsonObject = JsonParser.parseString(jsonString).getAsJsonObject();
-
-        campionati = jsonObject.get("campionati").getAsJsonArray();
-
-        return campionati;
-
-
-
+        championships = jsonObject.get("campionati").getAsJsonArray();
+        return championships;
     }
+
+    // get racers standings e get teams standings
 
 
 }

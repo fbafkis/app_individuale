@@ -30,9 +30,9 @@
             android:name="com.francescobertamini.app_individuale.ui.signup.SignupActivity"
             android:windowSoftInputMode="stateVisible|adjustResize"></activity>
         <activity android:name="com.francescobertamini.app_individuale.ui.signup.SignupActivity2"></activity>
-        <activity android:name="com.francescobertamini.app_individuale.ui.championship.champ_calendar.ChampionshipEventsActivity"></activity>
-        <activity android:name="com.francescobertamini.app_individuale.ui.championship.champ_partecipants.ChampionshipPartecipantsActivity"></activity>
-        <activity android:name="com.francescobertamini.app_individuale.ui.championship.champ_standings.ChampionshipStandingsActivity"></activity>
+        <activity android:name="com.francescobertamini.app_individuale.ui.championships.championship_events.ChampionshipEventsActivity"></activity>
+        <activity android:name="com.francescobertamini.app_individuale.ui.championships.championship_partecipants.ChampionshipPartecipantsActivity"></activity>
+        <activity android:name="com.francescobertamini.app_individuale.ui.championships.championship_standings.ChampionshipStandingsActivity"></activity>
 
         <activity android:name=".utils.ImagePickerActivity" />
         <activity

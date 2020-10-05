@@ -28,7 +28,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.francescobertamini.app_individuale.ui.main.MainActivity;
 import com.francescobertamini.app_individuale.R;
-import com.francescobertamini.app_individuale.database.dbmanager.DBManagerUser;
+import com.francescobertamini.app_individuale.database.dbmanagers.DBManagerUser;
 import com.francescobertamini.app_individuale.utils.ImagePickerActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -49,19 +49,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class SettingsFragment extends Fragment implements BottomNavigationView.OnNavigationItemSelectedListener {
-
-
     public static final int REQUEST_IMAGE = 100;
-
-
     private SettingsViewModel accountSettingsViewModel;
-
 
     @BindView(R.id.settingsProfilePicture)
     ImageView _settingsProfilePicture;
     @BindView(R.id.settingsEditProfilePicButton)
     ImageView _settingsEditPictureButton;
-
     @BindView(R.id.settingsName)
     TextView _settingsName;
     @BindView(R.id.settingsMail)
@@ -70,18 +64,6 @@ public class SettingsFragment extends Fragment implements BottomNavigationView.O
     TextView _settingsUsername;
     @BindView(R.id.editMailButton)
     FloatingActionButton _editMail;
-
-
-    /*
-    @BindView(R.id.settingsBirthdate)
-    TextView _settingsBirthdate;
-    @BindView(R.id.settingsAddress)
-    TextView _settingsAddress;
-    @BindView(R.id.settingsPassword)
-    TextView _settingsPassword;
-    @BindView(R.id.settingsRememberMe)
-    CheckBox _settingsRememberMe;
-     */
     @BindView(R.id.settingsBottomNavigation)
     BottomNavigationView _settingsBottomNavigation;
     @BindView(R.id.navigationProfileSettings)
@@ -89,27 +71,18 @@ public class SettingsFragment extends Fragment implements BottomNavigationView.O
     @BindView(R.id.navigationAccountSettings)
     BottomNavigationItemView _navigationAccountSettings;
 
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         accountSettingsViewModel =
                 ViewModelProviders.of(this).get(SettingsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_settings, container, false);
-
         NavigationView navigationView = (NavigationView) getActivity().findViewById(R.id.navView);
         navigationView.getMenu().getItem(2).setChecked(true);
-
-
-
         ButterKnife.bind(this, root);
-
-        MainActivity.toolbar.setTitle("Impostazioni");
-
+        MainActivity.mainToolbar.setTitle("Impostazioni");
         DBManagerUser dbManagerUser = new DBManagerUser(getContext());
         dbManagerUser.open();
-
         Cursor cursor = dbManagerUser.fetchByUsername(MainActivity.username);
-
         if (cursor.getInt(cursor.getColumnIndex("has_custom_picture")) == 1) {
             String imagePath = cursor.getString(cursor.getColumnIndex("profile_picture"));
             File image = new File(imagePath);
@@ -138,15 +111,13 @@ public class SettingsFragment extends Fragment implements BottomNavigationView.O
                         rotate = 90;
                         break;
                 }
-
                 Matrix matrix = new Matrix();
                 matrix.postRotate(rotate);
                 Bitmap rotateBitmap = Bitmap.createBitmap(bitmapImage, 0, 0, bitmapImage.getWidth(), bitmapImage.getHeight(), matrix, true);
                 _settingsProfilePicture.setImageBitmap(rotateBitmap);
-
-                } else _settingsProfilePicture.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_account_circle_100, null));
+            } else
+                _settingsProfilePicture.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_account_circle_100, null));
         }
-
 
         _settingsProfilePicture.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,7 +130,7 @@ public class SettingsFragment extends Fragment implements BottomNavigationView.O
                                 if (report.areAllPermissionsGranted()) {
                                     showImagePickerOptions();
                                 } else {
-                                    Toast.makeText(getContext(),"Devi concedere i permessi all'applicazione!", Toast.LENGTH_LONG);
+                                    Toast.makeText(getContext(), "Devi concedere i permessi all'applicazione!", Toast.LENGTH_LONG);
                                 }
                             }
 
@@ -170,27 +141,18 @@ public class SettingsFragment extends Fragment implements BottomNavigationView.O
                         }).check();
             }
         });
-
         _settingsName.setText(cursor.getString(cursor.getColumnIndex("name")) + " " + cursor.getString(cursor.getColumnIndex("lastname")));
-
         _settingsMail.setText(cursor.getString(cursor.getColumnIndex("email")));
-
         _settingsUsername.setText(cursor.getString(cursor.getColumnIndex("username")));
-
         _editMail.setOnClickListener(v -> {
             editMail();
         });
-
         loadFragment(new ProfileSettingsFragment());
-
         BottomNavigationView navigation = _settingsBottomNavigation;
         navigation.setOnNavigationItemSelectedListener(this);
-
         dbManagerUser.close();
         return root;
-
     }
-
 
     private void showImagePickerOptions() {
         ImagePickerActivity.showImagePickerOptions(getContext(), new ImagePickerActivity.PickerOptionListener() {
@@ -209,34 +171,25 @@ public class SettingsFragment extends Fragment implements BottomNavigationView.O
     private void launchCameraIntent() {
         Intent intent = new Intent(getContext(), ImagePickerActivity.class);
         intent.putExtra(ImagePickerActivity.INTENT_IMAGE_PICKER_OPTION, ImagePickerActivity.REQUEST_IMAGE_CAPTURE);
-
-        // setting aspect ratio
         intent.putExtra(ImagePickerActivity.INTENT_LOCK_ASPECT_RATIO, true);
         intent.putExtra(ImagePickerActivity.INTENT_ASPECT_RATIO_X, 1); // 16x9, 1x1, 3:4, 3:2
         intent.putExtra(ImagePickerActivity.INTENT_ASPECT_RATIO_Y, 1);
-
-        // setting maximum bitmap width and height
         intent.putExtra(ImagePickerActivity.INTENT_SET_BITMAP_MAX_WIDTH_HEIGHT, true);
         intent.putExtra(ImagePickerActivity.INTENT_BITMAP_MAX_WIDTH, 1000);
         intent.putExtra(ImagePickerActivity.INTENT_BITMAP_MAX_HEIGHT, 1000);
-
         startActivityForResult(intent, REQUEST_IMAGE);
     }
 
     private void launchGalleryIntent() {
         Intent intent = new Intent(getContext(), ImagePickerActivity.class);
         intent.putExtra(ImagePickerActivity.INTENT_IMAGE_PICKER_OPTION, ImagePickerActivity.REQUEST_GALLERY_IMAGE);
-
-        // setting aspect ratio
         intent.putExtra(ImagePickerActivity.INTENT_LOCK_ASPECT_RATIO, true);
         intent.putExtra(ImagePickerActivity.INTENT_ASPECT_RATIO_X, 1); // 16x9, 1x1, 3:4, 3:2
         intent.putExtra(ImagePickerActivity.INTENT_ASPECT_RATIO_Y, 1);
         startActivityForResult(intent, REQUEST_IMAGE);
     }
 
-
     private boolean loadFragment(Fragment fragment) {
-        //switching fragment
         if (fragment != null) {
             getChildFragmentManager()
                     .beginTransaction()
@@ -247,58 +200,42 @@ public class SettingsFragment extends Fragment implements BottomNavigationView.O
         return false;
     }
 
-
-
-
     private void editMail() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage("Modifica email");
-
         final View customLayout = getLayoutInflater().inflate(R.layout.dialog_edit_mail, null);
         builder.setView(customLayout);
         EditText _editMailEditText = customLayout.findViewById(R.id.editMailEditText);
         TextInputLayout _editMailtextInputLayout = customLayout.findViewById(R.id.editMailTextInputLayout);
-
-
         builder.setPositiveButton("Invia", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
-
             }
         });
-
 
         builder.setNegativeButton("Annulla", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 dialog.cancel();
             }
         });
-
         final AlertDialog dialog = builder.create();
         dialog.show();
-
-
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 String email = _editMailEditText.getText().toString();
-
                 if (email.isEmpty()) {
                     setErrorTheme(_editMailtextInputLayout);
                     _editMailtextInputLayout.setError("Inserisci la tua mail!");
-
                 } else if (!validateMail(email)) {
                     setErrorTheme(_editMailtextInputLayout);
                     _editMailtextInputLayout.setError("Inserisci una mail valida!");
                 } else {
-
                     unsetErrorTheme(_editMailtextInputLayout);
                     String newEmail = _editMailEditText.getText().toString();
                     DBManagerUser dbManagerUser = new DBManagerUser(getContext());
                     dbManagerUser.open();
-                    int result = dbManagerUser.updateMailByUsername(MainActivity.username, newEmail);
-
+                    int result = dbManagerUser.updateMail(MainActivity.username, newEmail);
                     if (result > 0) {
                         _settingsMail.setText(newEmail);
                         dialog.dismiss();
@@ -306,62 +243,45 @@ public class SettingsFragment extends Fragment implements BottomNavigationView.O
                         toast.show();
                         dbManagerUser.close();
                     } else {
-
                         Toast toast = Toast.makeText(getContext(), "Errore nell'aggiornare l'email.", Toast.LENGTH_LONG);
                         toast.show();
-
+                        dbManagerUser.close();
                     }
-
                 }
             }
         });
-
-
     }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == REQUEST_IMAGE) {
             if (resultCode == Activity.RESULT_OK) {
-
                 Uri uri = data.getParcelableExtra("path");
-
                 DBManagerUser dbManagerUser = new DBManagerUser(getContext());
                 dbManagerUser.open();
-
                 dbManagerUser.updatePicture(MainActivity.username, true, uri.getPath());
                 dbManagerUser.close();
-
                 Bitmap image = BitmapFactory.decodeFile(uri.getPath());
                 _settingsProfilePicture.setImageBitmap(image);
-
             }
         }
     }
 
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Fragment fragment = null;
-
         switch (item.getItemId()) {
             case R.id.navigationProfileSettings:
                 fragment = new ProfileSettingsFragment();
                 break;
-
             case R.id.navigationAccountSettings:
                 fragment = new AccountSettingsFragment();
                 break;
-
         }
-
         return loadFragment(fragment);
     }
 
-
     private void setErrorTheme(TextInputLayout t) {
-
         t.setErrorEnabled(true);
         t.setErrorIconDrawable(R.drawable.ic_baseline_error_outline_24);
     }
@@ -370,13 +290,8 @@ public class SettingsFragment extends Fragment implements BottomNavigationView.O
         t.setErrorEnabled(false);
     }
 
-
     private boolean validateMail(String email) {
-
         String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
         return email.matches(regex);
-
     }
-
-
 }

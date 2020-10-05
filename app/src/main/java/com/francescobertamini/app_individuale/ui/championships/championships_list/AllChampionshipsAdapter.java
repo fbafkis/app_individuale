@@ -1,4 +1,4 @@
-package com.francescobertamini.app_individuale.data_managing;
+package com.francescobertamini.app_individuale.ui.championships.championships_list;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -15,16 +15,13 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 public class AllChampionshipsAdapter extends RecyclerView.Adapter<AllChampionshipsAdapter.ViewHolder> {
-
     JsonArray championships;
     Context context;
-
 
     public AllChampionshipsAdapter(JsonArray championships, Context context) {
         this.championships = championships;
         this.context = context;
     }
-
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 

@@ -1,4 +1,4 @@
-package com.francescobertamini.app_individuale.database.dbmanager;
+package com.francescobertamini.app_individuale.database.dbmanagers;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -92,14 +92,7 @@ public class DBManagerUser {
         return columnsAffected;
     }
 
-    public int updateMail(String email) {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("email", email);
-        int columnsAffected = database.update("user", contentValues, "email" + "= ?", new String[]{email});
-        return columnsAffected;
-    }
-
-    public int updateMailByUsername(String username, String email) {
+    public int updateMail(String username, String email) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("email", email);
         int columnsAffected = database.update("user", contentValues, "username" + "= ?", new String[]{username});
@@ -173,6 +166,4 @@ public class DBManagerUser {
         int columnsAffected = database.update("user", contentValues, "email" + "= ?", new String[]{email});
         return columnsAffected;
     }
-
-
 }

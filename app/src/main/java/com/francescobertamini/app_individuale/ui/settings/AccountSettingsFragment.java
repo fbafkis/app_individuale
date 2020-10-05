@@ -22,8 +22,8 @@ import androidx.fragment.app.Fragment;
 
 import com.francescobertamini.app_individuale.ui.main.MainActivity;
 import com.francescobertamini.app_individuale.R;
-import com.francescobertamini.app_individuale.database.dbmanager.DBManagerStatus;
-import com.francescobertamini.app_individuale.database.dbmanager.DBManagerUser;
+import com.francescobertamini.app_individuale.database.dbmanagers.DBManagerStatus;
+import com.francescobertamini.app_individuale.database.dbmanagers.DBManagerUser;
 import com.francescobertamini.app_individuale.ui.login.LoginActivity;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -44,12 +44,10 @@ public class AccountSettingsFragment extends Fragment {
     CheckBox _settingsRememberMe;
     @BindView(R.id.showPassword)
     ImageButton _showPassword;
-
     @BindView(R.id.editAddress)
     ImageButton _editAddress;
     @BindView(R.id.editPassword)
     ImageButton _editPassword;
-
     @BindView(R.id.logoutButton)
     Button _logoutButton;
     @BindView(R.id.deleteAccountButton)
@@ -57,28 +55,19 @@ public class AccountSettingsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        //just change the fragment_dashboard
-        //with the fragment you want to inflate
-        //like if the class is HomeFragment it should have R.layout.home_fragment
-        //if it is DashboardFragment it should have R.layout.fragment_dashboard
         View root = inflater.inflate(R.layout.fragment_account_settings, null);
-
         ButterKnife.bind(this, root);
-
         DBManagerUser dbManagerUser = new DBManagerUser(getContext());
         dbManagerUser.open();
-
         Cursor cursor = dbManagerUser.fetchByUsername(MainActivity.username);
-
         _settingsBirthdate.setText(cursor.getString(cursor.getColumnIndex("birthdate")));
         _settingsAddress.setText(cursor.getString(cursor.getColumnIndex("address")));
         _settingsPasswordHidden.setText(cursor.getString(cursor.getColumnIndex("password")));
         _settingsPasswordShown.setText(cursor.getString(cursor.getColumnIndex("password")));
-        _showPassword.setOnClickListener(new View.OnClickListener() {
 
+        _showPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (_settingsPasswordHidden.getVisibility() == View.VISIBLE) {
                     _settingsPasswordHidden.setVisibility(View.GONE);
                     _settingsPasswordShown.setVisibility(View.VISIBLE);
@@ -87,13 +76,10 @@ public class AccountSettingsFragment extends Fragment {
                     _settingsPasswordShown.setVisibility(View.GONE);
                     _settingsPasswordHidden.setVisibility(View.VISIBLE);
                     _showPassword.setImageDrawable(getResources().getDrawable(R.drawable.ic_outline_remove_red_eye_24, null));
-
                 }
-
             }
-
-
         });
+
         int rememberMe = cursor.getInt(cursor.getColumnIndex("remember_me"));
         if (rememberMe == 1)
             _settingsRememberMe.setChecked(true);
@@ -101,17 +87,20 @@ public class AccountSettingsFragment extends Fragment {
         _settingsRememberMe.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
                 if (isChecked) {
+                    dbManagerUser.open();
                     dbManagerUser.updateRemeberMe(true, MainActivity.username);
                     Toast toast = Toast.makeText(getContext(), "\"Ricordami\" attivo, non dovrai efettuare il login.", Toast.LENGTH_LONG);
                     toast.show();
                     Log.e("RememberMe", "On");
+                    dbManagerUser.close();
                 } else if (!isChecked) {
+                    dbManagerUser.open();
                     dbManagerUser.updateRemeberMe(false, MainActivity.username);
                     Toast toast = Toast.makeText(getContext(), "\"Ricordami\" non attivo, dovrai efettuare il login.", Toast.LENGTH_LONG);
                     toast.show();
                     Log.e("RememberMe", "Off");
+                    dbManagerUser.close();
                 }
             }
         });
@@ -137,25 +126,19 @@ public class AccountSettingsFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int id) {
                     }
                 });
-
-
                 builder.setNegativeButton("Annulla", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                     }
                 });
-
                 final AlertDialog dialog = builder.create();
                 dialog.show();
-
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
                         DBManagerStatus dbManagerStatus = new DBManagerStatus(getContext());
                         dbManagerStatus.open();
-                        int result = dbManagerStatus.update(0, null);
-
+                        int result = dbManagerStatus.update(false, null);
                         if (result == 1) {
                             Intent intent = new Intent(getContext(), LoginActivity.class);
                             getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
@@ -163,17 +146,16 @@ public class AccountSettingsFragment extends Fragment {
                             toast.show();
                             startActivity(intent);
                             getActivity().finish();
-                        } else if (result==0){
+                        } else if (result == 0) {
                             Toast toast = Toast.makeText(getContext(), "Errore: impossibile effettuare il logout", Toast.LENGTH_LONG);
                             toast.show();
                         }
-
+                        dbManagerStatus.close();
                     }
                 });
-
-
             }
         });
+
         _deleteAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -185,152 +167,120 @@ public class AccountSettingsFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int id) {
                     }
                 });
-
-
                 builder.setNegativeButton("Annulla", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                     }
                 });
-
                 final AlertDialog dialog = builder.create();
                 dialog.show();
-
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
                         DBManagerStatus dbManagerStatus = new DBManagerStatus(getContext());
                         dbManagerStatus.open();
-                        int result = dbManagerStatus.update(0, null);
-
+                        int result = dbManagerStatus.update(false, null);
                         if (result == 1) {
+                            dbManagerUser.open();
                             int result2 = dbManagerUser.delete(MainActivity.username);
-                            if(result2 == 1){
-                            Intent intent = new Intent(getContext(), LoginActivity.class);
-                            getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                            Toast toast = Toast.makeText(getContext(), "Account eliminato correttamente", Toast.LENGTH_LONG);
-                            toast.show();
-                            startActivity(intent);
-                            getActivity().finish();
-                            } else if (result2==0){
+                            if (result2 == 1) {
+                                Intent intent = new Intent(getContext(), LoginActivity.class);
+                                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                                Toast toast = Toast.makeText(getContext(), "Account eliminato correttamente", Toast.LENGTH_LONG);
+                                toast.show();
+                                startActivity(intent);
+                                getActivity().finish();
+                            } else if (result2 == 0) {
                                 Toast toast = Toast.makeText(getContext(), "Errore: impossibile eliminare l'account", Toast.LENGTH_LONG);
                                 toast.show();
                             }
-                        } else if (result==0){
+                        } else if (result == 0) {
                             Toast toast = Toast.makeText(getContext(), "Errore: impossibile aggiornare lo stato dell'applicazione", Toast.LENGTH_LONG);
                             toast.show();
                         }
+                        dbManagerUser.close();
+                        dbManagerStatus.close();
                     }
                 });
             }
         });
         return root;
-
     }
 
     private void editAddress() {
-
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage("Modifica il tuo indirizzo");
-
         final View customLayout = getLayoutInflater().inflate(R.layout.dialog_edit_address, null);
         builder.setView(customLayout);
         EditText editText = customLayout.findViewById(R.id.editAddressEditText);
         TextInputLayout textInputLayout = customLayout.findViewById(R.id.editAddressTextInputLayout);
-
-        builder.setPositiveButton("Invia", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Conferma", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
             }
         });
-
-
         builder.setNegativeButton("Annulla", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 dialog.cancel();
             }
         });
-
         final AlertDialog dialog = builder.create();
         dialog.show();
-
-
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 String newAddress = editText.getText().toString();
-
                 if (newAddress.isEmpty()) {
                     setErrorTheme(textInputLayout);
                     textInputLayout.setError("Inserisci il tuo indirizzo!");
                 } else {
-
                     unsetErrorTheme(textInputLayout);
                     DBManagerUser dbManagerUser = new DBManagerUser(getContext());
                     dbManagerUser.open();
                     int result = dbManagerUser.updateAddress(newAddress, MainActivity.username);
-
                     if (result > 0) {
                         _settingsAddress.setText(newAddress.toString());
                         dialog.dismiss();
                         Toast toast = Toast.makeText(getContext(), "Indirizzo aggiornato correttamente", Toast.LENGTH_LONG);
                         toast.show();
                     } else {
-
                         Toast toast = Toast.makeText(getContext(), "Errore nell'aggiornare l'indirizzo.", Toast.LENGTH_LONG);
                         toast.show();
-
                     }
-
+                    dbManagerUser.close();
                 }
             }
         });
-
-
     }
 
     private void editPassword() {
-
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage("Modifica la tua password");
-
         final View customLayout = getLayoutInflater().inflate(R.layout.dialog_edit_password, null);
         builder.setView(customLayout);
         EditText passwordEditText = customLayout.findViewById(R.id.editPasswordEditText);
         EditText passwordConfirmEditText = customLayout.findViewById(R.id.editConfirmPasswordEditText);
-
         TextInputLayout passwordInputLayout = customLayout.findViewById(R.id.editPasswordTextInputLayout);
         TextInputLayout passwordConfirmTextInputLayout = customLayout.findViewById(R.id.editConfirmPasswordTextInputLayout);
-
-
-        builder.setPositiveButton("Invia", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Conferma", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
             }
         });
-
 
         builder.setNegativeButton("Annulla", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 dialog.cancel();
             }
         });
-
         final AlertDialog dialog = builder.create();
         dialog.show();
-
-
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 String password;
-                String passwordConfirm;
-                Boolean passwordOK = false;
-                Boolean passwordConfirmOK = false;
-
+                Boolean passwordOK;
+                Boolean passwordConfirmOK;
                 if (passwordEditText.getText().toString().trim().isEmpty()) {
                     setErrorTheme(passwordInputLayout);
                     passwordInputLayout.setError("Inserisci la tua password!");
@@ -357,7 +307,6 @@ public class AccountSettingsFragment extends Fragment {
                     passwordConfirmTextInputLayout.setHint("Conferma password");
                 }
 
-
                 if (passwordOK && passwordConfirmOK) {
                     password = passwordConfirmEditText.getText().toString().trim();
                     DBManagerUser dbManagerUser = new DBManagerUser(getContext());
@@ -373,14 +322,13 @@ public class AccountSettingsFragment extends Fragment {
                         Toast toast = Toast.makeText(getContext(), "Errore nell'aggiornare la password", Toast.LENGTH_LONG);
                         toast.show();
                     }
+                    dbManagerUser.close();
                 }
             }
         });
-
     }
 
     private void setErrorTheme(TextInputLayout t) {
-
         t.setErrorEnabled(true);
         t.setErrorIconDrawable(R.drawable.ic_baseline_error_outline_24);
     }
@@ -388,6 +336,4 @@ public class AccountSettingsFragment extends Fragment {
     private void unsetErrorTheme(TextInputLayout t) {
         t.setErrorEnabled(false);
     }
-
-
 }

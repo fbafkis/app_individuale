@@ -1,7 +1,6 @@
-package com.francescobertamini.app_individuale.ui.championship_list;
+package com.francescobertamini.app_individuale.ui.championships.championships_list;
 
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;

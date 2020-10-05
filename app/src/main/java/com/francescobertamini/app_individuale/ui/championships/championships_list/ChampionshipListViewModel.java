@@ -1,4 +1,4 @@
-package com.francescobertamini.app_individuale.ui.championship_list;
+package com.francescobertamini.app_individuale.ui.championships.championships_list;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

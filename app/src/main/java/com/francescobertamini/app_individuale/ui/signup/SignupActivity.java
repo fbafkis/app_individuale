@@ -14,8 +14,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
-import com.francescobertamini.app_individuale.database.DBHelper;
-import com.francescobertamini.app_individuale.database.dbmanager.DBManagerUser;
+import com.francescobertamini.app_individuale.database.dbmanagers.DBManagerUser;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Calendar;
@@ -85,7 +84,6 @@ public class SignupActivity extends AppCompatActivity implements DatePickerDialo
             public void onClick(View v) {
                 finish();
                 overridePendingTransition(anim.slide_in_left, anim.slide_out_right);
-
             }
         });
 
@@ -95,7 +93,6 @@ public class SignupActivity extends AppCompatActivity implements DatePickerDialo
                 checkFields();
             }
         });
-
     }
 
     @Override
@@ -104,32 +101,29 @@ public class SignupActivity extends AppCompatActivity implements DatePickerDialo
         calendar.set(Calendar.YEAR, year);
         calendar.set(Calendar.MONTH, month);
         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-
         String Year = Integer.toString(year);
         String Month = Integer.toString(month + 1);
         String DayOfMonth = Integer.toString(dayOfMonth);
-
         if (month < 10) {
             Month = "0" + Month;
         }
         if (dayOfMonth < 10) {
             DayOfMonth = "0" + DayOfMonth;
         }
-
         String currentDateString = DayOfMonth + "/" + Month + "/" + Year;
         _signupBirthDateEditText.setText(currentDateString);
     }
 
     public void checkFields() {
 
-        Boolean birthdateOK = false;
-        Boolean emailOK = false;
-        Boolean passwordOK = false;
-        Boolean passwordConfirmOK = false;
-        Boolean nameOK = false;
-        Boolean lastnameOK = false;
-        Boolean usernameOK = false;
-        Boolean addressOK = false;
+        Boolean birthdateOK;
+        Boolean emailOK;
+        Boolean passwordOK;
+        Boolean passwordConfirmOK;
+        Boolean nameOK;
+        Boolean lastnameOK;
+        Boolean usernameOK;
+        Boolean addressOK;
 
         String name = "";
         String lastname = "";
@@ -245,24 +239,16 @@ public class SignupActivity extends AppCompatActivity implements DatePickerDialo
         }
 
         if (nameOK && lastnameOK && addressOK && birthdateOK && emailOK && usernameOK && passwordOK && passwordConfirmOK) {
-
             if (checkDuplicateUsers(username, email) == 1) {
-
                 Toast duplicateUsernameWarningToast = Toast.makeText(this, "Esiste già un utente con username uguale!", Toast.LENGTH_LONG);
                 duplicateUsernameWarningToast.show();
-
             } else if (checkDuplicateUsers(username, email) == 2) {
-
                 Toast duplicateEmailWarningToast = Toast.makeText(this, "Esiste già un utente con email uguale!", Toast.LENGTH_LONG);
                 duplicateEmailWarningToast.show();
-
             } else if (checkDuplicateUsers(username, email) == 3) {
-
                 Toast duplicateUserWarningToast = Toast.makeText(this, "Esiste già un utente con username e email uguali!", Toast.LENGTH_LONG);
                 duplicateUserWarningToast.show();
-
             } else {
-
                 Intent intent = new Intent(getApplicationContext(), SignupActivity2.class);
                 intent.putExtra("name", name);
                 intent.putExtra("lastname", lastname);
@@ -271,11 +257,8 @@ public class SignupActivity extends AppCompatActivity implements DatePickerDialo
                 intent.putExtra("username", username);
                 intent.putExtra("birthdate", birthdate);
                 intent.putExtra("password", password);
-
                 overridePendingTransition(anim.slide_in_right, anim.slide_out_left);
                 startActivity(intent);
-
-
             }
 
         }
@@ -295,12 +278,10 @@ public class SignupActivity extends AppCompatActivity implements DatePickerDialo
     private boolean validateBirthDate(String birthdate) {
         boolean checkFormat = false;
         boolean checkNumber = false;
-
         if (birthdate.matches("([0-9]{2})/([0-9]{2})/([0-9]{4})"))
             checkFormat = true;
         else
             checkFormat = false;
-
         if (checkFormat) {
             String[] t = birthdate.split("/");
             checkNumber = (Integer.valueOf(t[0]) <= 31 && Integer.valueOf(t[1]) <= 12 && Integer.valueOf(t[2]) >= 1900 && Integer.valueOf(t[2]) <= 2100);
@@ -309,25 +290,18 @@ public class SignupActivity extends AppCompatActivity implements DatePickerDialo
     }
 
     private boolean validateName(String name) {
-
         String regex = "^[A-Za-z]+$";
         return name.matches(regex);
-
     }
 
     private boolean validateMail(String email) {
-
         String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
         return email.matches(regex);
-
     }
 
     private int checkDuplicateUsers(String username, String email) {
-
-        DBHelper dbHelper = new DBHelper(this);
         DBManagerUser dbManagerUser = new DBManagerUser(this);
         dbManagerUser.open();
-
         Cursor userCursor = dbManagerUser.fetchByUsername(username);
         Cursor emailCursor = dbManagerUser.fetchByEmail(email);
 
@@ -339,7 +313,5 @@ public class SignupActivity extends AppCompatActivity implements DatePickerDialo
             return 3;
 
         return 0;
-
-
     }
 }

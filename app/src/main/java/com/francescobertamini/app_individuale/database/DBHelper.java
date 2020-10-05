@@ -5,8 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBHelper extends SQLiteOpenHelper {
-    public static final String DBNAME="APPDB";
-
+    public static final String DBNAME = "APPDB";
 
     public DBHelper(Context context) {
         super(context, DBNAME, null, 1);
@@ -24,6 +23,5 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
     }
 }

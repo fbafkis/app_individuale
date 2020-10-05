@@ -1,4 +1,4 @@
-package com.francescobertamini.app_individuale.ui.championship;
+package com.francescobertamini.app_individuale.ui.championships;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -18,9 +18,9 @@ import androidx.fragment.app.FragmentManager;
 import com.francescobertamini.app_individuale.R;
 import com.francescobertamini.app_individuale.data_managing.JsonExtractorChampionships;
 import com.francescobertamini.app_individuale.data_managing.JsonExtractorStandings;
-import com.francescobertamini.app_individuale.ui.championship.champ_calendar.ChampionshipEventsActivity;
-import com.francescobertamini.app_individuale.ui.championship.champ_partecipants.ChampionshipPartecipantsActivity;
-import com.francescobertamini.app_individuale.ui.championship.champ_standings.ChampionshipStandingsActivity;
+import com.francescobertamini.app_individuale.ui.championships.championship_events.ChampionshipEventsActivity;
+import com.francescobertamini.app_individuale.ui.championships.championship_partecipants.ChampionshipPartecipantsActivity;
+import com.francescobertamini.app_individuale.ui.championships.championship_standings.ChampionshipStandingsActivity;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 

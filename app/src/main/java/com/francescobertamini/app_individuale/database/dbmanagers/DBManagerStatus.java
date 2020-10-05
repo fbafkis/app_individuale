@@ -1,4 +1,4 @@
-package com.francescobertamini.app_individuale.database.dbmanager;
+package com.francescobertamini.app_individuale.database.dbmanagers;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -29,7 +29,6 @@ public class DBManagerStatus {
     }
 
     //Insert non necessario.
-
     public Cursor fetch() {
         String[] columns = {"is_user_logged", "user_logged"};
         Cursor cursor = database.query("status", columns, null, null, null, null, null);
@@ -39,17 +38,12 @@ public class DBManagerStatus {
         return cursor;
     }
 
-    public int update(int isUserLogged, String userLogged ) {
+    public int update(boolean isUserLogged, String userLogged) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("is_user_logged", isUserLogged);
         contentValues.put("user_logged", userLogged);
-
         int columnsAffected = database.update("status", contentValues, null, null);
         return columnsAffected;
     }
-
-
     //Delete non necessario.
-
-
 }

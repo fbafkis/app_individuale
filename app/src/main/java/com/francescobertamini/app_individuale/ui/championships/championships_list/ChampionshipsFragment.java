@@ -1,4 +1,4 @@
-package com.francescobertamini.app_individuale.ui.championship_list;
+package com.francescobertamini.app_individuale.ui.championships.championships_list;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,7 +12,6 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.francescobertamini.app_individuale.ui.main.MainActivity;
 import com.francescobertamini.app_individuale.R;
-import com.francescobertamini.app_individuale.data_managing.AllChampionshipsAdapter;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;

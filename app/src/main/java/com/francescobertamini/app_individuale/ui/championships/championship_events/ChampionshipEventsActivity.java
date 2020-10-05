@@ -1,4 +1,4 @@
-package com.francescobertamini.app_individuale.ui.championship.champ_standings;
+package com.francescobertamini.app_individuale.ui.championships.championship_events;
 
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -18,16 +18,16 @@ import com.google.gson.JsonParser;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ChampionshipStandingsActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+public class ChampionshipEventsActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     JsonObject championship;
 
-    @BindView(R.id.champStandTitle)
-    TextView _champStandingsTitle;
-    @BindView(R.id.champStandBottomNavigation)
-    BottomNavigationView _champStandingsBottomNavigation;
-    @BindView(R.id.backToChampFromStand)
-    ImageButton _backToChampFromStandings;
+    @BindView(R.id.champEventsTitle)
+    TextView _champCalendarTitle;
+    @BindView(R.id.champEventsBottomNavigation)
+    BottomNavigationView _champCalendarBottomNavigation;
+    @BindView(R.id.backToChampFromEvents)
+    ImageButton _backToChampFromCal;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,23 +36,23 @@ public class ChampionshipStandingsActivity extends AppCompatActivity implements 
 
         championship = (JsonObject) JsonParser.parseString(getIntent().getStringExtra("championship"));
 
-        setContentView(R.layout.activity_championship_standings);
+        setContentView(R.layout.activity_championship_events);
         ButterKnife.bind(this);
 
-        _backToChampFromStandings.setOnClickListener(new View.OnClickListener() {
+        _backToChampFromCal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
 
-        _champStandingsTitle.setText("Classifiche di: " + championship.get("nome").getAsString());
+        _champCalendarTitle.setText("Eventi del campionato: " + championship.get("nome").getAsString());
 
 
-        BottomNavigationView navigation = _champStandingsBottomNavigation;
+        BottomNavigationView navigation = _champCalendarBottomNavigation;
         navigation.setOnNavigationItemSelectedListener(this);
 
-        loadFragment(new ChampionshipFragmentStandingsRacers());
+        loadFragment(new ChampionshipFragmentList());
 
 
     }
@@ -62,12 +62,12 @@ public class ChampionshipStandingsActivity extends AppCompatActivity implements 
         Fragment fragment = null;
 
         switch (item.getItemId()) {
-            case R.id.navigationChampStandRacer:
-                fragment = new ChampionshipFragmentStandingsRacers();
+            case R.id.navigationChampEventsList:
+                fragment = new ChampionshipFragmentList();
                 break;
 
-            case R.id.navigationChampStandTeams:
-                fragment = new ChampionshipFragmentStandingsTeams();
+            case R.id.navigationChampEventsCalendar:
+                fragment = new ChampionshipFragmentCalendar();
                 break;
 
         }
@@ -83,7 +83,7 @@ public class ChampionshipStandingsActivity extends AppCompatActivity implements 
         if (fragment != null) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.chamStandFragmentContainer, fragment)
+                    .replace(R.id.champEventsFragmentContainer, fragment)
                     .commit();
             return true;
         }

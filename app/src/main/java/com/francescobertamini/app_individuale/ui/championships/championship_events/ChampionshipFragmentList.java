@@ -1,4 +1,4 @@
-package com.francescobertamini.app_individuale.ui.championship.champ_standings;
+package com.francescobertamini.app_individuale.ui.championships.championship_events;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -19,19 +19,21 @@ import com.google.gson.JsonParser;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ChampionshipFragmentStandingsTeams extends Fragment {
+public class ChampionshipFragmentList extends Fragment {
 
     JsonObject championship;
-    JsonArray teamStandings;
+    JsonArray events;
     RecyclerView.Adapter adapter;
 
-    @BindView(R.id.champStandTeamRecycler)
-    RecyclerView _champStandingsTeamsList;
+    @BindView(R.id.champEventsListRecycler)
+    RecyclerView _champEventsList;
+
+    String string_dates[];
 
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View root = inflater.inflate(R.layout.fragment_champ_standings_teams, null);
+        View root = inflater.inflate(R.layout.fragment_champ_events_list, null);
 
         ButterKnife.bind(this, root);
 
@@ -39,10 +41,10 @@ public class ChampionshipFragmentStandingsTeams extends Fragment {
         championship = (JsonObject) JsonParser.parseString(args.getString("championship"));
 
         Log.e("Campionato", championship.toString());
-        teamStandings = championship.get("classifica-team").getAsJsonArray();
-        adapter = new TeamsStandingAdapter(teamStandings, getContext());
-        _champStandingsTeamsList.setAdapter(adapter);
-        _champStandingsTeamsList.setLayoutManager(new LinearLayoutManager(getContext()));
+        events = championship.get("calendario").getAsJsonArray();
+        adapter = new ListEventAdapter(events, getContext());
+        _champEventsList.setAdapter(adapter);
+        _champEventsList.setLayoutManager(new LinearLayoutManager(getContext()));
         return root;
     }
 

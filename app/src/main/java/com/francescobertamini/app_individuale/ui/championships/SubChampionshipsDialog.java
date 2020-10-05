@@ -1,4 +1,4 @@
-package com.francescobertamini.app_individuale.ui.championship;
+package com.francescobertamini.app_individuale.ui.championships;
 
 import android.app.Dialog;
 import android.os.Bundle;

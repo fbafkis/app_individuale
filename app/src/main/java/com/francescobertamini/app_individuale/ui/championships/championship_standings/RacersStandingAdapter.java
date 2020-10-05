@@ -1,4 +1,4 @@
-package com.francescobertamini.app_individuale.ui.championship.champ_standings;
+package com.francescobertamini.app_individuale.ui.championships.championship_standings;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,14 +13,14 @@ import com.francescobertamini.app_individuale.R;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-public class TeamsStandingAdapter extends RecyclerView.Adapter<TeamsStandingAdapter.ViewHolder> {
+public class RacersStandingAdapter extends RecyclerView.Adapter<RacersStandingAdapter.ViewHolder> {
 
-    JsonArray teamsStandings;
+    JsonArray racerStandings;
     Context context;
 
 
-    public TeamsStandingAdapter(JsonArray teamsStandings, Context context) {
-        this.teamsStandings = teamsStandings;
+    public RacersStandingAdapter(JsonArray racerStandings, Context context) {
+        this.racerStandings = racerStandings;
         this.context = context;
     }
 
@@ -29,11 +29,9 @@ public class TeamsStandingAdapter extends RecyclerView.Adapter<TeamsStandingAdap
 
         public TextView standing;
         public TextView name;
+        public TextView team;
         public TextView car;
-
         public TextView score;
-
-
 
 
 
@@ -42,10 +40,11 @@ public class TeamsStandingAdapter extends RecyclerView.Adapter<TeamsStandingAdap
 
             super(itemView);
 
-            standing = itemView.findViewById(R.id.champStandTeamListItemStanding);
-            name = itemView.findViewById(R.id.champStandTeamListItemName);
-            car = itemView.findViewById(R.id.champStandTeamListItemCar);
-            score = itemView.findViewById(R.id.champStandTeamListItemScore);
+            standing = itemView.findViewById(R.id.champStandRacerListItemStanding);
+            name = itemView.findViewById(R.id.champStandRacerListItemName);
+            team = itemView.findViewById(R.id.champStandRacerListItemTeam);
+            car = itemView.findViewById(R.id.champStandRacerListItemCar);
+            score = itemView.findViewById(R.id.champStandRacerListItemScore);
 
         }
     }
@@ -54,29 +53,31 @@ public class TeamsStandingAdapter extends RecyclerView.Adapter<TeamsStandingAdap
     @NonNull
 
     @Override
-    public TeamsStandingAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RacersStandingAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View itemView = inflater.inflate(R.layout.list_item_standings_teams, parent, false);
+        View itemView = inflater.inflate(R.layout.list_item_standings_racers, parent, false);
         ViewHolder viewHolder = new ViewHolder(itemView);
         return viewHolder;
     }
 
 
     @Override
-    public void onBindViewHolder(@NonNull TeamsStandingAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RacersStandingAdapter.ViewHolder holder, int position) {
 
 
         TextView standing = holder.standing;
         TextView name = holder.name;
+        TextView team = holder.team;
         TextView car = holder.car;
         TextView score = holder.score;
 
 
-        JsonObject event = teamsStandings.get(position).getAsJsonObject();
+        JsonObject event = racerStandings.get(position).getAsJsonObject();
 
         standing.setText(Integer.toString(position+1));
-        name.setText(event.get("team").getAsString());
+        name.setText(event.get("nome").getAsString());
+        team.setText(event.get("team").getAsString());
         car.setText(event.get("auto").getAsString());
         score.setText(event.get("punti").getAsString());
 
@@ -87,14 +88,14 @@ public class TeamsStandingAdapter extends RecyclerView.Adapter<TeamsStandingAdap
     @Override
     public int getItemCount() {
 
-        if (teamsStandings.size() == 0)
+        if (racerStandings.size() == 0)
             return 0;
-        else return teamsStandings.size();
+        else return racerStandings.size();
 
     }
 
     public JsonObject getItem(int position) {
-        return teamsStandings.get(position).getAsJsonObject();
+        return racerStandings.get(position).getAsJsonObject();
     }
 
 

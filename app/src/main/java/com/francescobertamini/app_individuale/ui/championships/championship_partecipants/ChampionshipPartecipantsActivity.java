@@ -1,4 +1,4 @@
-package com.francescobertamini.app_individuale.ui.championship.champ_partecipants;
+package com.francescobertamini.app_individuale.ui.championships.championship_partecipants;
 
 import android.os.Bundle;
 import android.view.View;

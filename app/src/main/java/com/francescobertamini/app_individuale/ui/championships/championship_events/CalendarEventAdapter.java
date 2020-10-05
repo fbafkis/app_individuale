@@ -1,4 +1,4 @@
-package com.francescobertamini.app_individuale.ui.championship.champ_calendar;
+package com.francescobertamini.app_individuale.ui.championships.championship_events;
 
 import android.content.Context;
 import android.view.LayoutInflater;
