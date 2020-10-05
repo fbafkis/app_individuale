@@ -23,7 +23,7 @@ public class BasicActivity extends AppCompatActivity {
         if (user.getCount() == 1) {
             int remember_me = user.getInt(user.getColumnIndex("remember_me"));
             if (remember_me == 0) {
-                dbManagerStatus.update(0, null);
+                dbManagerStatus.update(false, null);
             }
         }
     }

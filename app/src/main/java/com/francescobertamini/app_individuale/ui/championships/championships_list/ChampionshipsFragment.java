@@ -53,7 +53,7 @@ public class ChampionshipsFragment extends Fragment {
         }
         ).attach();
 
-        MainActivity.toolbar.setTitle("Campionati");
+        MainActivity.mainToolbar.setTitle("Campionati");
     }
 
 }

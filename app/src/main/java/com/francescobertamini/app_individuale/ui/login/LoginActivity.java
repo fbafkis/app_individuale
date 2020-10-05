@@ -93,13 +93,10 @@ public class LoginActivity extends BasicActivity {
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 }
             });
-            dbManagerStatus.close();
-            dbManagerUser.close();
         }
     }
 
     private void login() {
-
         if (_loginUsernameEditText.getText().toString().trim().isEmpty() || _loginPasswordEditText.getText().toString().trim().isEmpty()) {
             if (_loginUsernameEditText.getText().toString().trim().isEmpty()) {
                 setErrorTheme(_loginUsernameTextInputLayout);
@@ -129,7 +126,7 @@ public class LoginActivity extends BasicActivity {
                     cursor = dbManagerUser.fetchByEmail(username);
                     actualUsername = cursor.getString(cursor.getColumnIndex("username"));
                 }
-                dbManagerStatus.update(1, actualUsername);
+                dbManagerStatus.update(true, actualUsername);
                 dbManagerStatus.close();
                 dbManagerUser.close();
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
