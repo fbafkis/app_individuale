@@ -68,11 +68,16 @@ public class PartecipantsAdapter extends RecyclerView.Adapter<PartecipantsAdapte
 
         String nameStr = partecipant.get("nome").getAsString();
         String initialsStr="";
+        int counter=0;
 
         for (int i = 0; i < nameStr.length(); i++) {
             char letter = nameStr.charAt(i);
-            if (letter == ' ') {
+            if(i==0)
+                initialsStr += nameStr.charAt(i);
+
+            if (letter == ' ' && counter<1) {
                 initialsStr += nameStr.charAt(i + 1);
+                counter++;
             }
 
 

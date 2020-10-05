@@ -3,6 +3,7 @@ package com.francescobertamini.app_individuale.ui.championship;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +16,15 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.francescobertamini.app_individuale.R;
-import com.francescobertamini.app_individuale.data_managing.JsonExtractor;
+import com.francescobertamini.app_individuale.data_managing.JsonExtractorChampionships;
+import com.francescobertamini.app_individuale.data_managing.JsonExtractorStandings;
 import com.francescobertamini.app_individuale.ui.championship.champ_calendar.ChampionshipEventsActivity;
 import com.francescobertamini.app_individuale.ui.championship.champ_partecipants.ChampionshipPartecipantsActivity;
+import com.francescobertamini.app_individuale.ui.championship.champ_standings.ChampionshipStandingsActivity;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import java.io.Console;
 import java.io.IOException;
 
 import butterknife.BindView;
@@ -91,10 +95,10 @@ public class UnsubChampionshipsDialog extends DialogFragment {
         toolbar = root.findViewById(R.id.unsub_champ_toolbar);
 
 
-        JsonExtractor jsonExtractor = new JsonExtractor(this.getContext());
+        JsonExtractorChampionships jsonExtractorChampionships = new JsonExtractorChampionships(this.getContext());
 
         try {
-            championships = jsonExtractor.readJson();
+            championships = jsonExtractorChampionships.readJson();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -145,6 +149,34 @@ public class UnsubChampionshipsDialog extends DialogFragment {
                 Intent intent = new Intent(getContext(), ChampionshipPartecipantsActivity.class);
                 intent.putExtra("championship", championship.toString());
                 startActivity(intent);
+            }
+        });
+
+        _unsubChampResultsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                JsonObject championshipStandings=null;
+                JsonArray championshipsStandings=null;
+
+                try {
+                    championshipsStandings = new JsonExtractorStandings(getContext()).readJson();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                for(int i=0; i<championshipsStandings.size();i++){
+
+                    if(championshipsStandings.get(i).getAsJsonObject().get("id").getAsString().equals(id)) {
+                        championshipStandings = championshipsStandings.get(i).getAsJsonObject();
+                    }
+                }
+
+                Log.e("POrcodio", championshipStandings.toString());
+
+                Intent intent = new Intent(getContext(), ChampionshipStandingsActivity.class);
+                intent.putExtra("championship", championshipStandings.toString());
+                startActivity(intent);
+
             }
         });
 

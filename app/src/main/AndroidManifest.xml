@@ -32,6 +32,7 @@
         <activity android:name="com.francescobertamini.app_individuale.ui.signup.SignupActivity2"></activity>
         <activity android:name="com.francescobertamini.app_individuale.ui.championship.champ_calendar.ChampionshipEventsActivity"></activity>
         <activity android:name="com.francescobertamini.app_individuale.ui.championship.champ_partecipants.ChampionshipPartecipantsActivity"></activity>
+        <activity android:name="com.francescobertamini.app_individuale.ui.championship.champ_standings.ChampionshipStandingsActivity"></activity>
 
         <activity android:name=".utils.ImagePickerActivity" />
         <activity

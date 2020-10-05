@@ -2,7 +2,6 @@ package com.francescobertamini.app_individuale.ui.championship;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.francescobertamini.app_individuale.R;
-import com.francescobertamini.app_individuale.data_managing.JsonExtractor;
+import com.francescobertamini.app_individuale.data_managing.JsonExtractorChampionships;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -81,10 +80,10 @@ public class SubChampionshipsDialog extends DialogFragment {
         toolbar = root.findViewById(R.id.sub_champ_toolbar);
 
 
-        JsonExtractor jsonExtractor = new JsonExtractor(this.getContext());
+        JsonExtractorChampionships jsonExtractorChampionships = new JsonExtractorChampionships(this.getContext());
 
         try {
-            championships = jsonExtractor.readJson();
+            championships = jsonExtractorChampionships.readJson();
         } catch (IOException e) {
             e.printStackTrace();
         }

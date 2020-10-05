@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.francescobertamini.app_individuale.MainActivity;
 import com.francescobertamini.app_individuale.data_managing.AllChampionshipsAdapter;
-import com.francescobertamini.app_individuale.data_managing.JsonExtractor;
+import com.francescobertamini.app_individuale.data_managing.JsonExtractorChampionships;
 
 import com.francescobertamini.app_individuale.R;
 import com.francescobertamini.app_individuale.database.dbmanager.DBManagerUser;
@@ -27,8 +26,6 @@ import com.francescobertamini.app_individuale.ui.championship.SubChampionshipsDi
 import com.francescobertamini.app_individuale.ui.championship.UnsubChampionshipsDialog;
 import com.francescobertamini.app_individuale.utils.RecyclerItemClickListener;
 import com.google.gson.JsonArray;
-
-import org.json.JSONArray;
 
 import java.io.IOException;
 
@@ -54,10 +51,10 @@ public class AllChampionshipsFragment extends Fragment {
             }
         });
 
-        JsonExtractor jsonExtractor = new JsonExtractor(this.getContext());
+        JsonExtractorChampionships jsonExtractorChampionships = new JsonExtractorChampionships(this.getContext());
 
         try {
-            adapter = new AllChampionshipsAdapter(jsonExtractor.readJson(), this.getContext());
+            adapter = new AllChampionshipsAdapter(jsonExtractorChampionships.readJson(), this.getContext());
         } catch (IOException e) {
             e.printStackTrace();
         }

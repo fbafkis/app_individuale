@@ -2,7 +2,6 @@ package com.francescobertamini.app_individuale.ui.championship_list;
 
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,13 +17,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.francescobertamini.app_individuale.MainActivity;
 import com.francescobertamini.app_individuale.R;
-import com.francescobertamini.app_individuale.data_managing.JsonExtractor;
+import com.francescobertamini.app_individuale.data_managing.JsonExtractorChampionships;
 import com.francescobertamini.app_individuale.data_managing.MyChampionshipsAdapter;
 import com.francescobertamini.app_individuale.database.dbmanager.DBManagerUser;
 import com.francescobertamini.app_individuale.ui.championship.SubChampionshipsDialog;
-import com.francescobertamini.app_individuale.ui.championship.UnsubChampionshipsDialog;
 import com.francescobertamini.app_individuale.utils.RecyclerItemClickListener;
-import com.google.gson.JsonArray;
 
 import java.io.IOException;
 
@@ -59,10 +56,10 @@ public class MyChampionshipsFragment extends Fragment {
 
         String nameLastname = cursor.getString(cursor.getColumnIndex("name")) + " " + cursor.getString(cursor.getColumnIndex("lastname"));
 
-        JsonExtractor jsonExtractor = new JsonExtractor(this.getContext());
+        JsonExtractorChampionships jsonExtractorChampionships = new JsonExtractorChampionships(this.getContext());
 
         try {
-            adapter = new MyChampionshipsAdapter(jsonExtractor.readJson(), this.getContext(), nameLastname);
+            adapter = new MyChampionshipsAdapter(jsonExtractorChampionships.readJson(), this.getContext(), nameLastname);
         } catch (IOException e) {
             e.printStackTrace();
         }
