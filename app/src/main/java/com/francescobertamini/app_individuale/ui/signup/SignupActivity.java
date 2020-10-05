@@ -1,12 +1,8 @@
 package com.francescobertamini.app_individuale.ui.signup;
 
-import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.content.res.Resources;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -14,9 +10,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
-
-import com.francescobertamini.app_individuale.BasicActivity;
-import com.francescobertamini.app_individuale.R;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
@@ -46,7 +39,7 @@ public class SignupActivity extends AppCompatActivity implements DatePickerDialo
     TextInputLayout _signupUsernameTextInputLayout;
     @BindView(id.signupUsernameEditText)
     EditText _signupUsernameEditText;
-    @BindView(id.signupBirthdateInputLayout)
+    @BindView(id.signupBirthdateTextInputLayout)
     TextInputLayout _signupBirthdateInputLayout;
     @BindView(id.signupBirthDateEditText)
     EditText _signupBirthDateEditText;

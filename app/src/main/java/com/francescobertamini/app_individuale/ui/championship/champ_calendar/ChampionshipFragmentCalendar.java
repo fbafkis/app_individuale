@@ -42,7 +42,7 @@ public class ChampionshipFragmentCalendar extends Fragment {
     CalendarView _champCalendarViewDay;
     @BindView(R.id.champCalendarViewNight)
     CalendarView _champCalendarViewNight;
-    @BindView(R.id.eventsRecyclerView)
+    @BindView(R.id.champEventsCalRecycler)
     RecyclerView _eventsRecyclerView;
 
 

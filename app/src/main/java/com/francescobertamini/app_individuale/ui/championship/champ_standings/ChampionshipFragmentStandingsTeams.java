@@ -25,7 +25,7 @@ public class ChampionshipFragmentStandingsTeams extends Fragment {
     JsonArray teamStandings;
     RecyclerView.Adapter adapter;
 
-    @BindView(R.id.champStandingsTeamsList)
+    @BindView(R.id.champStandTeamRecycler)
     RecyclerView _champStandingsTeamsList;
 
 

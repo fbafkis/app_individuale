@@ -11,19 +11,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.applandeo.materialcalendarview.CalendarView;
-import com.applandeo.materialcalendarview.EventDay;
 import com.francescobertamini.app_individuale.R;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,7 +25,7 @@ public class ChampionshipFragmentList extends Fragment {
     JsonArray events;
     RecyclerView.Adapter adapter;
 
-    @BindView(R.id.champEventsList)
+    @BindView(R.id.champEventsListRecycler)
     RecyclerView _champEventsList;
 
     String string_dates[];

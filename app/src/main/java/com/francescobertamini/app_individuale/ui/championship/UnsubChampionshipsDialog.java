@@ -24,7 +24,6 @@ import com.francescobertamini.app_individuale.ui.championship.champ_standings.Ch
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import java.io.Console;
 import java.io.IOException;
 
 import butterknife.BindView;
@@ -92,7 +91,7 @@ public class UnsubChampionshipsDialog extends DialogFragment {
         View root = inflater.inflate(R.layout.dialog_unsub_champ, container, false);
         ButterKnife.bind(this,root);
 
-        toolbar = root.findViewById(R.id.unsub_champ_toolbar);
+        toolbar = root.findViewById(R.id.unsubChampToolbar);
 
 
         JsonExtractorChampionships jsonExtractorChampionships = new JsonExtractorChampionships(this.getContext());

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigationChampStandRacer"
+        android:enabled="true"
+        android:icon="@drawable/ic_helmet"
+        android:title="Piloti" />
+    <item
+        android:id="@+id/navigationChampStandTeams"
+        android:enabled="true"
+        android:icon="@drawable/ic_team"
+        android:title="Team" />
+</menu>
+

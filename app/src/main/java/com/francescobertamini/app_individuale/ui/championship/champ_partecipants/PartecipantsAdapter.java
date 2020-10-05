@@ -38,10 +38,10 @@ public class PartecipantsAdapter extends RecyclerView.Adapter<PartecipantsAdapte
 
             super(itemView);
 
-            name = itemView.findViewById(R.id.champPartecipantName);
-            initials = itemView.findViewById(R.id.champPartecipantInitials);
-            team = itemView.findViewById(R.id.champPartecipantTeam);
-            car = itemView.findViewById(R.id.champPartecipantCar);
+            initials = itemView.findViewById(R.id.champPartListItemInitials);
+            name = itemView.findViewById(R.id.champPartListItemName);
+            team = itemView.findViewById(R.id.champPartListItemTeam);
+            car = itemView.findViewById(R.id.champPartListItemCar);
         }
     }
 

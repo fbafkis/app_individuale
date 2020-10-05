@@ -20,7 +20,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.francescobertamini.app_individuale.MainActivity;
+import com.francescobertamini.app_individuale.ui.main.MainActivity;
 import com.francescobertamini.app_individuale.R;
 import com.francescobertamini.app_individuale.database.dbmanager.DBManagerStatus;
 import com.francescobertamini.app_individuale.database.dbmanager.DBManagerUser;

@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.francescobertamini.app_individuale.R;
-import com.francescobertamini.app_individuale.ui.championship.champ_calendar.ListEventAdapter;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -26,7 +25,7 @@ public class ChampionshipFragmentStandingsRacers extends Fragment {
     JsonArray racerStandings;
     RecyclerView.Adapter adapter;
 
-    @BindView(R.id.champStandingsRacersList)
+    @BindView(R.id.champStandRacersRecycler)
     RecyclerView _champStandingsRacersList;
 
     String string_dates[];

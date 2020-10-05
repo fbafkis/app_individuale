@@ -1,9 +1,7 @@
 package com.francescobertamini.app_individuale.ui.login;
 
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,15 +12,12 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.francescobertamini.app_individuale.BasicActivity;
-import com.francescobertamini.app_individuale.MainActivity;
+import com.francescobertamini.app_individuale.ui.BasicActivity;
+import com.francescobertamini.app_individuale.ui.main.MainActivity;
 import com.francescobertamini.app_individuale.R;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.francescobertamini.app_individuale.database.dbmanager.DBManagerStatus;
 import com.francescobertamini.app_individuale.database.dbmanager.DBManagerUser;
-import com.francescobertamini.app_individuale.ui.home.HomeFragment;
 import com.francescobertamini.app_individuale.ui.signup.SignupActivity;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -44,7 +39,7 @@ public class LoginActivity extends BasicActivity {
     EditText _loginPasswordEditText;
     @BindView(R.id.loginPasswordTextInputLayout)
     TextInputLayout _loginPasswordTextInputLayout;
-    @BindView(R.id.rememberMeCheckBox)
+    @BindView(R.id.loginRememberMe)
     CheckBox _rememberMeCheckBox;
     @BindView(R.id.loginButton)
     Button _loginButton;

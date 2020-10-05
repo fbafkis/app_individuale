@@ -1,22 +1,16 @@
 package com.francescobertamini.app_individuale.ui.championship.champ_calendar;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.francescobertamini.app_individuale.R;
-import com.francescobertamini.app_individuale.ui.settings.AccountSettingsFragment;
-import com.francescobertamini.app_individuale.ui.settings.ProfileSettingsFragment;
-import com.google.android.material.bottomnavigation.BottomNavigationMenu;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -28,11 +22,11 @@ public class ChampionshipEventsActivity extends AppCompatActivity implements Bot
 
     JsonObject championship;
 
-    @BindView(R.id.champCalendarTitle)
+    @BindView(R.id.champEventsTitle)
     TextView _champCalendarTitle;
-    @BindView(R.id.champCalendarBottomNavigation)
+    @BindView(R.id.champEventsBottomNavigation)
     BottomNavigationView _champCalendarBottomNavigation;
-    @BindView(R.id.backToChampFromCal)
+    @BindView(R.id.backToChampFromEvents)
     ImageButton _backToChampFromCal;
 
     @Override
@@ -89,7 +83,7 @@ public class ChampionshipEventsActivity extends AppCompatActivity implements Bot
         if (fragment != null) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.champ_calendar_fragment_container, fragment)
+                    .replace(R.id.champEventsFragmentContainer, fragment)
                     .commit();
             return true;
         }

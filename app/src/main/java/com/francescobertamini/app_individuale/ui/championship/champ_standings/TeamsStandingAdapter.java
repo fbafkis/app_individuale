@@ -42,10 +42,10 @@ public class TeamsStandingAdapter extends RecyclerView.Adapter<TeamsStandingAdap
 
             super(itemView);
 
-            standing = itemView.findViewById(R.id.champStandTeamStanding);
-            name = itemView.findViewById(R.id.champStandTeamName);
-            car = itemView.findViewById(R.id.champStandTeamCar);
-            score = itemView.findViewById(R.id.champStandTeamScore);
+            standing = itemView.findViewById(R.id.champStandTeamListItemStanding);
+            name = itemView.findViewById(R.id.champStandTeamListItemName);
+            car = itemView.findViewById(R.id.champStandTeamListItemCar);
+            score = itemView.findViewById(R.id.champStandTeamListItemScore);
 
         }
     }

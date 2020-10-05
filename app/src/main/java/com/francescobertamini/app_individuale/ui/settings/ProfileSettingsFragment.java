@@ -18,7 +18,7 @@ import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import com.francescobertamini.app_individuale.MainActivity;
+import com.francescobertamini.app_individuale.ui.main.MainActivity;
 import com.francescobertamini.app_individuale.R;
 import com.francescobertamini.app_individuale.database.dbmanager.DBManagerUser;
 import com.google.android.material.chip.Chip;

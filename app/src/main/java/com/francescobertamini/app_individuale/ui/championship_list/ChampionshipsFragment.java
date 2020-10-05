@@ -10,7 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.francescobertamini.app_individuale.MainActivity;
+import com.francescobertamini.app_individuale.ui.main.MainActivity;
 import com.francescobertamini.app_individuale.R;
 import com.francescobertamini.app_individuale.data_managing.AllChampionshipsAdapter;
 import com.google.android.material.navigation.NavigationView;
@@ -36,14 +36,14 @@ public class ChampionshipsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
-        NavigationView navigationView = (NavigationView) getActivity().findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView) getActivity().findViewById(R.id.navView);
         navigationView.getMenu().getItem(1).setChecked(true);
 
 
 
-        viewPager = view.findViewById(R.id.championships_pager);
+        viewPager = view.findViewById(R.id.championshipsPager);
         viewPager.setAdapter(new ChampionshipsAdapter(this));
-        TabLayout tabLayout = view.findViewById(R.id.tab_layout);
+        TabLayout tabLayout = view.findViewById(R.id.championshipListTabLayout);
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
             if(position==0){
                 tab.setText("Tutti i campionati");

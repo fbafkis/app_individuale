@@ -1,22 +1,15 @@
 package com.francescobertamini.app_individuale.ui.championship.champ_partecipants;
 
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.francescobertamini.app_individuale.R;
-import com.francescobertamini.app_individuale.ui.championship.champ_calendar.CalendarEventAdapter;
-import com.francescobertamini.app_individuale.ui.championship.champ_calendar.ChampionshipFragmentCalendar;
-import com.francescobertamini.app_individuale.ui.championship.champ_calendar.ChampionshipFragmentList;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -30,9 +23,9 @@ public class ChampionshipPartecipantsActivity extends AppCompatActivity {
     JsonArray partecipants;
     PartecipantsAdapter adapter;
 
-    @BindView(R.id.champPartecipants)
+    @BindView(R.id.champPartecipantsRecycler)
     RecyclerView _champPartecipants;
-    @BindView(R.id.champPartecipantTitle)
+    @BindView(R.id.champPartecipantsTitle)
     TextView _champPartecipantTitle;
     @BindView(R.id.backToChampFromPart)
     ImageButton _backToChampFromPart;

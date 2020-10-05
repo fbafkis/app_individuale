@@ -16,7 +16,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.francescobertamini.app_individuale.MainActivity;
+import com.francescobertamini.app_individuale.ui.main.MainActivity;
 import com.francescobertamini.app_individuale.data_managing.AllChampionshipsAdapter;
 import com.francescobertamini.app_individuale.data_managing.JsonExtractorChampionships;
 
@@ -60,7 +60,7 @@ public class AllChampionshipsFragment extends Fragment {
         }
 
 
-        RecyclerView recyclerView = (RecyclerView) root.findViewById(R.id.championships_view);
+        RecyclerView recyclerView = (RecyclerView) root.findViewById(R.id.allChampsRecycler);
 
         recyclerView.setAdapter(adapter);
 

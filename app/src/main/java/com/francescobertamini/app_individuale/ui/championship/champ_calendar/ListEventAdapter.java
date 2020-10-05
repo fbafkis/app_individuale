@@ -37,9 +37,9 @@ public class ListEventAdapter extends RecyclerView.Adapter<ListEventAdapter.View
 
             super(itemView);
 
-            seq = itemView.findViewById(R.id.champListSeqNumber);
-            track_name = itemView.findViewById(R.id.champListEventName);
-            date = itemView.findViewById(R.id.champListEventDate);
+            seq = itemView.findViewById(R.id.champEventListListItemSeqNum);
+            track_name = itemView.findViewById(R.id.champEventListListItemName);
+            date = itemView.findViewById(R.id.champEventListListItemDate);
 
         }
     }

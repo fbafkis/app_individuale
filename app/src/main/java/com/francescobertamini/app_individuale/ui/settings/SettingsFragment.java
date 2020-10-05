@@ -26,7 +26,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.francescobertamini.app_individuale.MainActivity;
+import com.francescobertamini.app_individuale.ui.main.MainActivity;
 import com.francescobertamini.app_individuale.R;
 import com.francescobertamini.app_individuale.database.dbmanager.DBManagerUser;
 import com.francescobertamini.app_individuale.utils.ImagePickerActivity;
@@ -59,7 +59,7 @@ public class SettingsFragment extends Fragment implements BottomNavigationView.O
 
     @BindView(R.id.settingsProfilePicture)
     ImageView _settingsProfilePicture;
-    @BindView(R.id.settingsEditPictureButton)
+    @BindView(R.id.settingsEditProfilePicButton)
     ImageView _settingsEditPictureButton;
 
     @BindView(R.id.settingsName)
@@ -68,7 +68,7 @@ public class SettingsFragment extends Fragment implements BottomNavigationView.O
     TextView _settingsMail;
     @BindView(R.id.settingsUsername)
     TextView _settingsUsername;
-    @BindView(R.id.editMail)
+    @BindView(R.id.editMailButton)
     FloatingActionButton _editMail;
 
 
@@ -96,7 +96,7 @@ public class SettingsFragment extends Fragment implements BottomNavigationView.O
                 ViewModelProviders.of(this).get(SettingsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_settings, container, false);
 
-        NavigationView navigationView = (NavigationView) getActivity().findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView) getActivity().findViewById(R.id.navView);
         navigationView.getMenu().getItem(2).setChecked(true);
 
 
@@ -240,7 +240,7 @@ public class SettingsFragment extends Fragment implements BottomNavigationView.O
         if (fragment != null) {
             getChildFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragment_container, fragment)
+                    .replace(R.id.settingsFragmentContainer, fragment)
                     .commit();
             return true;
         }

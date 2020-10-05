@@ -31,9 +31,17 @@ android {
             res.srcDirs =
                     [
                             'src/main/res/layout/dialogs',
-                            'src/main/res/layout/championship_calendar',
-                            'src/main/res/layout/championship_partecipants',
-                            'src/main/res/layout/championship_standings',
+                            'src/main/res/layout/championships',
+                            'src/main/res/layout/settings',
+                            'src/main/res/layout/settings/dialogs',
+                            'src/main/res/layout/main',
+                            'src/main/res/layout/login',
+                            'src/main/res/layout/signup',
+                            'src/main/res/layout/home',
+                            'src/main/res/layout/image_picker',
+                            'src/main/res/layout/championships/championship_events',
+                            'src/main/res/layout/championships/championship_partecipants',
+                            'src/main/res/layout/championships/championship_standings',
                             'src/main/res/layout',
                             'src/main/res'
                     ]

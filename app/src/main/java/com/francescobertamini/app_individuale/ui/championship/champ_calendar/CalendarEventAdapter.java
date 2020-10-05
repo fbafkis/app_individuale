@@ -36,8 +36,8 @@ public class CalendarEventAdapter extends RecyclerView.Adapter<CalendarEventAdap
 
             super(itemView);
 
-            seq = itemView.findViewById(R.id.champListSeqNumber);
-            track_name = itemView.findViewById(R.id.champListEventName);
+            seq = itemView.findViewById(R.id.champEventCalListItemSeqNum);
+            track_name = itemView.findViewById(R.id.champEventCalListItemName);
 
         }
     }

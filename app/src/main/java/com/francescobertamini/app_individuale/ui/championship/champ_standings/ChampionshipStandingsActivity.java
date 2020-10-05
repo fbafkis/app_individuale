@@ -11,8 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.francescobertamini.app_individuale.R;
-import com.francescobertamini.app_individuale.ui.championship.champ_calendar.ChampionshipFragmentCalendar;
-import com.francescobertamini.app_individuale.ui.championship.champ_calendar.ChampionshipFragmentList;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -24,11 +22,11 @@ public class ChampionshipStandingsActivity extends AppCompatActivity implements 
 
     JsonObject championship;
 
-    @BindView(R.id.champStandingsTitle)
+    @BindView(R.id.champStandTitle)
     TextView _champStandingsTitle;
-    @BindView(R.id.champStandingsBottomNavigation)
+    @BindView(R.id.champStandBottomNavigation)
     BottomNavigationView _champStandingsBottomNavigation;
-    @BindView(R.id.backToChampFromStandings)
+    @BindView(R.id.backToChampFromStand)
     ImageButton _backToChampFromStandings;
 
     @Override
@@ -64,11 +62,11 @@ public class ChampionshipStandingsActivity extends AppCompatActivity implements 
         Fragment fragment = null;
 
         switch (item.getItemId()) {
-            case R.id.navigationChampStandingsRacer:
+            case R.id.navigationChampStandRacer:
                 fragment = new ChampionshipFragmentStandingsRacers();
                 break;
 
-            case R.id.navigationChampStandingsTeams:
+            case R.id.navigationChampStandTeams:
                 fragment = new ChampionshipFragmentStandingsTeams();
                 break;
 
@@ -85,7 +83,7 @@ public class ChampionshipStandingsActivity extends AppCompatActivity implements 
         if (fragment != null) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.champ_standings_fragment_container, fragment)
+                    .replace(R.id.chamStandFragmentContainer, fragment)
                     .commit();
             return true;
         }

@@ -1,16 +1,12 @@
 package com.francescobertamini.app_individuale.ui.signup;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,7 +20,6 @@ import com.francescobertamini.app_individuale.database.dbmanager.DBManagerUser;
 import com.francescobertamini.app_individuale.ui.login.LoginActivity;
 import com.francescobertamini.app_individuale.utils.ImagePickerActivity;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.gson.JsonObject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,8 +31,6 @@ import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
-import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 public class SignupActivity2 extends AppCompatActivity {
@@ -84,7 +77,7 @@ public class SignupActivity2 extends AppCompatActivity {
     Button _signupButton;
     @BindView(R.id.signupEditPictureButton)
     ImageView _editPictureButton;
-    @BindView(R.id.signupBackButton2)
+    @BindView(R.id.signup2BackButton)
     ImageView _signupBackButton2;
 
     @Override

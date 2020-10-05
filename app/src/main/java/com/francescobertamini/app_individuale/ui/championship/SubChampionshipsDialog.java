@@ -77,7 +77,7 @@ public class SubChampionshipsDialog extends DialogFragment {
         View root = inflater.inflate(R.layout.dialog_sub_champ, container, false);
         ButterKnife.bind(this,root);
 
-        toolbar = root.findViewById(R.id.sub_champ_toolbar);
+        toolbar = root.findViewById(R.id.subChampToolbar);
 
 
         JsonExtractorChampionships jsonExtractorChampionships = new JsonExtractorChampionships(this.getContext());
