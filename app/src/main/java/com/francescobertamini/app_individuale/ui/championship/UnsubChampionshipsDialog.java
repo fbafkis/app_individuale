@@ -17,6 +17,7 @@ import androidx.fragment.app.FragmentManager;
 import com.francescobertamini.app_individuale.R;
 import com.francescobertamini.app_individuale.data_managing.JsonExtractor;
 import com.francescobertamini.app_individuale.ui.championship.champ_calendar.ChampionshipEventsActivity;
+import com.francescobertamini.app_individuale.ui.championship.champ_partecipants.ChampionshipPartecipantsActivity;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -41,6 +42,14 @@ public class UnsubChampionshipsDialog extends DialogFragment {
     TextView _unsubChampId;
     @BindView(R.id.unsubChampCar)
     TextView _unsubChampCar;
+    @BindView(R.id.unsubDialogFlags)
+    TextView _unsubDialogFlags;
+    @BindView(R.id.unsubDialogFuel)
+    TextView _unsubDialogFuel;
+    @BindView(R.id.unsubDialogTires)
+    TextView _unsubDialogTires;
+        @BindView(R.id.unsubDialogHelps)
+    TextView _unsubDialogHelps;
     @BindView(R.id.unsubChampLogo)
     ImageView _unsubChampLogo;
     @BindView(R.id.unsubChampCalendarButton)
@@ -103,6 +112,13 @@ public class UnsubChampionshipsDialog extends DialogFragment {
 
         _unsubChampCar.setText(championship.get("lista-auto").getAsString());
 
+        JsonArray settings = championship.get("impostazioni-gioco").getAsJsonArray();
+
+        _unsubDialogFlags.setText(settings.get(0).getAsJsonObject().get("valore").getAsString());
+        _unsubDialogFuel.setText(settings.get(1).getAsJsonObject().get("valore").getAsString());
+        _unsubDialogTires.setText(settings.get(2).getAsJsonObject().get("valore").getAsString());
+        _unsubDialogHelps.setText(settings.get(3).getAsJsonObject().get("valore").getAsString());
+
 
         String wrong_res_name = championship.get("logo").getAsString();
         wrong_res_name =  wrong_res_name.replaceAll("-","_");
@@ -120,6 +136,15 @@ public class UnsubChampionshipsDialog extends DialogFragment {
                 intent.putExtra("championship", championship.toString());
                 startActivity(intent);
 
+            }
+        });
+
+        _unsubChampRacersButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), ChampionshipPartecipantsActivity.class);
+                intent.putExtra("championship", championship.toString());
+                startActivity(intent);
             }
         });
 

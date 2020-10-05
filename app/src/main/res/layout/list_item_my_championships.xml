@@ -10,7 +10,7 @@
 
 
     <TextView
-        android:id="@+id/champListSeqNumber"
+        android:id="@+id/championshipListNumber"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_weight="0"

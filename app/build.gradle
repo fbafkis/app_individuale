@@ -32,6 +32,7 @@ android {
                     [
                             'src/main/res/layout/dialogs',
                             'src/main/res/layout/championship_calendar',
+                            'src/main/res/layout/championship_partecipants',
                             'src/main/res/layout',
                             'src/main/res'
                     ]
