@@ -20,7 +20,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ChampionshipFragmentList extends Fragment {
-
     JsonObject championship;
     JsonArray events;
     RecyclerView.Adapter adapter;
@@ -28,24 +27,16 @@ public class ChampionshipFragmentList extends Fragment {
     @BindView(R.id.champEventsListRecycler)
     RecyclerView _champEventsList;
 
-    String string_dates[];
-
-
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View root = inflater.inflate(R.layout.fragment_champ_events_list, null);
-
         ButterKnife.bind(this, root);
-
         Bundle args = getArguments();
         championship = (JsonObject) JsonParser.parseString(args.getString("championship"));
-
-        Log.e("Campionato", championship.toString());
         events = championship.get("calendario").getAsJsonArray();
         adapter = new ListEventAdapter(events, getContext());
         _champEventsList.setAdapter(adapter);
         _champEventsList.setLayoutManager(new LinearLayoutManager(getContext()));
         return root;
     }
-
 }

@@ -20,7 +20,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ChampionshipFragmentStandingsTeams extends Fragment {
-
     JsonObject championship;
     JsonArray teamStandings;
     RecyclerView.Adapter adapter;
@@ -28,17 +27,12 @@ public class ChampionshipFragmentStandingsTeams extends Fragment {
     @BindView(R.id.champStandTeamRecycler)
     RecyclerView _champStandingsTeamsList;
 
-
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View root = inflater.inflate(R.layout.fragment_champ_standings_teams, null);
-
         ButterKnife.bind(this, root);
-
         Bundle args = getArguments();
         championship = (JsonObject) JsonParser.parseString(args.getString("championship"));
-
-        Log.e("Campionato", championship.toString());
         teamStandings = championship.get("classifica-team").getAsJsonArray();
         adapter = new TeamsStandingAdapter(teamStandings, getContext());
         _champStandingsTeamsList.setAdapter(adapter);

@@ -14,37 +14,26 @@ import com.google.gson.JsonObject;
 import com.francescobertamini.app_individuale.R;
 
 public class CalendarEventAdapter extends RecyclerView.Adapter<CalendarEventAdapter.ViewHolder> {
-
     JsonArray events;
     Context context;
 
-
-    public CalendarEventAdapter(JsonArray event, Context context) {
-        this.events = event;
+    public CalendarEventAdapter(JsonArray events, Context context) {
+        this.events = events;
         this.context = context;
     }
 
-
     public class ViewHolder extends RecyclerView.ViewHolder {
-
-        public TextView seq;
-        public TextView track_name;
-
-
+        public TextView _seq;
+        public TextView _trackName;
 
         public ViewHolder(View itemView) {
-
             super(itemView);
-
-            seq = itemView.findViewById(R.id.champEventCalListItemSeqNum);
-            track_name = itemView.findViewById(R.id.champEventCalListItemName);
-
+            _seq = itemView.findViewById(R.id.champEventCalListItemSeqNum);
+            _trackName = itemView.findViewById(R.id.champEventCalListItemName);
         }
     }
 
-
     @NonNull
-
     @Override
     public CalendarEventAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
@@ -54,33 +43,24 @@ public class CalendarEventAdapter extends RecyclerView.Adapter<CalendarEventAdap
         return viewHolder;
     }
 
-
     @Override
     public void onBindViewHolder(@NonNull CalendarEventAdapter.ViewHolder holder, int position) {
-
-        TextView seq = holder.seq;
-        TextView track_name = holder.track_name;
-
+        TextView _seq = holder._seq;
+        TextView _trackName = holder._trackName;
         JsonObject event = events.get(position).getAsJsonObject();
-
-        seq.setText(event.get("seq").getAsString());
-        track_name.setText(event.get("circuito").getAsString());
-
+        _seq.setText(event.get("seq").getAsString());
+        _trackName.setText(event.get("circuito").getAsString());
     }
 
     @Override
     public int getItemCount() {
-
         if (events.size() == 0)
             return 0;
         else return events.size();
-
     }
 
     public JsonObject getItem(int position) {
         return events.get(position).getAsJsonObject();
     }
-
-
 }
 

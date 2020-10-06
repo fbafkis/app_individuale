@@ -13,36 +13,24 @@ public class ChampionshipsAdapter extends FragmentStateAdapter {
         super(fragment);
     }
 
-
-
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        // Return a NEW fragment instance in createFragment(int)
-
         Fragment fragment = null;
-
-        if(position==0) {
-
+        if (position == 0) {
             try {
                 fragment = new AllChampionshipsFragment();
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-        } else if(position==1){
-
+        } else if (position == 1) {
             try {
                 fragment = new MyChampionshipsFragment();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
         Bundle args = new Bundle();
-
-
         return fragment;
     }
 

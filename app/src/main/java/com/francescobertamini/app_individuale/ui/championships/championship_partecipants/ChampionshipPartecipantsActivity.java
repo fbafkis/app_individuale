@@ -18,7 +18,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ChampionshipPartecipantsActivity extends AppCompatActivity {
-
     JsonObject championship;
     JsonArray partecipants;
     PartecipantsAdapter adapter;
@@ -30,38 +29,22 @@ public class ChampionshipPartecipantsActivity extends AppCompatActivity {
     @BindView(R.id.backToChampFromPart)
     ImageButton _backToChampFromPart;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-
         championship = (JsonObject) JsonParser.parseString(getIntent().getStringExtra("championship"));
-
         partecipants = championship.get("piloti-iscritti").getAsJsonArray();
-
         setContentView(R.layout.activity_championship_partecipants);
         ButterKnife.bind(this);
-
         _backToChampFromPart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-
         _champPartecipantTitle.setText("Piloti del campionato: " + championship.get("nome").getAsString());
-
-        adapter = new PartecipantsAdapter( partecipants, getApplicationContext());
-
+        adapter = new PartecipantsAdapter(partecipants, getApplicationContext());
         _champPartecipants.setAdapter(adapter);
         _champPartecipants.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-
-
-
     }
-
-
-
-
 }

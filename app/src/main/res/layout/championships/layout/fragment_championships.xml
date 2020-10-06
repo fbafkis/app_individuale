@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <com.google.android.material.tabs.TabLayout
-        android:id="@+id/championshipListTabLayout"
+        android:id="@+id/championshipsListTabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

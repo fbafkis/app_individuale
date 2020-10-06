@@ -19,7 +19,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ChampionshipStandingsActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
-
     JsonObject championship;
 
     @BindView(R.id.champStandTitle)
@@ -31,52 +30,37 @@ public class ChampionshipStandingsActivity extends AppCompatActivity implements 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-
         championship = (JsonObject) JsonParser.parseString(getIntent().getStringExtra("championship"));
-
         setContentView(R.layout.activity_championship_standings);
         ButterKnife.bind(this);
-
         _backToChampFromStandings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-
         _champStandingsTitle.setText("Classifiche di: " + championship.get("nome").getAsString());
-
-
         BottomNavigationView navigation = _champStandingsBottomNavigation;
         navigation.setOnNavigationItemSelectedListener(this);
-
         loadFragment(new ChampionshipFragmentStandingsRacers());
-
-
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Fragment fragment = null;
-
         switch (item.getItemId()) {
             case R.id.navigationChampStandRacer:
                 fragment = new ChampionshipFragmentStandingsRacers();
                 break;
-
             case R.id.navigationChampStandTeams:
                 fragment = new ChampionshipFragmentStandingsTeams();
                 break;
-
         }
-
         return loadFragment(fragment);
     }
 
     private boolean loadFragment(Fragment fragment) {
-        //switching fragment
         Bundle args = new Bundle();
         args.putString("championship", championship.toString());
         fragment.setArguments(args);
@@ -89,5 +73,4 @@ public class ChampionshipStandingsActivity extends AppCompatActivity implements 
         }
         return false;
     }
-
 }

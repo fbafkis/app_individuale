@@ -14,39 +14,28 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 public class ListEventAdapter extends RecyclerView.Adapter<ListEventAdapter.ViewHolder> {
-
     JsonArray events;
     Context context;
-
 
     public ListEventAdapter(JsonArray event, Context context) {
         this.events = event;
         this.context = context;
     }
 
-
     public class ViewHolder extends RecyclerView.ViewHolder {
-
-        public TextView seq;
-        public TextView track_name;
-        public TextView date;
-
-
+        public TextView _seq;
+        public TextView _trackName;
+        public TextView _date;
 
         public ViewHolder(View itemView) {
-
             super(itemView);
-
-            seq = itemView.findViewById(R.id.champEventListListItemSeqNum);
-            track_name = itemView.findViewById(R.id.champEventListListItemName);
-            date = itemView.findViewById(R.id.champEventListListItemDate);
-
+            _seq = itemView.findViewById(R.id.champEventListListItemSeqNum);
+            _trackName = itemView.findViewById(R.id.champEventListListItemName);
+            _date = itemView.findViewById(R.id.champEventListListItemDate);
         }
     }
 
-
     @NonNull
-
     @Override
     public ListEventAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
@@ -56,32 +45,23 @@ public class ListEventAdapter extends RecyclerView.Adapter<ListEventAdapter.View
         return viewHolder;
     }
 
-
     @Override
     public void onBindViewHolder(@NonNull ListEventAdapter.ViewHolder holder, int position) {
 
-
-        TextView seq = holder.seq;
-        TextView track_name = holder.track_name;
-        TextView date = holder.date;
-
-
+        TextView _seq = holder._seq;
+        TextView _trackName = holder._trackName;
+        TextView _date = holder._date;
         JsonObject event = events.get(position).getAsJsonObject();
-
-        seq.setText(event.get("seq").getAsString());
-        track_name.setText(event.get("circuito").getAsString());
-        date.setText(event.get("data").getAsString());
-
-
+        _seq.setText(event.get("seq").getAsString());
+        _trackName.setText(event.get("circuito").getAsString());
+        _date.setText(event.get("data").getAsString());
     }
 
     @Override
     public int getItemCount() {
-
         if (events.size() == 0)
             return 0;
         else return events.size();
-
     }
 
     public JsonObject getItem(int position) {

@@ -17,32 +17,20 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 public class ChampionshipsFragment extends Fragment {
-    // When requested, this adapter returns a DemoObjectFragment,
-    // representing an object in the collection.
-    AllChampionshipsAdapter allChampionshipsAdapter;
     ViewPager2 viewPager;
-
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_championships, container, false);
-
-
-
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
         NavigationView navigationView = (NavigationView) getActivity().findViewById(R.id.navView);
         navigationView.getMenu().getItem(1).setChecked(true);
-
-
-
         viewPager = view.findViewById(R.id.championshipsPager);
         viewPager.setAdapter(new ChampionshipsAdapter(this));
-        TabLayout tabLayout = view.findViewById(R.id.championshipListTabLayout);
+        TabLayout tabLayout = view.findViewById(R.id.championshipsListTabLayout);
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
             if(position==0){
                 tab.setText("Tutti i campionati");
@@ -52,13 +40,6 @@ public class ChampionshipsFragment extends Fragment {
             }
         }
         ).attach();
-
         MainActivity.mainToolbar.setTitle("Campionati");
     }
-
 }
-
-
-
-// Instances of this class are fragments representing a single
-// object in our collection.

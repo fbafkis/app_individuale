@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.francescobertamini.app_individuale.R;
@@ -15,7 +16,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 public class MyChampionshipsAdapter extends RecyclerView.Adapter<MyChampionshipsAdapter.ViewHolder> {
-
     JsonArray championships;
     Context context;
     String nameLastname;
@@ -27,24 +27,19 @@ public class MyChampionshipsAdapter extends RecyclerView.Adapter<MyChampionships
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-
-        public TextView nameTextView;
-        public TextView numberListTextView;
-        public ImageView logo;
+        public TextView _champListItemName;
+        public TextView _champListItemNumber;
+        public ImageView _champListItemLogo;
 
         public ViewHolder(View itemView) {
-
             super(itemView);
-
-            nameTextView = itemView.findViewById(R.id.champListItemName);
-            numberListTextView = itemView.findViewById(R.id.champListItemNumber);
-            logo = itemView.findViewById(R.id.champListItemLogo);
-
+            _champListItemName = itemView.findViewById(R.id.champListItemName);
+            _champListItemNumber = itemView.findViewById(R.id.champListItemNumber);
+            _champListItemLogo = itemView.findViewById(R.id.champListItemLogo);
         }
     }
 
     @NonNull
-
     @Override
     public MyChampionshipsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
@@ -56,63 +51,45 @@ public class MyChampionshipsAdapter extends RecyclerView.Adapter<MyChampionships
 
     @Override
     public void onBindViewHolder(@NonNull MyChampionshipsAdapter.ViewHolder holder, int position) {
-
-        JsonObject campionato = championships.get(position).getAsJsonObject();
-        JsonArray iscritti = campionato.getAsJsonArray("piloti-iscritti");
-        for (int i = 0; i < iscritti.size(); i++) {
-            JsonObject iscritto = iscritti.get(i).getAsJsonObject();
-
+        JsonObject championship = championships.get(position).getAsJsonObject();
+        JsonArray racers = championship.getAsJsonArray("piloti-iscritti");
+        for (int i = 0; i < racers.size(); i++) {
+            JsonObject iscritto = racers.get(i).getAsJsonObject();
             if (iscritto.get("nome").getAsString().equals(nameLastname)) {
-
-                TextView nameTextView = holder.nameTextView;
-                TextView numberListTextView = holder.numberListTextView;
-                ImageView logo = holder.logo;
-
-                nameTextView.setText(campionato.get("nome").getAsString());
-                numberListTextView.setText(campionato.get("id").getAsString());
-
-                String wrong_res_name = campionato.get("logo").getAsString();
-                wrong_res_name = wrong_res_name.replaceAll("-", "_");
-
-                String logo_res = wrong_res_name.substring(0, wrong_res_name.indexOf("."));
-
-                int logo_drawable_id = context.getResources().getIdentifier(logo_res, "drawable", context.getPackageName());
-
-                logo.setImageDrawable(context.getResources().getDrawable(logo_drawable_id));
-
+                TextView _champListItemName = holder._champListItemName;
+                TextView _champListItemNumber = holder._champListItemNumber;
+                ImageView _champListItemLogo = holder._champListItemLogo;
+                _champListItemName.setText(championship.get("nome").getAsString());
+                _champListItemNumber.setText(championship.get("id").getAsString());
+                String wrongPictureFilName = championship.get("logo").getAsString();
+                wrongPictureFilName = wrongPictureFilName.replaceAll("-", "_");
+                String _champListItemLogo_res = wrongPictureFilName.substring(0, wrongPictureFilName.indexOf("."));
+                int _champListItemLogo_drawable_id = context.getResources().getIdentifier(_champListItemLogo_res, "drawable", context.getPackageName());
+                _champListItemLogo.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), _champListItemLogo_drawable_id, null));
             }
-
-
         }
-
     }
 
     @Override
     public int getItemCount() {
-
         int itemCount = 0;
-
         for (int e = 0; e < championships.size(); e++) {
-            JsonObject campionato = championships.get(e).getAsJsonObject();
-            JsonArray iscritti = campionato.getAsJsonArray("piloti-iscritti");
+            JsonObject championship = championships.get(e).getAsJsonObject();
+            JsonArray racers = championship.getAsJsonArray("piloti-iscritti");
             Boolean bool = false;
-            for (int i = 0; i < iscritti.size(); i++) {
-                JsonObject iscritto = iscritti.get(i).getAsJsonObject();
+            for (int i = 0; i < racers.size(); i++) {
+                JsonObject iscritto = racers.get(i).getAsJsonObject();
                 if (iscritto.get("nome").getAsString().equals(nameLastname)) {
                     bool = true;
                 }
             }
-
             if (bool)
                 itemCount++;
-
-
         }
-
         return itemCount;
     }
 
-    public JsonObject getItem (int position){
+    public JsonObject getItem(int position) {
         return championships.get(position).getAsJsonObject();
     }
 }

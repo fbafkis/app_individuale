@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.francescobertamini.app_individuale.R;
@@ -24,25 +25,19 @@ public class AllChampionshipsAdapter extends RecyclerView.Adapter<AllChampionshi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-
-        public TextView nameTextView;
-        public TextView numberListTextView;
-        public ImageView logo;
+        public TextView _champListItemName;
+        public TextView _champListItemNumber;
+        public ImageView _champListItemLogo;
 
         public ViewHolder(View itemView) {
-
             super(itemView);
-
-            nameTextView = itemView.findViewById(R.id.champListItemName);
-            numberListTextView = itemView.findViewById(R.id.champListItemNumber);
-            logo = itemView.findViewById(R.id.champListItemLogo);
-
+            _champListItemName = itemView.findViewById(R.id.champListItemName);
+            _champListItemNumber = itemView.findViewById(R.id.champListItemNumber);
+            _champListItemLogo = itemView.findViewById(R.id.champListItemLogo);
         }
     }
 
-
     @NonNull
-
     @Override
     public AllChampionshipsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
@@ -54,40 +49,27 @@ public class AllChampionshipsAdapter extends RecyclerView.Adapter<AllChampionshi
 
     @Override
     public void onBindViewHolder(@NonNull AllChampionshipsAdapter.ViewHolder holder, int position) {
-
         JsonObject campionato = championships.get(position).getAsJsonObject();
-
-        TextView nameTextView = holder.nameTextView;
-        TextView numberListTextView = holder.numberListTextView;
-        ImageView logo = holder.logo;
-
+        TextView nameTextView = holder._champListItemName;
+        TextView numberListTextView = holder._champListItemNumber;
+        ImageView logo = holder._champListItemLogo;
         nameTextView.setText(campionato.get("nome").getAsString());
         numberListTextView.setText(campionato.get("id").getAsString());
-
         String wrong_res_name = campionato.get("logo").getAsString();
-        wrong_res_name =  wrong_res_name.replaceAll("-","_");
-
-        String logo_res = wrong_res_name.substring(0,wrong_res_name.indexOf("."));
-
-        int logo_drawable_id = context.getResources().getIdentifier( logo_res, "drawable", context.getPackageName());
-
-        logo.setImageDrawable(context.getResources().getDrawable(logo_drawable_id));
-
-
+        wrong_res_name = wrong_res_name.replaceAll("-", "_");
+        String logo_res = wrong_res_name.substring(0, wrong_res_name.indexOf("."));
+        int logo_drawable_id = context.getResources().getIdentifier(logo_res, "drawable", context.getPackageName());
+        logo.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), logo_drawable_id, null));
     }
 
     @Override
     public int getItemCount() {
-
         if (championships.size() == 0)
             return 0;
         else return championships.size();
-
     }
 
-    public JsonObject getItem (int position){
+    public JsonObject getItem(int position) {
         return championships.get(position).getAsJsonObject();
     }
-
-
 }

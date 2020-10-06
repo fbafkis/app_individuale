@@ -19,7 +19,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ChampionshipEventsActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
-
     JsonObject championship;
 
     @BindView(R.id.champEventsTitle)
@@ -31,52 +30,37 @@ public class ChampionshipEventsActivity extends AppCompatActivity implements Bot
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-
         championship = (JsonObject) JsonParser.parseString(getIntent().getStringExtra("championship"));
-
         setContentView(R.layout.activity_championship_events);
         ButterKnife.bind(this);
-
         _backToChampFromCal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-
         _champCalendarTitle.setText("Eventi del campionato: " + championship.get("nome").getAsString());
-
-
         BottomNavigationView navigation = _champCalendarBottomNavigation;
         navigation.setOnNavigationItemSelectedListener(this);
-
         loadFragment(new ChampionshipFragmentList());
-
-
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Fragment fragment = null;
-
         switch (item.getItemId()) {
             case R.id.navigationChampEventsList:
                 fragment = new ChampionshipFragmentList();
                 break;
-
             case R.id.navigationChampEventsCalendar:
                 fragment = new ChampionshipFragmentCalendar();
                 break;
-
         }
-
         return loadFragment(fragment);
     }
 
     private boolean loadFragment(Fragment fragment) {
-        //switching fragment
         Bundle args = new Bundle();
         args.putString("championship", championship.toString());
         fragment.setArguments(args);
@@ -89,5 +73,4 @@ public class ChampionshipEventsActivity extends AppCompatActivity implements Bot
         }
         return false;
     }
-
 }

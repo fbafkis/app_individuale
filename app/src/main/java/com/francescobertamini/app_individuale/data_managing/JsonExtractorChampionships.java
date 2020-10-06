@@ -17,8 +17,7 @@ import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
 public class JsonExtractorChampionships {
-
-    JsonObject jsonObject;
+    JsonObject file;
     JsonArray championships;
     Context context;
 
@@ -44,24 +43,9 @@ public class JsonExtractorChampionships {
             is.close();
         }
         String jsonString = writer.toString();
-        jsonObject = JsonParser.parseString(jsonString).getAsJsonObject();
-        championships = jsonObject.get("campionati").getAsJsonArray();
+        file = JsonParser.parseString(jsonString).getAsJsonObject();
+        championships = file.get("campionati").getAsJsonArray();
         return championships;
     }
 
-
-    public JsonArray getCalendar(JsonObject campionato) {
-        JsonArray calendar = campionato.get("calendario").getAsJsonArray();
-        return calendar;
-    }
-
-    public JsonArray getSettings(JsonObject campionato) {
-        JsonArray settings = campionato.get("impostazioni-gioco").getAsJsonArray();
-        return settings;
-    }
-
-    public JsonArray getDrivers(JsonObject campionato) {
-        JsonArray racers = campionato.get("piloti-iscritti").getAsJsonArray();
-        return racers;
-    }
 }

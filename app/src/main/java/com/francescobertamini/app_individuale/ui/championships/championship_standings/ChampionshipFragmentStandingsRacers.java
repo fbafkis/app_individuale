@@ -20,32 +20,23 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ChampionshipFragmentStandingsRacers extends Fragment {
-
     JsonObject championship;
-    JsonArray racerStandings;
+    JsonArray racersStandings;
     RecyclerView.Adapter adapter;
 
     @BindView(R.id.champStandRacersRecycler)
     RecyclerView _champStandingsRacersList;
 
-    String string_dates[];
-
-
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View root = inflater.inflate(R.layout.fragment_champ_standings_racers, null);
-
         ButterKnife.bind(this, root);
-
         Bundle args = getArguments();
         championship = (JsonObject) JsonParser.parseString(args.getString("championship"));
-
-        Log.e("Campionato", championship.toString());
-        racerStandings = championship.get("classifica-piloti").getAsJsonArray();
-        adapter = new RacersStandingAdapter(racerStandings, getContext());
+        racersStandings = championship.get("classifica-piloti").getAsJsonArray();
+        adapter = new RacersStandingAdapter(racersStandings, getContext());
         _champStandingsRacersList.setAdapter(adapter);
         _champStandingsRacersList.setLayoutManager(new LinearLayoutManager(getContext()));
         return root;
     }
-
 }

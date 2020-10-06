@@ -73,8 +73,7 @@ public class SettingsFragment extends Fragment implements BottomNavigationView.O
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        accountSettingsViewModel =
-                ViewModelProviders.of(this).get(SettingsViewModel.class);
+        accountSettingsViewModel = ViewModelProviders.of(this).get(SettingsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_settings, container, false);
         NavigationView navigationView = (NavigationView) getActivity().findViewById(R.id.navView);
         navigationView.getMenu().getItem(2).setChecked(true);
