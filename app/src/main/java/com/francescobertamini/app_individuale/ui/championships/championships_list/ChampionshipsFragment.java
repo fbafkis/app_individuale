@@ -17,11 +17,13 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 public class ChampionshipsFragment extends Fragment {
-    ViewPager2 viewPager;
+    public ViewPager2 viewPager;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_championships, container, false);
+        View root = inflater.inflate(R.layout.fragment_championships, container, false);
+        return root;
     }
 
     @Override
@@ -30,16 +32,27 @@ public class ChampionshipsFragment extends Fragment {
         navigationView.getMenu().getItem(1).setChecked(true);
         viewPager = view.findViewById(R.id.championshipsPager);
         viewPager.setAdapter(new ChampionshipsAdapter(this));
+        viewPager.setOffscreenPageLimit(1);
         TabLayout tabLayout = view.findViewById(R.id.championshipsListTabLayout);
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
-            if(position==0){
+            if (position == 0) {
                 tab.setText("Tutti i campionati");
             }
-            if(position==1){
+            if (position == 1) {
                 tab.setText("I tuoi campionati");
             }
         }
         ).attach();
         MainActivity.mainToolbar.setTitle("Campionati");
     }
+
+    public void updateContent() {
+        viewPager.setAdapter(new ChampionshipsAdapter(this));
+    }
+
+    public ViewPager2 getViewPager() {
+        return viewPager;
+    }
+
 }
+

@@ -67,16 +67,6 @@
           "auto": "Seat Leon"
         },
         {
-          "nome": "Andrea Torbol",
-          "team": "Team AIDS",
-          "auto": "Seat Leon"
-        },
-        {
-          "nome": "Francesco Bertamini",
-          "team": "Team AIDS",
-          "auto": "Seat Leon"
-        },
-        {
           "nome": "Fabio Narduzzo",
           "team": "Busters eRacing Team",
           "auto": "Seat Leon"
@@ -84,11 +74,6 @@
         {
           "nome": "Roberto Contino",
           "team": "Handy Racing Team",
-          "auto": "Seat Leon"
-        },
-        {
-          "nome": "Aldo Vivaldelli",
-          "team": "Aldi Racing Team",
           "auto": "Seat Leon"
         }
       ]
@@ -132,16 +117,6 @@
           "seq": "7",
           "data": "23/05/2020",
           "circuito": "Adria"
-        },
-        {
-          "seq": "8",
-          "data": "23/12/2020",
-          "circuito": "Vignole"
-        },
-        {
-          "seq": "9",
-          "data": "26/12/2020",
-          "circuito": "Deva"
         }
       ],
       "impostazioni-gioco": [

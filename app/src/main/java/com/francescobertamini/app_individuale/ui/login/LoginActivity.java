@@ -1,6 +1,7 @@
 package com.francescobertamini.app_individuale.ui.login;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.francescobertamini.app_individuale.data_managing.JsonExtractorChampionships;
+import com.francescobertamini.app_individuale.data_managing.JsonExtractorStandings;
 import com.francescobertamini.app_individuale.ui.BasicActivity;
 import com.francescobertamini.app_individuale.ui.main.MainActivity;
 import com.francescobertamini.app_individuale.R;
@@ -20,6 +23,11 @@ import com.francescobertamini.app_individuale.database.dbmanagers.DBManagerStatu
 import com.francescobertamini.app_individuale.database.dbmanagers.DBManagerUser;
 import com.francescobertamini.app_individuale.ui.signup.SignupActivity;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.JsonParser;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,6 +37,7 @@ public class LoginActivity extends BasicActivity {
     Boolean accountCreated = false;
     private DBManagerStatus dbManagerStatus;
     private DBManagerUser dbManagerUser;
+    SharedPreferences preferences;
 
     @BindView(R.id.loginUsernameEditText)
     EditText _loginUsernameEditText;
@@ -50,6 +59,7 @@ public class LoginActivity extends BasicActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        preferences = getSharedPreferences("com.francescobertamini.app_individuale", MODE_PRIVATE);
         accountCreated = getIntent().getBooleanExtra("accountCreated", false);
         dbManagerStatus = new DBManagerStatus(this);
         dbManagerStatus.open();
@@ -93,6 +103,22 @@ public class LoginActivity extends BasicActivity {
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 }
             });
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (preferences.getBoolean("firstrun", true)) {
+            JsonExtractorChampionships jsonExtractorChampionships = new JsonExtractorChampionships(getApplicationContext());
+            JsonExtractorStandings jsonExtractorStandings = new JsonExtractorStandings(getApplicationContext());
+            try {
+                jsonExtractorChampionships.copyFile();
+                jsonExtractorStandings.copyFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            preferences.edit().putBoolean("firstrun", false).commit();
         }
     }
 

@@ -26,14 +26,16 @@ import java.io.IOException;
 
 public class AllChampionshipsFragment extends Fragment {
     AllChampionshipsAdapter adapter;
+    Fragment championshipsFragment;
 
-    public AllChampionshipsFragment() throws IOException {
+    public AllChampionshipsFragment(Fragment championshipsFragment) throws IOException {
+        this.championshipsFragment = championshipsFragment;
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_all_championships, container, false);
         try {
-            adapter = new AllChampionshipsAdapter(new JsonExtractorChampionships(getContext()).readJson(), this.getContext());
+            adapter = new AllChampionshipsAdapter(this.getContext());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -43,8 +45,6 @@ public class AllChampionshipsFragment extends Fragment {
             @Override
             public void onItemClick(View view, int position) {
                 String id = adapter.getItem(position).getAsJsonObject().get("id").getAsString();
-                Log.e("Championship", adapter.getItem(position).toString());
-
                 JsonArray partecipants = adapter.getItem(position).getAsJsonObject().get("piloti-iscritti").getAsJsonArray();
 
                 Log.e("Partecipants", partecipants.toString());
@@ -69,26 +69,21 @@ public class AllChampionshipsFragment extends Fragment {
                 if (has_user_sub) {
                     ChampionshipsDialog dialog = new ChampionshipsDialog();
                     FragmentManager fragmentManager = getParentFragmentManager();
-                    dialog.display(fragmentManager, id, true);
+                    dialog.display(fragmentManager, id, true, championshipsFragment, 0);
+
                 } else {
                     ChampionshipsDialog dialog = new ChampionshipsDialog();
                     FragmentManager fragmentManager = getParentFragmentManager();
-                    dialog.display(fragmentManager, id, false);
+                    dialog.display(fragmentManager, id, false, championshipsFragment, 0);
                 }
             }
-
 
             @Override
             public void onLongItemClick(View view, int position) {
                 // do whatever
             }
         }));
-
-        recyclerView.setLayoutManager(new
-
-                LinearLayoutManager(this.getContext()));
-
-
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         return root;
     }
 

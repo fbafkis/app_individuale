@@ -1,35 +1,51 @@
 package com.francescobertamini.app_individuale.ui.championships;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.database.Cursor;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.francescobertamini.app_individuale.R;
 import com.francescobertamini.app_individuale.data_managing.JsonExtractorChampionships;
 import com.francescobertamini.app_individuale.data_managing.JsonExtractorStandings;
+import com.francescobertamini.app_individuale.database.dbmanagers.DBManagerUser;
 import com.francescobertamini.app_individuale.ui.championships.championship_events.ChampionshipEventsActivity;
 import com.francescobertamini.app_individuale.ui.championships.championship_partecipants.ChampionshipPartecipantsActivity;
 import com.francescobertamini.app_individuale.ui.championships.championship_standings.ChampionshipStandingsActivity;
+import com.francescobertamini.app_individuale.ui.championships.championships_list.AllChampionshipsAdapter;
+import com.francescobertamini.app_individuale.ui.championships.championships_list.AllChampionshipsFragment;
+import com.francescobertamini.app_individuale.ui.championships.championships_list.ChampionshipsAdapter;
+import com.francescobertamini.app_individuale.ui.championships.championships_list.ChampionshipsFragment;
+import com.francescobertamini.app_individuale.ui.championships.championships_list.MyChampionshipsAdapter;
+import com.francescobertamini.app_individuale.ui.championships.championships_list.MyChampionshipsFragment;
+import com.francescobertamini.app_individuale.ui.main.MainActivity;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import butterknife.BindView;
@@ -42,6 +58,8 @@ public class ChampionshipsDialog extends DialogFragment {
     JsonObject championship;
     String id;
     Boolean sub;
+    Fragment championshipsFragment;
+    int page;
 
     @BindView(R.id.champName)
     TextView _champName;
@@ -72,10 +90,12 @@ public class ChampionshipsDialog extends DialogFragment {
     @BindView(R.id.champSubUnsubText)
     TextView _champSubUnsubText;
 
-    public static ChampionshipsDialog display(FragmentManager fragmentManager, String champ_id, boolean sub) {
+    public static ChampionshipsDialog display(FragmentManager fragmentManager, String champ_id, boolean sub, Fragment championshipsFragment, int page) {
         ChampionshipsDialog dialog = new ChampionshipsDialog();
         dialog.id = champ_id;
         dialog.sub = sub;
+        dialog.championshipsFragment = championshipsFragment;
+        dialog.page = page;
         dialog.show(fragmentManager, TAG);
         return dialog;
     }
@@ -99,7 +119,7 @@ public class ChampionshipsDialog extends DialogFragment {
         toolbar = root.findViewById(R.id.champToolbar);
         JsonExtractorChampionships jsonExtractorChampionships = new JsonExtractorChampionships(this.getContext());
         try {
-            championships = jsonExtractorChampionships.readJson();
+            championships = jsonExtractorChampionships.getJsonArray();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -148,7 +168,7 @@ public class ChampionshipsDialog extends DialogFragment {
                 JsonObject championshipStandings = null;
                 JsonArray championshipsStandings = null;
                 try {
-                    championshipsStandings = new JsonExtractorStandings(getContext()).readJson();
+                    championshipsStandings = new JsonExtractorStandings(getContext()).getJsonArray();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -162,7 +182,15 @@ public class ChampionshipsDialog extends DialogFragment {
                 startActivity(intent);
             }
         });
+
+
         return root;
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        ((ChampionshipsFragment) championshipsFragment).updateContent();
+        ((ChampionshipsFragment) championshipsFragment).getViewPager().setCurrentItem(page);
     }
 
     @Override
@@ -184,7 +212,11 @@ public class ChampionshipsDialog extends DialogFragment {
         _champSubUnsubButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //unsub logic
+                try {
+                    unsubscribe();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -197,10 +229,92 @@ public class ChampionshipsDialog extends DialogFragment {
         _champSubUnsubButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //sub logic
+                subscribe();
             }
         });
     }
+
+    public void subscribe() {
+        DBManagerUser dbManagerUser = new DBManagerUser(getContext());
+        dbManagerUser.open();
+        Cursor cursor = dbManagerUser.fetchByUsername(MainActivity.username);
+        String nameLastname = cursor.getString(cursor.getColumnIndex("name")) + " " + cursor.getString(cursor.getColumnIndex("lastname"));
+        String car = cursor.getString(cursor.getColumnIndex("favorite_car"));
+        String team = "Personal Team";
+        JsonObject championships = null;
+        try {
+            championships = new JsonExtractorChampionships(getContext()).getJsonObject();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        JsonObject userJson = new JsonObject();
+        userJson.addProperty("nome", nameLastname);
+        userJson.addProperty("team", team);
+        userJson.addProperty("auto", car);
+        for (int i = 0; i < championships.get("campionati").getAsJsonArray().size(); i++) {
+            if (championships.get("campionati").getAsJsonArray().get(i).getAsJsonObject().get("id").getAsString().equals(id)) {
+                championships.get("campionati").getAsJsonArray().get(i).getAsJsonObject().get("piloti-iscritti").getAsJsonArray().add(userJson);
+                championship = championships.get("campionati").getAsJsonArray().get(i).getAsJsonObject();
+            }
+        }
+        File file = new File(getContext().getFilesDir(), "campionati.json");
+        FileWriter fileWriter = null;
+        try {
+            fileWriter = new FileWriter(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+        try {
+            bufferedWriter.write(championships.toString());
+            bufferedWriter.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        dbManagerUser.close();
+        JsonExtractorChampionships jsonExtractorChampionships = new JsonExtractorChampionships(getContext());
+        changeToSub();
+    }
+
+    public void unsubscribe() throws IOException {
+        DBManagerUser dbManagerUser = new DBManagerUser(getContext());
+        dbManagerUser.open();
+        Cursor cursor = dbManagerUser.fetchByUsername(MainActivity.username);
+        String nameLastname = cursor.getString(cursor.getColumnIndex("name")) + " " + cursor.getString(cursor.getColumnIndex("lastname"));
+        JsonObject championships = null;
+        try {
+            championships = new JsonExtractorChampionships(getContext()).getJsonObject();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        for (int i = 0; i < championships.get("campionati").getAsJsonArray().size(); i++) {
+            if (championships.get("campionati").getAsJsonArray().get(i).getAsJsonObject().get("id").getAsString().equals(id)) {
+                for (int e = 0; e < championships.get("campionati").getAsJsonArray().get(i).getAsJsonObject().get("piloti-iscritti").getAsJsonArray().size(); e++) {
+                    if (championships.get("campionati").getAsJsonArray().get(i).getAsJsonObject().get("piloti-iscritti").getAsJsonArray().get(e).getAsJsonObject().get("nome").getAsString().equals(nameLastname)) {
+                        championships.get("campionati").getAsJsonArray().get(i).getAsJsonObject().get("piloti-iscritti").getAsJsonArray().remove(e);
+                        championship = championships.get("campionati").getAsJsonArray().get(i).getAsJsonObject();
+                    }
+                }
+            }
+        }
+        File file = new File(getContext().getFilesDir(), "campionati.json");
+        FileWriter fileWriter = null;
+        try {
+            fileWriter = new FileWriter(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+        try {
+            bufferedWriter.write(championships.toString());
+            bufferedWriter.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        dbManagerUser.close();
+        changeToUnsub();
+    }
 }
+
 
 

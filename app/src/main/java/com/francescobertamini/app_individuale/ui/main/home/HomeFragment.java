@@ -101,10 +101,10 @@ public class HomeFragment extends Fragment {
         _homeChampionshipLink.setOnClickListener(v -> {
             Fragment fragment = null;
             fragment = new ChampionshipsFragment();
-            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            fragmentTransaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
-            fragmentTransaction.replace(R.id.navHostFragment, fragment);
-            fragmentTransaction.addToBackStack(null);
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
+                fragmentTransaction.replace(R.id.navHostFragment, fragment, "champ_fragment");
+                fragmentTransaction.addToBackStack(null);
             Animation shake;
             shake = AnimationUtils.loadAnimation(getContext(), R.anim.shake);
             _homeChampionshipLink.startAnimation(shake);

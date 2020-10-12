@@ -12,15 +12,18 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.francescobertamini.app_individuale.R;
+import com.francescobertamini.app_individuale.data_managing.JsonExtractorChampionships;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+
+import java.io.IOException;
 
 public class AllChampionshipsAdapter extends RecyclerView.Adapter<AllChampionshipsAdapter.ViewHolder> {
     JsonArray championships;
     Context context;
 
-    public AllChampionshipsAdapter(JsonArray championships, Context context) {
-        this.championships = championships;
+    public AllChampionshipsAdapter(Context context) throws IOException {
+        this.championships = new JsonExtractorChampionships(context).getJsonArray();
         this.context = context;
     }
 

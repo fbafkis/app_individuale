@@ -2,6 +2,7 @@ package com.francescobertamini.app_individuale.ui.championships.championships_li
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,10 +23,14 @@ import com.francescobertamini.app_individuale.utils.RecyclerItemClickListener;
 import java.io.IOException;
 
 public class MyChampionshipsFragment extends Fragment {
-    MyChampionshipsAdapter adapter;
+    public static MyChampionshipsAdapter adapter;
     DBManagerUser dbManagerUser;
+    RecyclerView recyclerView;
+    String userNameLastname;
+    Fragment championshipsFragment;
 
-    public MyChampionshipsFragment() throws IOException {
+    public MyChampionshipsFragment(Fragment championshipsFragment) throws IOException {
+        this.championshipsFragment = championshipsFragment;
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -36,7 +41,7 @@ public class MyChampionshipsFragment extends Fragment {
         String userNameLastname = cursor.getString(cursor.getColumnIndex("name")) + " " + cursor.getString(cursor.getColumnIndex("lastname"));
         dbManagerUser.close();
         try {
-            adapter = new MyChampionshipsAdapter(new JsonExtractorChampionships(getContext()).readJson(), this.getContext(), userNameLastname);
+            adapter = new MyChampionshipsAdapter(this.getContext(), userNameLastname);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -48,7 +53,7 @@ public class MyChampionshipsFragment extends Fragment {
                 String id = adapter.getItem(position).getAsJsonObject().get("id").getAsString();
                 ChampionshipsDialog dialog = new ChampionshipsDialog();
                 FragmentManager fragmentManager = getParentFragmentManager();
-                dialog.display(fragmentManager, id, true);
+                dialog.display(fragmentManager, id, true, championshipsFragment, 1);
             }
 
             @Override
