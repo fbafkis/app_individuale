@@ -11,6 +11,7 @@ import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -124,9 +125,12 @@ public class SettingsFragment extends Fragment implements BottomNavigationView.O
                 Dexter.withActivity(getActivity())
                         .withPermissions(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                         .withListener(new MultiplePermissionsListener() {
+
                             @Override
                             public void onPermissionsChecked(MultiplePermissionsReport report) {
                                 if (report.areAllPermissionsGranted()) {
+                                    Log.e("cristo", "cristo");
+
                                     showImagePickerOptions();
                                 } else {
                                     Toast.makeText(getContext(), "Devi concedere i permessi all'applicazione!", Toast.LENGTH_LONG);
@@ -154,6 +158,7 @@ public class SettingsFragment extends Fragment implements BottomNavigationView.O
     }
 
     private void showImagePickerOptions() {
+        Log.e("diocan","diocan");
         ImagePickerActivity.showImagePickerOptions(getContext(), new ImagePickerActivity.PickerOptionListener() {
             @Override
             public void onTakeCameraSelected() {

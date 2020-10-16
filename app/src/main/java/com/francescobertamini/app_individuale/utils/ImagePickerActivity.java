@@ -64,7 +64,7 @@ public class ImagePickerActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         if (intent == null) {
-            Toast.makeText(getApplicationContext(), "boh", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Impossibile avviare la scelta.", Toast.LENGTH_LONG).show();
             return;
         }
 
