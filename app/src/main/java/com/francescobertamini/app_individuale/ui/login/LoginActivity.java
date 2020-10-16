@@ -2,6 +2,7 @@ package com.francescobertamini.app_individuale.ui.login;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,8 +27,11 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.JsonParser;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -59,6 +63,7 @@ public class LoginActivity extends BasicActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        copyAssets();
         preferences = getSharedPreferences("com.francescobertamini.app_individuale", MODE_PRIVATE);
         accountCreated = getIntent().getBooleanExtra("accountCreated", false);
         dbManagerStatus = new DBManagerStatus(this);
@@ -226,6 +231,53 @@ public class LoginActivity extends BasicActivity {
         _loginPasswordEditText.setEnabled(true);
         _loginRememberMe.setEnabled(true);
         _signupLink.setVisibility(View.VISIBLE);
+    }
+
+    private void copyAssets() {
+        AssetManager assetManager = getAssets();
+        String[] files = null;
+        try {
+            files = assetManager.list("champs_images");
+        } catch (IOException e) {
+            Log.e("tag", "Failed to get asset file list.", e);
+        }
+        if (files != null) for (String filename : files) {
+            InputStream in = null;
+            OutputStream out = null;
+            File directory = new File(getFilesDir(), "champs_images");
+            directory.mkdir();
+            try {
+                in = assetManager.open("champs_images/" + filename);
+                File outFile = new File(getFilesDir(), "champs_images/" + filename);
+                out = new FileOutputStream(outFile);
+                copyFile(in, out);
+            } catch (IOException e) {
+                Log.e("tag", "Failed to copy asset file: " + filename, e);
+            } finally {
+                if (in != null) {
+                    try {
+                        in.close();
+                    } catch (IOException e) {
+                        // NOOP
+                    }
+                }
+                if (out != null) {
+                    try {
+                        out.close();
+                    } catch (IOException e) {
+                        // NOOP
+                    }
+                }
+            }
+        }
+    }
+
+    private void copyFile(InputStream in, OutputStream out) throws IOException {
+        byte[] buffer = new byte[2048];
+        int read;
+        while ((read = in.read(buffer)) != -1) {
+            out.write(buffer, 0, read);
+        }
     }
 }
 

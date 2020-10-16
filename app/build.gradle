@@ -34,6 +34,7 @@ android {
                             'src/main/res/layout/championships',
                             'src/main/res/layout/settings',
                             'src/main/res/layout/settings/dialogs',
+                            'src/main/res/layout/gallery',
                             'src/main/res/layout/main',
                             'src/main/res/layout/login',
                             'src/main/res/layout/signup',

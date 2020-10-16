@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -41,6 +42,10 @@ public class AllChampionshipsFragment extends Fragment {
         }
         RecyclerView recyclerView = (RecyclerView) root.findViewById(R.id.allChampsRecycler);
         recyclerView.setAdapter(adapter);
+        TextView noElements = root.findViewById(R.id.allChampNoElements);
+        if(adapter.getItemCount()==0)
+            noElements.setVisibility(View.VISIBLE);
+
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {

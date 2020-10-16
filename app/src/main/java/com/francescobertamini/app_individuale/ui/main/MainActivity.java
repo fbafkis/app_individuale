@@ -30,7 +30,7 @@ public class MainActivity extends BasicActivity {
         DrawerLayout drawer = findViewById(R.id.drawerLayout);
         NavigationView navigationView = findViewById(R.id.navView);
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_championships, R.id.nav_account_settings)
+                R.id.nav_home, R.id.nav_championships, R.id.nav_settings,R.id.nav_gallery)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.navHostFragment);

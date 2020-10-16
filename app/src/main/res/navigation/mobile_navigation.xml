@@ -12,19 +12,26 @@
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_nav_home_to_nav_account_settings"
-            app:destination="@id/nav_account_settings" />
+            app:destination="@id/nav_settings" />
         <action
             android:id="@+id/action_nav_home_to_championshipsFragment2"
             app:destination="@id/nav_championships"/>
+        <action
+            android:id="@+id/action_nav_home_to_galleryFragment2"
+            app:destination="@id/nav_gallery" />
     </fragment>
 
     <fragment
-        android:id="@+id/nav_account_settings"
+        android:id="@+id/nav_settings"
         android:name="com.francescobertamini.app_individuale.ui.settings.SettingsFragment"
-        android:label="Account settings"
+        android:label="Impostazioni"
         tools:layout="@layout/fragment_settings" />
     <fragment
         android:id="@+id/nav_championships"
         android:name="com.francescobertamini.app_individuale.ui.championships.championships_list.ChampionshipsFragment"
-        android:label="ChampionshipsFragment" />
+        android:label="Campionati" />
+    <fragment
+        android:id="@+id/nav_gallery"
+        android:name="com.francescobertamini.app_individuale.ui.gallery.GalleryFragment"
+        android:label="Galleria" />
 </navigation>

@@ -13,8 +13,12 @@
             android:icon="@drawable/ic_menu_gallery"
             android:title="Campionati" />
         <item
-            android:id="@+id/nav_account_settings"
+            android:id="@+id/nav_settings"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="Impostazioni" />
+        <item
+            android:id="@+id/nav_gallery"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Galleria" />
     </group>
 </menu>
