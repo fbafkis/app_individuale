@@ -233,7 +233,7 @@ public class ImagePickerActivity extends AppCompatActivity {
         File path = new File(getExternalCacheDir(), "camera");
         if (!path.exists()) path.mkdirs();
         File image = new File(path, fileName);
-        return FileProvider.getUriForFile(ImagePickerActivity.this, BuildConfig.APPLICATION_ID + ".provider", image);
+        return FileProvider.getUriForFile(ImagePickerActivity.this, "com.francescobertamini.app_individuale.fileprovider", image);
     }
 
     private static String queryName(ContentResolver resolver, Uri uri) {
@@ -247,10 +247,6 @@ public class ImagePickerActivity extends AppCompatActivity {
         return name;
     }
 
-    /**
-     * Calling this will delete the images from cache directory
-     * useful to clear some memory
-     */
     public static void clearCache(Context context) {
         File path = new File(context.getExternalCacheDir(), "camera");
         if (path.exists() && path.isDirectory()) {

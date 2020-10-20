@@ -158,7 +158,7 @@ public class SettingsFragment extends Fragment implements BottomNavigationView.O
     }
 
     private void showImagePickerOptions() {
-        Log.e("diocan","diocan");
+        Log.e("diocan", "diocan");
         ImagePickerActivity.showImagePickerOptions(getContext(), new ImagePickerActivity.PickerOptionListener() {
             @Override
             public void onTakeCameraSelected() {

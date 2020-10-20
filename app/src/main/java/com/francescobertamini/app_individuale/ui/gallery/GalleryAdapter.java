@@ -17,11 +17,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.francescobertamini.app_individuale.R;
-import com.francescobertamini.app_individuale.ui.main.MainActivity;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,7 +30,6 @@ import java.util.Arrays;
 import static androidx.core.content.FileProvider.getUriForFile;
 
 public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHolder> {
-
     GalleryFragment parent;
     Context context;
     String[] images;
@@ -54,8 +51,8 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
             _galleryListItemImage1 = itemView.findViewById(R.id.galleryListItemImage1);
             _galleryListItemImage2 = itemView.findViewById(R.id.galleryListItemImage2);
         }
-    }
 
+    }
 
     @NonNull
     @Override
@@ -72,27 +69,17 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     public void onBindViewHolder(@NonNull GalleryAdapter.ViewHolder holder, int position) {
         ImageView _galleryListItemImage1 = holder._galleryListItemImage1;
         ImageView _galleryListItemImage2 = holder._galleryListItemImage2;
-
         InputStream inputstream1 = null;
         InputStream inputstream2 = null;
-
-        Log.e("position", Integer.toString(position));
-        Log.e("size", Integer.toString(listImages.size()));
-
-
-        Log.e("ouh", "ouhhhh");
-
         if (listImages.size() % 2 == 1 && 2 * position == listImages.size() - 1) {
             try {
                 inputstream1 = context.getAssets().open("champs_images/" + listImages.get(2 * position));
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
             Drawable drawable1 = Drawable.createFromStream(inputstream1, null);
             _galleryListItemImage1.setImageDrawable(drawable1);
             _galleryListItemImage2.setVisibility(View.GONE);
-
             _galleryListItemImage1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -121,7 +108,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
                     dialog.show();
                 }
             });
-
         } else {
             try {
                 inputstream1 = context.getAssets().open("champs_images/" + listImages.get(2 * position));
@@ -134,9 +120,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
-
         Drawable drawable1 = Drawable.createFromStream(inputstream1, null);
         _galleryListItemImage1.setImageDrawable(drawable1);
         Drawable drawable2 = Drawable.createFromStream(inputstream2, null);
@@ -197,7 +181,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
                 dialog.show();
             }
         });
-
     }
 
     @Override

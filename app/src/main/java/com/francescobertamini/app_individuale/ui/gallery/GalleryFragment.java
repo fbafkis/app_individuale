@@ -12,14 +12,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.francescobertamini.app_individuale.R;
-import com.francescobertamini.app_individuale.ui.championships.championships_list.AllChampionshipsAdapter;
 
 import java.io.IOException;
 
 public class GalleryFragment extends Fragment {
-
 GalleryAdapter adapter;
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

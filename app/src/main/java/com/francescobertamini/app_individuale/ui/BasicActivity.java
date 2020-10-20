@@ -26,6 +26,7 @@ public class BasicActivity extends AppCompatActivity {
                 dbManagerStatus.update(false, null);
             }
         }
+
     }
 }
 

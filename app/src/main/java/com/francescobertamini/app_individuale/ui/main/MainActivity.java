@@ -1,9 +1,20 @@
 package com.francescobertamini.app_individuale.ui.main;
 
+import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.FileObserver;
+import android.os.IBinder;
+import android.renderscript.ScriptGroup;
+import android.util.Log;
 import android.view.Menu;
+import android.widget.Toast;
 
 import com.francescobertamini.app_individuale.R;
+import com.francescobertamini.app_individuale.services.NotificationService;
 import com.francescobertamini.app_individuale.ui.BasicActivity;
 import com.google.android.material.navigation.NavigationView;
 
@@ -13,6 +24,8 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.widget.Toolbar;
+
+import java.io.File;
 
 public class MainActivity extends BasicActivity {
 
@@ -30,13 +43,25 @@ public class MainActivity extends BasicActivity {
         DrawerLayout drawer = findViewById(R.id.drawerLayout);
         NavigationView navigationView = findViewById(R.id.navView);
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_championships, R.id.nav_settings,R.id.nav_gallery)
+                R.id.nav_home, R.id.nav_championships, R.id.nav_settings, R.id.nav_gallery)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.navHostFragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+        Intent notificationServiceIntent = new Intent(getApplicationContext(), NotificationService.class);
+        startService(notificationServiceIntent);
+
+        ///////////////////////////////////////////////////////////////
+
+
+
+              ////////////////////////////////////////////////////////////
+
+
+
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

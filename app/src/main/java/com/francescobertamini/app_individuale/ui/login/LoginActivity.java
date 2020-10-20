@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.francescobertamini.app_individuale.data_managing.JsonExtractorChampionships;
 import com.francescobertamini.app_individuale.data_managing.JsonExtractorStandings;
+import com.francescobertamini.app_individuale.services.NotificationService;
 import com.francescobertamini.app_individuale.ui.BasicActivity;
 import com.francescobertamini.app_individuale.ui.main.MainActivity;
 import com.francescobertamini.app_individuale.R;
