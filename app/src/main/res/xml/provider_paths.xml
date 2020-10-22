@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths xmlns:android="http://schemas.android.com/apk/res/android">
-    <external-cache-path name="external_files" path="."/>
+    <cache-path name="cache" path="../cache"/>
     <external-path name="external_files" path="."/>
-
+    <files-path name="champs_images" path="champs_images" />
 </paths>

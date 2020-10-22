@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.francescobertamini.app_individuale.BuildConfig;
 import com.francescobertamini.app_individuale.R;
 
 import java.io.File;
@@ -100,7 +101,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
                             share.setType("image/*");
                             File imagePath = new File(context.getFilesDir(), "champs_images");
                             File newFile = new File(imagePath, listImages.get(2 * position));
-                            Uri contentUri = getUriForFile(context, "com.francescobertamini.app_individuale.fileprovider", newFile);
+                            Uri contentUri = getUriForFile(context, BuildConfig.APPLICATION_ID + ".provider", newFile);
                             share.putExtra(Intent.EXTRA_STREAM, contentUri);
                             context.startActivity(Intent.createChooser(share, "Condividi immagine"));
                         }
@@ -145,7 +146,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
                         share.setType("image/*");
                         File imagePath = new File(context.getFilesDir(), "champs_images");
                         File newFile = new File(imagePath, listImages.get(2 * position));
-                        Uri contentUri = getUriForFile(context, "com.francescobertamini.app_individuale.fileprovider", newFile);
+                        Uri contentUri = getUriForFile(context, BuildConfig.APPLICATION_ID + ".provider", newFile);
                         share.putExtra(Intent.EXTRA_STREAM, contentUri);
                         context.startActivity(Intent.createChooser(share, "Condividi immagine"));
                     }
@@ -173,7 +174,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
                         share.setType("image/*");
                         File imagePath = new File(context.getFilesDir(), "champs_images");
                         File newFile = new File(imagePath, listImages.get(2 * position + 1));
-                        Uri contentUri = getUriForFile(context, "com.francescobertamini.app_individuale.fileprovider", newFile);
+                        Uri contentUri = getUriForFile(context, BuildConfig.APPLICATION_ID + ".provider", newFile);
                         share.putExtra(Intent.EXTRA_STREAM, contentUri);
                         context.startActivity(Intent.createChooser(share, "Condividi immagine"));
                     }

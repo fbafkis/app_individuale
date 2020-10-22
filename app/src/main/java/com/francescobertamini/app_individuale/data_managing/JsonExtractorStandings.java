@@ -1,6 +1,7 @@
 package com.francescobertamini.app_individuale.data_managing;
 
 import android.content.Context;
+import android.os.Environment;
 
 import com.francescobertamini.app_individuale.R;
 import com.google.gson.JsonArray;

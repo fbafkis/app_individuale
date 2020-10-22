@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.francescobertamini.app_individuale">
-    <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
-
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -17,16 +18,10 @@
         android:theme="@style/AppTheme.NoActionBar">
         <service
             android:name=".services.NotificationService"
-            android:exported="false"/>
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="com.francescobertamini.app_individuale.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
-        </provider>
+            android:enabled="true"
+            android:exported="true"
+            android:process=":NotificationService" />
+
         <activity
             android:name="com.francescobertamini.app_individuale.ui.main.MainActivity"
             android:label="@string/app_name"
@@ -51,14 +46,42 @@
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.francescobertamini.app_individuale.fileprovider"
+            android:authorities="${applicationId}.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+
+        <receiver
+            android:name=".broadcast_receivers.AddRacerReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.francescobertamini.perform.addRacer" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".broadcast_receivers.RemoveRacerReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.francescobertamini.perform.removeRacer" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".broadcast_receivers.BootUpReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
     </application>
 </manifest>

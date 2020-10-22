@@ -230,10 +230,10 @@ public class ImagePickerActivity extends AppCompatActivity {
     }
 
     private Uri getCacheImagePath(String fileName) {
-        File path = new File(getExternalCacheDir(), "camera");
+        File path = new File(getCacheDir(), "camera");
         if (!path.exists()) path.mkdirs();
         File image = new File(path, fileName);
-        return FileProvider.getUriForFile(ImagePickerActivity.this, "com.francescobertamini.app_individuale.fileprovider", image);
+        return FileProvider.getUriForFile(ImagePickerActivity.this, BuildConfig.APPLICATION_ID + ".provider", image);
     }
 
     private static String queryName(ContentResolver resolver, Uri uri) {

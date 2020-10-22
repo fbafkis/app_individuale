@@ -1,10 +1,14 @@
 package com.francescobertamini.app_individuale.ui.login;
 
+import android.Manifest;
+import android.app.Instrumentation;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +17,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.francescobertamini.app_individuale.data_managing.JsonExtractorChampionships;
 import com.francescobertamini.app_individuale.data_managing.JsonExtractorStandings;
@@ -61,10 +68,29 @@ public class LoginActivity extends BasicActivity {
     @BindView(R.id.signupLink)
     LinearLayout _signupLink;
 
+    final int PERMISSION_REQUEST_CODE = 100;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         copyAssets();
+        checkJsonFilesExistence();
+        File championshipsFile = new File(getFilesDir(), "campionati.json");
+        File standingsFile = new File(getFilesDir(), "classifiche.json");
+        if (!championshipsFile.exists()) {
+            try {
+                new JsonExtractorChampionships(this).copyFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        if (!standingsFile.exists()) {
+            try {
+                new JsonExtractorStandings(this).copyFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         preferences = getSharedPreferences("com.francescobertamini.app_individuale", MODE_PRIVATE);
         accountCreated = getIntent().getBooleanExtra("accountCreated", false);
         dbManagerStatus = new DBManagerStatus(this);
@@ -73,8 +99,6 @@ public class LoginActivity extends BasicActivity {
         dbManagerUser.open();
         Cursor statusCursor = dbManagerStatus.fetch();
         int isUserLogged = statusCursor.getInt(statusCursor.getColumnIndex("is_user_logged"));
-        Log.e("UserLogged", Integer.toString(isUserLogged));
-
         if (isUserLogged == 1) {
             String actualUsername = statusCursor.getString(statusCursor.getColumnIndex("user_logged"));
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -83,11 +107,9 @@ public class LoginActivity extends BasicActivity {
             finish();
             dbManagerUser.close();
             dbManagerStatus.close();
-
         } else if (isUserLogged == 0) {
             setContentView(R.layout.activity_login);
             ButterKnife.bind(this);
-
             if (accountCreated) {
                 Toast toast = Toast.makeText(this, "Account creato!", Toast.LENGTH_LONG);
                 toast.show();
@@ -112,19 +134,22 @@ public class LoginActivity extends BasicActivity {
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (preferences.getBoolean("firstrun", true)) {
-            JsonExtractorChampionships jsonExtractorChampionships = new JsonExtractorChampionships(getApplicationContext());
-            JsonExtractorStandings jsonExtractorStandings = new JsonExtractorStandings(getApplicationContext());
+    private void checkJsonFilesExistence() {
+        File championshipsFile = new File(getFilesDir(), "campionati.json");
+        File standingsFile = new File(getFilesDir(), "classifiche.json");
+        if (!championshipsFile.exists()) {
             try {
-                jsonExtractorChampionships.copyFile();
-                jsonExtractorStandings.copyFile();
+                new JsonExtractorChampionships(this).copyFile();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            preferences.edit().putBoolean("firstrun", false).commit();
+        }
+        if (!standingsFile.exists()) {
+            try {
+                new JsonExtractorStandings(this).copyFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -161,6 +186,7 @@ public class LoginActivity extends BasicActivity {
                 dbManagerStatus.update(true, actualUsername);
                 dbManagerStatus.close();
                 dbManagerUser.close();
+                copyAssets();
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 intent.putExtra("username", actualUsername);

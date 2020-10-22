@@ -1,12 +1,13 @@
 package com.francescobertamini.app_individuale.services;
 
-
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.FileObserver;
 import android.os.IBinder;
@@ -14,6 +15,8 @@ import android.os.IBinder;
 import androidx.core.app.NotificationCompat;
 
 import com.francescobertamini.app_individuale.R;
+import com.francescobertamini.app_individuale.broadcast_receivers.AddRacerReceiver;
+import com.francescobertamini.app_individuale.broadcast_receivers.RemoveRacerReceiver;
 import com.francescobertamini.app_individuale.data_managing.JsonExtractorChampionships;
 import com.francescobertamini.app_individuale.ui.main.MainActivity;
 import com.google.gson.JsonArray;
@@ -28,7 +31,8 @@ public class NotificationService extends Service {
     String notificationChannelsIds[] = new String[4];
     JsonObject baseChampsJsonObject;
     static FileObserver fileObserver;
-
+    AddRacerReceiver addRacerReceiver;
+    RemoveRacerReceiver removeRacerReceiver;
     private int NOTIFICATION = 69;
     private final int CHAMP_ADDED = 0;
     private final int CHAMP_REMOVED = 1;
@@ -41,13 +45,17 @@ public class NotificationService extends Service {
 
     @Override
     public void onCreate() {
+        addRacerReceiver = new AddRacerReceiver();
+        removeRacerReceiver = new RemoveRacerReceiver();
         notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         notificationChannelsIds[0] = "champs_notification_channel";
         notificationChannelsIds[1] = "events_notification_channel";
         notificationChannelsIds[2] = "champ_settings_notification_channel";
         notificationChannelsIds[3] = "racers_notification_channel";
         createNotificationChannels();
-        File file = new File(String.valueOf(getApplicationContext().getFilesDir()), "campionati.json");
+        addRacerReceiver = new AddRacerReceiver();
+        removeRacerReceiver = new RemoveRacerReceiver();
+        File file = new File(getApplicationContext().getFilesDir(), "campionati.json");
         fileObserver = new FileObserver(file) {
             @Override
             public void onEvent(int event, String file) {
@@ -64,23 +72,46 @@ public class NotificationService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        fileObserver.startWatching();
         try {
-            baseChampsJsonObject = new JsonExtractorChampionships(getApplicationContext()).getJsonObject();
+            baseChampsJsonObject = new JsonExtractorChampionships(this).getJsonObject();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return START_NOT_STICKY;
+        fileObserver.startWatching();
+        Intent notificationIntent = new Intent(this, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,
+                0, notificationIntent, 0);
+        NotificationChannel foregroudNotificationChannel = new NotificationChannel("service_notification_channel", "Service Notification", NotificationManager.IMPORTANCE_MIN);
+        notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.createNotificationChannel(foregroudNotificationChannel);
+        Notification serviceNotification = new NotificationCompat.Builder(this, "service_notification_channel")
+                .setContentTitle("Sim Career Notifications")
+                .setContentText("Puoi ricevere le notifiche di Sim Career")
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentIntent(pendingIntent)
+                .build();
+        startForeground(1, serviceNotification);
+        notificationManager.deleteNotificationChannel("service_notification_channel");
+        notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        IntentFilter racerAdded = new IntentFilter("com.francescobertamini.perform.addRacer");
+        registerReceiver(addRacerReceiver, racerAdded);
+        notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        IntentFilter racerRemoved = new IntentFilter("com.francescobertamini.perform.removeRacer");
+        registerReceiver(removeRacerReceiver, racerRemoved);
+        return START_STICKY;
     }
 
     @Override
     public void onDestroy() {
-        fileObserver.stopWatching();
     }
 
     @Override
     public IBinder onBind(Intent intent) {
         return null;
+    }
+
+    @Override
+    public void onTaskRemoved(Intent rootIntent) {
     }
 
     private void showNotification(int type, String title, String text) {
@@ -89,7 +120,7 @@ public class NotificationService extends Service {
 
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, 0);
-        ///////7
+        ///////
 
         NotificationCompat.Builder builder = null;
         switch (type) {
@@ -192,7 +223,6 @@ public class NotificationService extends Service {
         JsonObject tempChampsJsonObject = new JsonExtractorChampionships(getApplicationContext()).getJsonObject();
         ArrayList<JsonObject> baseChamps = new ArrayList<>();
         ArrayList<JsonObject> tempChamps = new ArrayList<>();
-
         if (!baseChampsJsonObject.equals(tempChampsJsonObject)) {
             for (int i = 0; i < baseChampsJsonObject.get("campionati").getAsJsonArray().size(); i++) {
                 baseChamps.add(baseChampsJsonObject.get("campionati").getAsJsonArray().get(i).getAsJsonObject());
@@ -200,7 +230,6 @@ public class NotificationService extends Service {
             for (int i = 0; i < tempChampsJsonObject.get("campionati").getAsJsonArray().size(); i++) {
                 tempChamps.add(tempChampsJsonObject.get("campionati").getAsJsonArray().get(i).getAsJsonObject());
             }
-
             if (baseChamps.size() != tempChamps.size()) {
                 JsonObject champ = null;
                 if (baseChamps.size() < tempChamps.size()) {
@@ -232,7 +261,6 @@ public class NotificationService extends Service {
                 for (int i = 0; i < oldChamps.size(); i++) {
                     JsonObject newChamp = newChamps.get(i);
                     JsonObject oldChamp = oldChamps.get(i);
-
                     if (newChamp.get("calendario").getAsJsonArray() != oldChamp.get("calendario").getAsJsonArray()) {
                         JsonArray newCalendar = newChamp.get("calendario").getAsJsonArray();
                         JsonArray oldCalendar = oldChamp.get("calendario").getAsJsonArray();
@@ -281,17 +309,14 @@ public class NotificationService extends Service {
                             }
                         }
                     }
-
                     if (!(oldChamp.get("impostazioni-gioco").getAsJsonArray().toString().equals(newChamp.get("impostazioni-gioco").getAsJsonArray().toString()))) {
                         showNotification(CHAMP_SETTINGS_MODIFIED, "Impostazioni di gioco modificate", "Sono state modificate " +
                                 "le impostazioni di gioco del campionato "
                                 + newChamp.get("nome").getAsString());
                     }
-
                     if (!(newChamp.get("piloti-iscritti").getAsJsonArray().equals(oldChamp.get("piloti-iscritti").getAsJsonArray()))) {
                         JsonArray newRacers = newChamp.get("piloti-iscritti").getAsJsonArray();
                         JsonArray oldRacers = oldChamp.get("piloti-iscritti").getAsJsonArray();
-
                         if (newRacers.size() != oldRacers.size()) {
                             JsonObject racer = null;
                             if (oldRacers.size() < newRacers.size()) {

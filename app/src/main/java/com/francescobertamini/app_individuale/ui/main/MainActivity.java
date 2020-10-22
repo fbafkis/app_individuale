@@ -1,9 +1,11 @@
 package com.francescobertamini.app_individuale.ui.main;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.FileObserver;
@@ -14,10 +16,13 @@ import android.view.Menu;
 import android.widget.Toast;
 
 import com.francescobertamini.app_individuale.R;
+import com.francescobertamini.app_individuale.broadcast_receivers.AddRacerReceiver;
+import com.francescobertamini.app_individuale.broadcast_receivers.BootUpReceiver;
 import com.francescobertamini.app_individuale.services.NotificationService;
 import com.francescobertamini.app_individuale.ui.BasicActivity;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.core.content.ContextCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -38,6 +43,7 @@ public class MainActivity extends BasicActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mainToolbar = findViewById(R.id.mainToolbar);
+
         setSupportActionBar(mainToolbar);
         username = getIntent().getStringExtra("username");
         DrawerLayout drawer = findViewById(R.id.drawerLayout);
@@ -49,17 +55,8 @@ public class MainActivity extends BasicActivity {
         NavController navController = Navigation.findNavController(this, R.id.navHostFragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-        Intent notificationServiceIntent = new Intent(getApplicationContext(), NotificationService.class);
-        startService(notificationServiceIntent);
-
-        ///////////////////////////////////////////////////////////////
-
-
-
-              ////////////////////////////////////////////////////////////
-
-
-
+        startNotificationService();
+        registerReceiver(new BootUpReceiver(), new IntentFilter("android.intent.action.BOOT_COMPLETED"));
     }
 
 
@@ -75,5 +72,22 @@ public class MainActivity extends BasicActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    public void startNotificationService() {
+        Intent serviceIntent = new Intent(this, NotificationService.class);
+        ContextCompat.startForegroundService(this, serviceIntent);
+    }
+
 }
 
