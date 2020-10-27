@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -84,6 +85,8 @@ public class ChampionshipsDialog extends DialogFragment {
     Button _champRacersButton;
     @BindView(R.id.champResultsButton)
     Button _champResultsButton;
+    @BindView(R.id.champForumButton)
+    Button _champForumButton;
     @BindView(R.id.champStateChip)
     Chip _champStateChip;
     @BindView(R.id.champSubUnsubButton)
@@ -184,6 +187,21 @@ public class ChampionshipsDialog extends DialogFragment {
             }
         });
 
+        _champForumButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri uri = null;
+                if (id.equals("0")) {
+                    uri = Uri.parse("http://www.simcareer.org/index.php?s=champs2&idevent=47&action=showinfo");
+                } else if (id.equals("1")) {
+                    uri = Uri.parse("http://www.simcareer.org/index.php?s=champs2&idevent=42&action=showinfo");
+                }
+                if (uri != null) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                    startActivity(intent);
+                }
+            }
+        });
 
         return root;
     }
@@ -278,6 +296,8 @@ public class ChampionshipsDialog extends DialogFragment {
     }
 
     public void unsubscribe() throws IOException {
+        Log.e("daddy", "daddy");
+
         DBManagerUser dbManagerUser = new DBManagerUser(getContext());
         dbManagerUser.open();
         Cursor cursor = dbManagerUser.fetchByUsername(MainActivity.username);

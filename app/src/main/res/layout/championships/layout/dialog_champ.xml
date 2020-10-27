@@ -52,6 +52,13 @@
                     android:layout_marginBottom="15dp"
                     android:text="risultati"
                     app:icon="@drawable/ic_baseline_format_list_numbered_24" />
+
+                <Button
+                    android:id="@+id/champForumButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Forum"
+                    app:icon="@drawable/ic_outline_forum_24" />
             </LinearLayout>
 
             <LinearLayout

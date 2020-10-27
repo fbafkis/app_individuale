@@ -13,12 +13,17 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class RemoveRacerReceiver extends BroadcastReceiver {
+public class EditChampSettingsReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        String name = intent.getStringExtra("name");
+
+        Log.e("SettingsChanged", "Settings changed");
+
         int champId = intent.getIntExtra("champId", 1);
+        String flags = intent.getStringExtra("flags");
+        String fuelCons = intent.getStringExtra("fuelConsumption");
+
         JsonObject championships = null;
         try {
             championships = new JsonExtractorChampionships(context).getJsonObject();
@@ -27,10 +32,8 @@ public class RemoveRacerReceiver extends BroadcastReceiver {
         }
         for (int i = 0; i < championships.get("campionati").getAsJsonArray().size(); i++) {
             if (championships.get("campionati").getAsJsonArray().get(i).getAsJsonObject().get("id").getAsString().equals(Integer.toString(champId))) {
-                for (int e = 0; e < championships.get("campionati").getAsJsonArray().get(i).getAsJsonObject().get("piloti-iscritti").getAsJsonArray().size(); e++)
-                    if (championships.get("campionati").getAsJsonArray().get(i).getAsJsonObject().get("piloti-iscritti").getAsJsonArray().get(e).getAsJsonObject().get("nome").getAsString().equals(name)) {
-                        championships.get("campionati").getAsJsonArray().get(i).getAsJsonObject().get("piloti-iscritti").getAsJsonArray().remove(e);
-                    }
+                championships.get("campionati").getAsJsonArray().get(i).getAsJsonObject().get("impostazioni-gioco").getAsJsonArray().get(0).getAsJsonObject().addProperty("valore", flags);
+                championships.get("campionati").getAsJsonArray().get(i).getAsJsonObject().get("impostazioni-gioco").getAsJsonArray().get(1).getAsJsonObject().addProperty("valore", fuelCons);
             }
         }
         File file = new File(context.getFilesDir(), "campionati.json");

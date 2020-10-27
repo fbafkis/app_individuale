@@ -8,16 +8,25 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
 import android.os.Build;
 import android.os.FileObserver;
 import android.os.IBinder;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
 import com.francescobertamini.app_individuale.R;
+import com.francescobertamini.app_individuale.broadcast_receivers.AddEventReceiver;
 import com.francescobertamini.app_individuale.broadcast_receivers.AddRacerReceiver;
+import com.francescobertamini.app_individuale.broadcast_receivers.EditChampSettingsReceiver;
+import com.francescobertamini.app_individuale.broadcast_receivers.EditEventReceiver;
+import com.francescobertamini.app_individuale.broadcast_receivers.RemoveChampReceiver;
 import com.francescobertamini.app_individuale.broadcast_receivers.RemoveRacerReceiver;
+import com.francescobertamini.app_individuale.broadcast_receivers.ResetReceiver;
 import com.francescobertamini.app_individuale.data_managing.JsonExtractorChampionships;
+import com.francescobertamini.app_individuale.database.dbmanagers.DBManagerSettings;
 import com.francescobertamini.app_individuale.ui.main.MainActivity;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -31,8 +40,7 @@ public class NotificationService extends Service {
     String notificationChannelsIds[] = new String[4];
     JsonObject baseChampsJsonObject;
     static FileObserver fileObserver;
-    AddRacerReceiver addRacerReceiver;
-    RemoveRacerReceiver removeRacerReceiver;
+
     private int NOTIFICATION = 69;
     private final int CHAMP_ADDED = 0;
     private final int CHAMP_REMOVED = 1;
@@ -45,16 +53,13 @@ public class NotificationService extends Service {
 
     @Override
     public void onCreate() {
-        addRacerReceiver = new AddRacerReceiver();
-        removeRacerReceiver = new RemoveRacerReceiver();
+
         notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         notificationChannelsIds[0] = "champs_notification_channel";
         notificationChannelsIds[1] = "events_notification_channel";
         notificationChannelsIds[2] = "champ_settings_notification_channel";
         notificationChannelsIds[3] = "racers_notification_channel";
         createNotificationChannels();
-        addRacerReceiver = new AddRacerReceiver();
-        removeRacerReceiver = new RemoveRacerReceiver();
         File file = new File(getApplicationContext().getFilesDir(), "campionati.json");
         fileObserver = new FileObserver(file) {
             @Override
@@ -91,19 +96,34 @@ public class NotificationService extends Service {
                 .setContentIntent(pendingIntent)
                 .build();
         startForeground(1, serviceNotification);
+        DBManagerSettings dbManagerSettings = new DBManagerSettings(this);
+        dbManagerSettings.open();
+        Cursor settingsCursor = dbManagerSettings.fetchByUsername(MainActivity.username);
         notificationManager.deleteNotificationChannel("service_notification_channel");
-        notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        IntentFilter racerAdded = new IntentFilter("com.francescobertamini.perform.addRacer");
-        registerReceiver(addRacerReceiver, racerAdded);
-        notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        IntentFilter racerRemoved = new IntentFilter("com.francescobertamini.perform.removeRacer");
-        registerReceiver(removeRacerReceiver, racerRemoved);
+        if (settingsCursor.getInt(settingsCursor.getColumnIndex("notifications"))==0){
+            notificationManager.deleteNotificationChannel("service_notification_channel");
+        }
+        if (settingsCursor.getInt(settingsCursor.getColumnIndex("championships_notifications"))==0){
+            notificationManager.deleteNotificationChannel("champs_notification_channel");
+        }
+        if (settingsCursor.getInt(settingsCursor.getColumnIndex("events_notifications"))==0){
+            notificationManager.deleteNotificationChannel("events_notification_channel");
+        }
+        if (settingsCursor.getInt(settingsCursor.getColumnIndex("champ_settings_notifications"))==0){
+            notificationManager.deleteNotificationChannel("champ_settings_notification_channel");
+        }
+        if (settingsCursor.getInt(settingsCursor.getColumnIndex("racers_notifications"))==0){
+            notificationManager.deleteNotificationChannel("racers_notification_channel");
+        }
+       // Toast.makeText(this, "SimCareer Notification Service Started", Toast.LENGTH_SHORT).show();
         return START_STICKY;
     }
 
     @Override
     public void onDestroy() {
     }
+
+
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -291,14 +311,14 @@ public class NotificationService extends Service {
                             ArrayList<JsonObject> newEvents = new ArrayList<>();
                             ArrayList<JsonObject> oldEvents = new ArrayList<>();
                             for (int e = 0; e < oldCalendar.size(); e++) {
-                                if (!newCalendar.get(e).toString().equals(newCalendar.get(e).toString())) {
-                                    newEvents.add(newCalendar.get(i).getAsJsonObject());
-                                    oldEvents.add(oldCalendar.get(i).getAsJsonObject());
+                                if (!newCalendar.get(e).getAsJsonObject().toString().equals(oldCalendar.get(e).getAsJsonObject().toString())) {
+                                    newEvents.add(newCalendar.get(e).getAsJsonObject());
+                                    oldEvents.add(oldCalendar.get(e).getAsJsonObject());
                                 }
                             }
                             JsonObject event = null;
                             for (int e = 0; e < oldEvents.size(); e++) {
-                                if (!newEvents.get(e).equals(oldEvents.get(e))) {
+                                if (!newEvents.get(e).toString().equals(oldEvents.get(e).toString())) {
                                     event = newEvents.get(e);
                                 }
                             }

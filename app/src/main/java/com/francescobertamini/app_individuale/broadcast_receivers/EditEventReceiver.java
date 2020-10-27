@@ -13,12 +13,18 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class RemoveRacerReceiver extends BroadcastReceiver {
-
+public class EditEventReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        String name = intent.getStringExtra("name");
+
+        String seq = intent.getStringExtra("seq");
+        String track = intent.getStringExtra("track");
+        String date = intent.getStringExtra("date");
         int champId = intent.getIntExtra("champId", 1);
+        JsonObject newEvent = new JsonObject();
+        newEvent.addProperty("seq", seq);
+        newEvent.addProperty("circuito", track);
+        newEvent.addProperty("data", date);
         JsonObject championships = null;
         try {
             championships = new JsonExtractorChampionships(context).getJsonObject();
@@ -27,10 +33,12 @@ public class RemoveRacerReceiver extends BroadcastReceiver {
         }
         for (int i = 0; i < championships.get("campionati").getAsJsonArray().size(); i++) {
             if (championships.get("campionati").getAsJsonArray().get(i).getAsJsonObject().get("id").getAsString().equals(Integer.toString(champId))) {
-                for (int e = 0; e < championships.get("campionati").getAsJsonArray().get(i).getAsJsonObject().get("piloti-iscritti").getAsJsonArray().size(); e++)
-                    if (championships.get("campionati").getAsJsonArray().get(i).getAsJsonObject().get("piloti-iscritti").getAsJsonArray().get(e).getAsJsonObject().get("nome").getAsString().equals(name)) {
-                        championships.get("campionati").getAsJsonArray().get(i).getAsJsonObject().get("piloti-iscritti").getAsJsonArray().remove(e);
+                for (int e = 0; e < championships.get("campionati").getAsJsonArray().get(i).getAsJsonObject().get("calendario").getAsJsonArray().size(); e++) {
+                    if (championships.get("campionati").getAsJsonArray().get(i).getAsJsonObject().get("calendario").getAsJsonArray().get(e).getAsJsonObject().get("seq").getAsString().equals(seq)) {
+                        championships.get("campionati").getAsJsonArray().get(i).getAsJsonObject().get("calendario").getAsJsonArray().get(e).getAsJsonObject().addProperty("data", date);
+                        Log.e("Calendar", championships.get("campionati").getAsJsonArray().get(i).getAsJsonObject().get("calendario").getAsJsonArray().toString());
                     }
+                }
             }
         }
         File file = new File(context.getFilesDir(), "campionati.json");

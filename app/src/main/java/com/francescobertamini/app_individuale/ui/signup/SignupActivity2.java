@@ -16,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.francescobertamini.app_individuale.database.dbmanagers.DBManagerSettings;
 import com.francescobertamini.app_individuale.database.dbmanagers.DBManagerUser;
 import com.francescobertamini.app_individuale.ui.login.LoginActivity;
 import com.francescobertamini.app_individuale.utils.ImagePickerActivity;
@@ -190,6 +191,10 @@ public class SignupActivity2 extends AppCompatActivity {
             dbManagerUser.insert(name, lastname, birthdate, email, address, username, password, favNumber, favCar, favTrack, hatedTrack, false, null, false);
         }
         dbManagerUser.close();
+        DBManagerSettings dbManagerSettings = new DBManagerSettings(this);
+        dbManagerSettings.open();
+        dbManagerSettings.insert(username, true, true, true, true, true, true);
+        dbManagerSettings.close();
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         intent.putExtra("accountCreated", true);
         intent.putExtra("new_user_username", username);

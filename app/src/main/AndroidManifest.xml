@@ -74,6 +74,16 @@
                 <action android:name="com.francescobertamini.perform.removeRacer" />
             </intent-filter>
         </receiver>
+
+        <receiver
+            android:name=".broadcast_receivers.EditChampSettingsReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.francescobertamini.perform.editChampSettings" />
+            </intent-filter>
+        </receiver>
+
         <receiver
             android:name=".broadcast_receivers.BootUpReceiver"
             android:enabled="true"
@@ -82,6 +92,5 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
     </application>
 </manifest>

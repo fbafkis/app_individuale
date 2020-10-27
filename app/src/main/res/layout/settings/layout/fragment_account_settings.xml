@@ -214,14 +214,17 @@
             android:backgroundTint="@color/colorPrimary"
             android:visibility="visible" />
 
+
         <Button
+            android:id="@+id/notificationSettingsButton"
             style="@style/Widget.MaterialComponents.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-
             android:layout_marginBottom="10dp"
+            android:clickable="true"
             android:drawableEnd="@drawable/ic_notification_settings"
+            android:onClick="notificationDialog"
             android:text="Impostazioni notifiche"
             android:textColor="#FFFFFF" />
 
@@ -256,6 +259,7 @@
             android:drawableEnd="@drawable/ic_outline_delete_forever_24"
             android:text="Elimina account"
             android:textColor="#FFFFFF" />
+
 
     </LinearLayout>
 
