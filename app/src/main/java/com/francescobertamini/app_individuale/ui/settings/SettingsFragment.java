@@ -129,14 +129,11 @@ public class SettingsFragment extends Fragment implements BottomNavigationView.O
                             @Override
                             public void onPermissionsChecked(MultiplePermissionsReport report) {
                                 if (report.areAllPermissionsGranted()) {
-                                    Log.e("cristo", "cristo");
-
                                     showImagePickerOptions();
                                 } else {
                                     Toast.makeText(getContext(), "Devi concedere i permessi all'applicazione!", Toast.LENGTH_LONG);
                                 }
                             }
-
                             @Override
                             public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
                                 token.continuePermissionRequest();
@@ -267,6 +264,7 @@ public class SettingsFragment extends Fragment implements BottomNavigationView.O
                 dbManagerUser.close();
                 Bitmap image = BitmapFactory.decodeFile(uri.getPath());
                 _settingsProfilePicture.setImageBitmap(image);
+                setDrawerPicture();
             }
         }
     }
@@ -297,5 +295,51 @@ public class SettingsFragment extends Fragment implements BottomNavigationView.O
     private boolean validateMail(String email) {
         String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
         return email.matches(regex);
+    }
+
+    private void setDrawerPicture(){
+        NavigationView navigationView =getActivity().findViewById(R.id.navView);
+        View navHeader = navigationView.getHeaderView(0);
+        ImageView _drawerPicture = navHeader.findViewById(R.id.drawerPicture);
+        DBManagerUser dbManagerUser = new DBManagerUser(getContext());
+        dbManagerUser.open();
+        Cursor userCursor =  dbManagerUser.fetchByUsername(MainActivity.username);
+        dbManagerUser.close();
+
+        if (userCursor.getInt(userCursor.getColumnIndex("has_custom_picture")) == 1) {
+            String imagePath = userCursor.getString(userCursor.getColumnIndex("profile_picture"));
+            File image = new File(imagePath);
+            if (image.exists()) {
+                Bitmap bitmapImage = BitmapFactory.decodeFile(image.getAbsolutePath());
+                int rotate = 0;
+                ExifInterface exif = null;
+                try {
+                    exif = new ExifInterface(image.getAbsolutePath());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                        ExifInterface.ORIENTATION_UNDEFINED);
+                switch (orientation) {
+                    case ExifInterface.ORIENTATION_NORMAL:
+                        rotate = 0;
+                        break;
+                    case ExifInterface.ORIENTATION_ROTATE_270:
+                        rotate = 270;
+                        break;
+                    case ExifInterface.ORIENTATION_ROTATE_180:
+                        rotate = 180;
+                        break;
+                    case ExifInterface.ORIENTATION_ROTATE_90:
+                        rotate = 90;
+                        break;
+                }
+                Matrix matrix = new Matrix();
+                matrix.postRotate(rotate);
+                Bitmap rotateBitmap = Bitmap.createBitmap(bitmapImage, 0, 0, bitmapImage.getWidth(), bitmapImage.getHeight(), matrix, true);
+                _drawerPicture.setImageBitmap(rotateBitmap);
+            } else
+                _drawerPicture.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_account_circle_100, null));
+        }
     }
 }

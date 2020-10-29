@@ -51,6 +51,14 @@ public class NotificationService extends Service {
     private final int RACER_ADDED = 6;
     private final int RACER_REMOVED = 7;
 
+    AddRacerReceiver addRacerReceiver;
+    RemoveRacerReceiver removeRacerReceiver;
+    EditChampSettingsReceiver editChampSettingsReceiver;
+    AddEventReceiver addEventReceiver;
+    EditEventReceiver editEventReceiver;
+    RemoveChampReceiver removeChampReceiver;
+    ResetReceiver resetReceiver;
+
     @Override
     public void onCreate() {
 
@@ -77,53 +85,53 @@ public class NotificationService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        registerReceivers();
         try {
-            baseChampsJsonObject = new JsonExtractorChampionships(this).getJsonObject();
+            baseChampsJsonObject = new JsonExtractorChampionships(getApplicationContext()).getJsonObject();
         } catch (IOException e) {
             e.printStackTrace();
         }
         fileObserver.startWatching();
-        Intent notificationIntent = new Intent(this, MainActivity.class);
+        Intent notificationIntent = new Intent(getApplicationContext(), MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
                 0, notificationIntent, 0);
         NotificationChannel foregroudNotificationChannel = new NotificationChannel("service_notification_channel", "Service Notification", NotificationManager.IMPORTANCE_MIN);
-        notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.createNotificationChannel(foregroudNotificationChannel);
-        Notification serviceNotification = new NotificationCompat.Builder(this, "service_notification_channel")
+        Notification serviceNotification = new NotificationCompat.Builder(getApplicationContext(), "service_notification_channel")
                 .setContentTitle("Sim Career Notifications")
                 .setContentText("Puoi ricevere le notifiche di Sim Career")
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentIntent(pendingIntent)
                 .build();
         startForeground(1, serviceNotification);
-        DBManagerSettings dbManagerSettings = new DBManagerSettings(this);
+        DBManagerSettings dbManagerSettings = new DBManagerSettings(getApplicationContext());
         dbManagerSettings.open();
         Cursor settingsCursor = dbManagerSettings.fetchByUsername(MainActivity.username);
         notificationManager.deleteNotificationChannel("service_notification_channel");
-        if (settingsCursor.getInt(settingsCursor.getColumnIndex("notifications"))==0){
+        if (settingsCursor.getInt(settingsCursor.getColumnIndex("notifications")) == 0) {
             notificationManager.deleteNotificationChannel("service_notification_channel");
         }
-        if (settingsCursor.getInt(settingsCursor.getColumnIndex("championships_notifications"))==0){
+        if (settingsCursor.getInt(settingsCursor.getColumnIndex("championships_notifications")) == 0) {
             notificationManager.deleteNotificationChannel("champs_notification_channel");
         }
-        if (settingsCursor.getInt(settingsCursor.getColumnIndex("events_notifications"))==0){
+        if (settingsCursor.getInt(settingsCursor.getColumnIndex("events_notifications")) == 0) {
             notificationManager.deleteNotificationChannel("events_notification_channel");
         }
-        if (settingsCursor.getInt(settingsCursor.getColumnIndex("champ_settings_notifications"))==0){
+        if (settingsCursor.getInt(settingsCursor.getColumnIndex("champ_settings_notifications")) == 0) {
             notificationManager.deleteNotificationChannel("champ_settings_notification_channel");
         }
-        if (settingsCursor.getInt(settingsCursor.getColumnIndex("racers_notifications"))==0){
+        if (settingsCursor.getInt(settingsCursor.getColumnIndex("racers_notifications")) == 0) {
             notificationManager.deleteNotificationChannel("racers_notification_channel");
         }
-       // Toast.makeText(this, "SimCareer Notification Service Started", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "SimCareer Notification Service Started", Toast.LENGTH_SHORT).show();
         return START_STICKY;
     }
 
     @Override
     public void onDestroy() {
+        unregisterReceivers();
     }
-
-
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -132,6 +140,7 @@ public class NotificationService extends Service {
 
     @Override
     public void onTaskRemoved(Intent rootIntent) {
+        unregisterReceivers();
     }
 
     private void showNotification(int type, String title, String text) {
@@ -367,5 +376,39 @@ public class NotificationService extends Service {
             baseChampsJsonObject = tempChampsJsonObject;
         }
     }
+
+    private void registerReceivers() {
+        addRacerReceiver = new AddRacerReceiver();
+        removeRacerReceiver = new RemoveRacerReceiver();
+        editChampSettingsReceiver = new EditChampSettingsReceiver();
+        addEventReceiver = new AddEventReceiver();
+        editEventReceiver = new EditEventReceiver();
+        removeChampReceiver = new RemoveChampReceiver();
+        resetReceiver = new ResetReceiver();
+        IntentFilter racerAdded = new IntentFilter("com.francescobertamini.perform.addRacer");
+        registerReceiver(addRacerReceiver, racerAdded);
+        IntentFilter racerRemoved = new IntentFilter("com.francescobertamini.perform.removeRacer");
+        registerReceiver(removeRacerReceiver, racerRemoved);
+        IntentFilter champSettingsEdited = new IntentFilter("com.francescobertamini.perform.editChampSettings");
+        registerReceiver(editChampSettingsReceiver, champSettingsEdited);
+        IntentFilter eventAdded = new IntentFilter("com.francescobertamini.perform.addEvent");
+        registerReceiver(addEventReceiver, eventAdded);
+        IntentFilter eventEdited = new IntentFilter("com.francescobertamini.perform.editEvent");
+        registerReceiver(editEventReceiver, eventEdited);
+        IntentFilter championshipRemoved = new IntentFilter("com.francescobertamini.perform.removeChampionship");
+        registerReceiver(removeChampReceiver, championshipRemoved);
+        IntentFilter resetted = new IntentFilter("com.francescobertamini.perform.reset");
+        registerReceiver(resetReceiver, resetted);
+    }
+    private void unregisterReceivers() {
+        unregisterReceiver(addRacerReceiver);
+        unregisterReceiver(removeRacerReceiver);
+        unregisterReceiver(editChampSettingsReceiver);
+        unregisterReceiver(addEventReceiver);
+        unregisterReceiver(editEventReceiver);
+        unregisterReceiver(removeChampReceiver);
+        unregisterReceiver(resetReceiver);
+    }
+
 }
 

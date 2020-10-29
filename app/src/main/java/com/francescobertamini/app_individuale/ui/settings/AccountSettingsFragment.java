@@ -83,10 +83,10 @@ public class AccountSettingsFragment extends Fragment {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 final View customLayout = getLayoutInflater().inflate(R.layout.dialog_notification_settings, null);
                 builder.setView(customLayout);
-                builder.setTitle("Impostazioni notifiche ");
+                builder.setTitle("Impostazioni notifiche");
                 builder.setNegativeButton("Chiudi", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
+                        dialog.dismiss();
                     }
                 });
 
@@ -100,6 +100,7 @@ public class AccountSettingsFragment extends Fragment {
                 if (settingsCursor.getInt(settingsCursor.getColumnIndex("notifications")) == 1) {
                     _switchNotifications.setEnabled(true);
                     _switchNotifications.setChecked(true);
+
                     if (settingsCursor.getInt(settingsCursor.getColumnIndex("start_at_bootup")) == 1) {
                         _checkBoxStartupNotifications.setEnabled(true);
                         _checkBoxStartupNotifications.setChecked(true);
@@ -107,20 +108,47 @@ public class AccountSettingsFragment extends Fragment {
                         _checkBoxStartupNotifications.setEnabled(true);
                         _checkBoxStartupNotifications.setChecked(false);
                     }
+
                     if (settingsCursor.getInt(settingsCursor.getColumnIndex("championships_notifications")) == 1) {
                         _switchChampNotifications.setEnabled(true);
                         _switchChampNotifications.setChecked(true);
                     } else if (settingsCursor.getInt(settingsCursor.getColumnIndex("championships_notifications")) == 0) {
                         _switchChampNotifications.setEnabled(true);
                         _switchChampNotifications.setChecked(false);
-                    } else if (settingsCursor.getInt(settingsCursor.getColumnIndex("notifications")) == 0) {
-                        uncheckAllSwitches(_switchNotifications, _checkBoxStartupNotifications, _switchChampNotifications,
-                                _switchChampSettingsNotifications, _switchEventsNotifications, _switchRacersNotifications);
-                        disableAllSwitches(_switchNotifications, _checkBoxStartupNotifications, _switchChampNotifications,
-                                _switchChampSettingsNotifications, _switchEventsNotifications, _switchRacersNotifications);
-                        _switchNotifications.setEnabled(true);
                     }
+
+                    if (settingsCursor.getInt(settingsCursor.getColumnIndex("champ_settings_notifications")) == 1) {
+                        _switchChampSettingsNotifications.setEnabled(true);
+                        _switchChampSettingsNotifications.setChecked(true);
+                    } else if (settingsCursor.getInt(settingsCursor.getColumnIndex("champ_settings_notifications")) == 0) {
+                        _switchChampSettingsNotifications.setEnabled(true);
+                        _switchChampSettingsNotifications.setChecked(false);
+                    }
+
+                    if (settingsCursor.getInt(settingsCursor.getColumnIndex("events_notifications")) == 1) {
+                        _switchEventsNotifications.setEnabled(true);
+                        _switchEventsNotifications.setChecked(true);
+                    } else if (settingsCursor.getInt(settingsCursor.getColumnIndex("events_notifications")) == 0) {
+                        _switchEventsNotifications.setEnabled(true);
+                        _switchEventsNotifications.setChecked(false);
+                    }
+
+                    if (settingsCursor.getInt(settingsCursor.getColumnIndex("racers_notifications")) == 1) {
+                        _switchRacersNotifications.setEnabled(true);
+                        _switchRacersNotifications.setChecked(true);
+                    } else if (settingsCursor.getInt(settingsCursor.getColumnIndex("racers_notifications")) == 0) {
+                        _switchRacersNotifications.setEnabled(true);
+                        _switchRacersNotifications.setChecked(false);
+                    }
+
+                } else if (settingsCursor.getInt(settingsCursor.getColumnIndex("notifications")) == 0) {
+                    uncheckAllSwitches(_switchNotifications, _checkBoxStartupNotifications, _switchChampNotifications,
+                            _switchChampSettingsNotifications, _switchEventsNotifications, _switchRacersNotifications);
+                    disableAllSwitches(_switchNotifications, _checkBoxStartupNotifications, _switchChampNotifications,
+                            _switchChampSettingsNotifications, _switchEventsNotifications, _switchRacersNotifications);
+                    _switchNotifications.setEnabled(true);
                 }
+
 
                 _switchNotifications.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override

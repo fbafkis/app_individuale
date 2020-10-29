@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.francescobertamini.app_individuale.data_managing.JsonExtractorChampionships;
 import com.google.gson.JsonObject;
@@ -17,6 +18,9 @@ public class AddEventReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+
+        Log.e("EventAddReceiver", "add event received");
+
         String seq = intent.getStringExtra("seq");
         String track = intent.getStringExtra("track");
         String date = intent.getStringExtra("date");

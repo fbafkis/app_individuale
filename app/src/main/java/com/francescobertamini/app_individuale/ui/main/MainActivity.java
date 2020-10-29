@@ -8,12 +8,19 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.os.Bundle;
 import android.os.FileObserver;
 import android.os.IBinder;
 import android.renderscript.ScriptGroup;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.francescobertamini.app_individuale.R;
@@ -26,6 +33,7 @@ import com.francescobertamini.app_individuale.broadcast_receivers.RemoveChampRec
 import com.francescobertamini.app_individuale.broadcast_receivers.RemoveRacerReceiver;
 import com.francescobertamini.app_individuale.broadcast_receivers.ResetReceiver;
 import com.francescobertamini.app_individuale.database.dbmanagers.DBManagerSettings;
+import com.francescobertamini.app_individuale.database.dbmanagers.DBManagerUser;
 import com.francescobertamini.app_individuale.services.NotificationService;
 import com.francescobertamini.app_individuale.ui.BasicActivity;
 import com.google.android.material.navigation.NavigationView;
@@ -39,19 +47,15 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.widget.Toolbar;
 
 import java.io.File;
+import java.io.IOException;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends BasicActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     public static String username;
     public static Toolbar mainToolbar;
-    AddRacerReceiver addRacerReceiver;
-    RemoveRacerReceiver removeRacerReceiver;
-    EditChampSettingsReceiver editChampSettingsReceiver;
-    AddEventReceiver addEventReceiver;
-    EditEventReceiver editEventReceiver;
-    RemoveChampReceiver removeChampReceiver;
-    ResetReceiver resetReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +66,10 @@ public class MainActivity extends BasicActivity {
         username = getIntent().getStringExtra("username");
         DrawerLayout drawer = findViewById(R.id.drawerLayout);
         NavigationView navigationView = findViewById(R.id.navView);
+        TextView _drawerName = navigationView.getHeaderView(0).findViewById(R.id.drawerName);
+        TextView _drawerUsername = navigationView.getHeaderView(0).findViewById(R.id.drawerUsername);
+        TextView _drawerEmail = navigationView.getHeaderView(0).findViewById(R.id.drawerEmail);
+        TextView _drawerNumber = navigationView.getHeaderView(0).findViewById(R.id.drawerNumber);
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.nav_championships, R.id.nav_settings, R.id.nav_gallery)
                 .setDrawerLayout(drawer)
@@ -69,18 +77,26 @@ public class MainActivity extends BasicActivity {
         NavController navController = Navigation.findNavController(this, R.id.navHostFragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-        registerReceivers();
         DBManagerSettings dbManagerSettings = new DBManagerSettings(this);
         dbManagerSettings.open();
-        Cursor cursor = dbManagerSettings.fetchByUsername(username);
-        if (cursor.getInt(cursor.getColumnIndex("notifications")) == 1) {
+        Cursor settingsCursor = dbManagerSettings.fetchByUsername(username);
+        dbManagerSettings.close();
+        if (settingsCursor.getInt(settingsCursor.getColumnIndex("notifications")) == 1) {
+            stopNotificationService();
             startNotificationService();
         }
-        if (cursor.getInt(cursor.getColumnIndex("start_at_bootup")) == 1) {
-            registerReceiver(new BootUpReceiver(), new IntentFilter("android.intent.action.BOOT_COMPLETED"));
-        }
-    }
 
+        DBManagerUser dbManagerUser = new DBManagerUser(this);
+        dbManagerUser.open();
+        Cursor userCursor = dbManagerUser.fetchByUsername(username);
+        dbManagerUser.close();
+        setDrawerPicture(navigationView, userCursor);
+        _drawerNumber.setText(userCursor.getString(userCursor.getColumnIndex("favorite_number")));
+        _drawerName.setText(userCursor.getString(userCursor.getColumnIndex("name")) + " " +
+                userCursor.getString(userCursor.getColumnIndex("lastname")));
+        _drawerUsername.setText(username);
+        _drawerEmail.setText(userCursor.getString(userCursor.getColumnIndex("email")));
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -95,44 +111,68 @@ public class MainActivity extends BasicActivity {
                 || super.onSupportNavigateUp();
     }
 
+
+    public void startNotificationService() {
+        Intent serviceIntent = new Intent(getBaseContext(), NotificationService.class);
+        ContextCompat.startForegroundService(getApplicationContext(), serviceIntent);
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
+        DBManagerSettings dbManagerSettings = new DBManagerSettings(this);
+        dbManagerSettings.open();
+        Cursor settingsCursor = dbManagerSettings.fetchByUsername(username);
+        dbManagerSettings.close();
+        if (settingsCursor.getInt(settingsCursor.getColumnIndex("notifications")) == 1) {
+            stopNotificationService();
+            startNotificationService();
+        }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    public void startNotificationService() {
+    public void stopNotificationService() {
         Intent serviceIntent = new Intent(this, NotificationService.class);
-        ContextCompat.startForegroundService(this, serviceIntent);
+        stopService(serviceIntent);
     }
 
-    private void registerReceivers () {
-        addRacerReceiver = new AddRacerReceiver();
-        removeRacerReceiver = new RemoveRacerReceiver();
-        editChampSettingsReceiver = new EditChampSettingsReceiver();
-        addEventReceiver = new AddEventReceiver();
-        editEventReceiver = new EditEventReceiver();
-        removeChampReceiver = new RemoveChampReceiver();
-        resetReceiver = new ResetReceiver();
-        IntentFilter racerAdded = new IntentFilter("com.francescobertamini.perform.addRacer");
-        registerReceiver(addRacerReceiver, racerAdded);
-        IntentFilter racerRemoved = new IntentFilter("com.francescobertamini.perform.removeRacer");
-        registerReceiver(removeRacerReceiver, racerRemoved);
-        IntentFilter champSettingsEdited = new IntentFilter("com.francescobertamini.perform.editChampSettings");
-        registerReceiver(editChampSettingsReceiver, champSettingsEdited);
-        IntentFilter eventAdded = new IntentFilter("com.francescobertamini.perform.addEvent");
-        registerReceiver(addEventReceiver, eventAdded);
-        IntentFilter eventEdited = new IntentFilter("com.francescobertamini.perform.editEvent");
-        registerReceiver(editEventReceiver, eventEdited);
-        IntentFilter championshipRemoved = new IntentFilter("com.francescobertamini.perform.removeChampionship");
-        registerReceiver(removeChampReceiver, championshipRemoved);
-        IntentFilter resetted = new IntentFilter("com.francescobertamini.perform.reset");
-        registerReceiver(resetReceiver, resetted);
+    private void setDrawerPicture(NavigationView navigationView, Cursor userCursor) {
+        View navHeader = navigationView.getHeaderView(0);
+        ImageView _drawerPicture = navHeader.findViewById(R.id.drawerPicture);
+        if (userCursor.getInt(userCursor.getColumnIndex("has_custom_picture")) == 1) {
+            String imagePath = userCursor.getString(userCursor.getColumnIndex("profile_picture"));
+            File image = new File(imagePath);
+            if (image.exists()) {
+                Bitmap bitmapImage = BitmapFactory.decodeFile(image.getAbsolutePath());
+                int rotate = 0;
+                ExifInterface exif = null;
+                try {
+                    exif = new ExifInterface(image.getAbsolutePath());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                        ExifInterface.ORIENTATION_UNDEFINED);
+                switch (orientation) {
+                    case ExifInterface.ORIENTATION_NORMAL:
+                        rotate = 0;
+                        break;
+                    case ExifInterface.ORIENTATION_ROTATE_270:
+                        rotate = 270;
+                        break;
+                    case ExifInterface.ORIENTATION_ROTATE_180:
+                        rotate = 180;
+                        break;
+                    case ExifInterface.ORIENTATION_ROTATE_90:
+                        rotate = 90;
+                        break;
+                }
+                Matrix matrix = new Matrix();
+                matrix.postRotate(rotate);
+                Bitmap rotateBitmap = Bitmap.createBitmap(bitmapImage, 0, 0, bitmapImage.getWidth(), bitmapImage.getHeight(), matrix, true);
+                _drawerPicture.setImageBitmap(rotateBitmap);
+            } else
+                _drawerPicture.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_account_circle_100, null));
+        }
     }
 }
 

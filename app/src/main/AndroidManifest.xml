@@ -20,8 +20,7 @@
             android:name=".services.NotificationService"
             android:enabled="true"
             android:exported="true"
-            android:process=":NotificationService" />
-
+            android:process=":SimCareerNotificationService"/>
         <activity
             android:name="com.francescobertamini.app_individuale.ui.main.MainActivity"
             android:label="@string/app_name"
@@ -36,11 +35,11 @@
         </activity>
         <activity
             android:name="com.francescobertamini.app_individuale.ui.signup.SignupActivity"
-            android:windowSoftInputMode="stateVisible|adjustResize"></activity>
-        <activity android:name="com.francescobertamini.app_individuale.ui.signup.SignupActivity2"></activity>
-        <activity android:name="com.francescobertamini.app_individuale.ui.championships.championship_events.ChampionshipEventsActivity"></activity>
-        <activity android:name="com.francescobertamini.app_individuale.ui.championships.championship_partecipants.ChampionshipPartecipantsActivity"></activity>
-        <activity android:name="com.francescobertamini.app_individuale.ui.championships.championship_standings.ChampionshipStandingsActivity"></activity>
+            android:windowSoftInputMode="stateVisible|adjustResize" />
+        <activity android:name="com.francescobertamini.app_individuale.ui.signup.SignupActivity2" />
+        <activity android:name="com.francescobertamini.app_individuale.ui.championships.championship_events.ChampionshipEventsActivity" />
+        <activity android:name="com.francescobertamini.app_individuale.ui.championships.championship_partecipants.ChampionshipPartecipantsActivity" />
+        <activity android:name="com.francescobertamini.app_individuale.ui.championships.championship_standings.ChampionshipStandingsActivity" />
         <activity android:name=".utils.ImagePickerActivity" />
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
@@ -61,7 +60,7 @@
             android:name=".broadcast_receivers.AddRacerReceiver"
             android:enabled="true"
             android:exported="true">
-            <intent-filter>
+            <intent-filter android:directBootAware="true">
                 <action android:name="com.francescobertamini.perform.addRacer" />
             </intent-filter>
         </receiver>
