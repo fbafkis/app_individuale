@@ -178,7 +178,7 @@ public class ImagePickerActivity extends AppCompatActivity {
                 break;
             case UCrop.RESULT_ERROR:
                 final Throwable cropError = UCrop.getError(data);
-                Log.e(TAG, "Errore di cropping: " + cropError);
+                Log.e(TAG, "Crop error: " + cropError);
                 setResultCancelled();
                 break;
             default:

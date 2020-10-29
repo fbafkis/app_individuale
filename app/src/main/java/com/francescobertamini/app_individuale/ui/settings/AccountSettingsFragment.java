@@ -36,6 +36,8 @@ import butterknife.ButterKnife;
 
 public class AccountSettingsFragment extends Fragment {
 
+    AlertDialog notificationsDialog;
+
     @BindView(R.id.settingsBirthdate)
     TextView _settingsBirthdate;
     @BindView(R.id.settingsAddress)
@@ -75,7 +77,6 @@ public class AccountSettingsFragment extends Fragment {
         _notificationSettingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "Dioporco", Toast.LENGTH_SHORT).show();
                 DBManagerSettings dbManagerSettings = new DBManagerSettings(getActivity());
                 dbManagerSettings.open();
                 Cursor settingsCursor = dbManagerSettings.fetchByUsername(MainActivity.username);
@@ -219,7 +220,7 @@ public class AccountSettingsFragment extends Fragment {
                                     _checkBoxStartupNotifications.setEnabled(true);
                                 }
                             }, 2000);
-                            Toast.makeText(getContext(), "Notifiche automatiche all'avvio disattivate", Toast.LENGTH_LONG).show();
+                            //      Toast.makeText(getContext(), "Notifiche automatiche all'avvio disattivate", Toast.LENGTH_LONG).show();
                         } else if (isChecked) {
                             dbManagerSettings.open();
                             dbManagerSettings.updateStartAtBootup(MainActivity.username, true);
@@ -232,7 +233,7 @@ public class AccountSettingsFragment extends Fragment {
                                     _checkBoxStartupNotifications.setEnabled(true);
                                 }
                             }, 2000);
-                            Toast.makeText(getContext(), "Notifiche automatiche all'avvio attivate", Toast.LENGTH_SHORT).show();
+                            //    Toast.makeText(getContext(), "Notifiche automatiche all'avvio attivate", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -258,7 +259,7 @@ public class AccountSettingsFragment extends Fragment {
                                             _switchChampSettingsNotifications, _switchEventsNotifications, _switchRacersNotifications);
                                 }
                             }, 2000);
-                            Toast.makeText(getContext(), "Notifiche sui campionati disattivate", Toast.LENGTH_SHORT).show();
+                            //  Toast.makeText(getContext(), "Notifiche sui campionati disattivate", Toast.LENGTH_SHORT).show();
                         } else if (isChecked) {
                             Intent intent = new Intent(getActivity(), NotificationService.class);
                             getActivity().stopService(intent);
@@ -276,7 +277,7 @@ public class AccountSettingsFragment extends Fragment {
                                             _switchChampSettingsNotifications, _switchEventsNotifications, _switchRacersNotifications);
                                 }
                             }, 2000);
-                            Toast.makeText(getActivity(), "Notifiche sui campionati attivate", Toast.LENGTH_SHORT).show();
+                            //   Toast.makeText(getActivity(), "Notifiche sui campionati attivate", Toast.LENGTH_SHORT).show();
                         }
                         dbManagerSettings.close();
                     }
@@ -303,7 +304,7 @@ public class AccountSettingsFragment extends Fragment {
                                             _switchChampSettingsNotifications, _switchEventsNotifications, _switchRacersNotifications);
                                 }
                             }, 2000);
-                            Toast.makeText(getContext(), "Notifiche sulle impostazioni dei campionati disattivate", Toast.LENGTH_SHORT).show();
+                            //  Toast.makeText(getContext(), "Notifiche sulle impostazioni dei campionati disattivate", Toast.LENGTH_SHORT).show();
                         } else if (isChecked) {
                             Intent intent = new Intent(getActivity(), NotificationService.class);
                             getActivity().stopService(intent);
@@ -321,7 +322,7 @@ public class AccountSettingsFragment extends Fragment {
                                             _switchChampSettingsNotifications, _switchEventsNotifications, _switchRacersNotifications);
                                 }
                             }, 2000);
-                            Toast.makeText(getActivity(), "Notifiche sulle impostazioni dei campionati attivate", Toast.LENGTH_SHORT).show();
+                            //  Toast.makeText(getActivity(), "Notifiche sulle impostazioni dei campionati attivate", Toast.LENGTH_SHORT).show();
                         }
                         dbManagerSettings.close();
                     }
@@ -348,7 +349,7 @@ public class AccountSettingsFragment extends Fragment {
                                             _switchChampSettingsNotifications, _switchEventsNotifications, _switchRacersNotifications);
                                 }
                             }, 2000);
-                            Toast.makeText(getContext(), "Notifiche sugli eventi disattivate", Toast.LENGTH_SHORT).show();
+                            //      Toast.makeText(getContext(), "Notifiche sugli eventi disattivate", Toast.LENGTH_SHORT).show();
                         } else if (isChecked) {
                             Intent intent = new Intent(getActivity(), NotificationService.class);
                             getActivity().stopService(intent);
@@ -366,7 +367,7 @@ public class AccountSettingsFragment extends Fragment {
                                             _switchChampSettingsNotifications, _switchEventsNotifications, _switchRacersNotifications);
                                 }
                             }, 2000);
-                            Toast.makeText(getActivity(), "Notifiche sugli eventi attivate", Toast.LENGTH_SHORT).show();
+                            // Toast.makeText(getActivity(), "Notifiche sugli eventi attivate", Toast.LENGTH_SHORT).show();
                         }
                         dbManagerSettings.close();
                     }
@@ -393,7 +394,7 @@ public class AccountSettingsFragment extends Fragment {
                                             _switchChampSettingsNotifications, _switchEventsNotifications, _switchRacersNotifications);
                                 }
                             }, 2000);
-                            Toast.makeText(getContext(), "Notifiche sui piloti disattivate", Toast.LENGTH_SHORT).show();
+                            //  Toast.makeText(getContext(), "Notifiche sui piloti disattivate", Toast.LENGTH_SHORT).show();
                         } else if (isChecked) {
                             Intent intent = new Intent(getActivity(), NotificationService.class);
                             getActivity().stopService(intent);
@@ -411,14 +412,14 @@ public class AccountSettingsFragment extends Fragment {
                                             _switchChampSettingsNotifications, _switchEventsNotifications, _switchRacersNotifications);
                                 }
                             }, 2000);
-                            Toast.makeText(getActivity(), "Notifiche sui piloti attivate", Toast.LENGTH_SHORT).show();
+                            //        Toast.makeText(getActivity(), "Notifiche sui piloti attivate", Toast.LENGTH_SHORT).show();
                         }
                         dbManagerSettings.close();
                     }
                 });
 
-                final AlertDialog dialog = builder.create();
-                dialog.show();
+                notificationsDialog = builder.create();
+                notificationsDialog.show();
             }
         });
 
@@ -745,5 +746,10 @@ public class AccountSettingsFragment extends Fragment {
 
     }
 
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (notificationsDialog!=null)
+            notificationsDialog.dismiss();
+    }
 }

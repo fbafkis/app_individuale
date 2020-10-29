@@ -36,7 +36,6 @@ public class EditEventReceiver extends BroadcastReceiver {
                 for (int e = 0; e < championships.get("campionati").getAsJsonArray().get(i).getAsJsonObject().get("calendario").getAsJsonArray().size(); e++) {
                     if (championships.get("campionati").getAsJsonArray().get(i).getAsJsonObject().get("calendario").getAsJsonArray().get(e).getAsJsonObject().get("seq").getAsString().equals(seq)) {
                         championships.get("campionati").getAsJsonArray().get(i).getAsJsonObject().get("calendario").getAsJsonArray().get(e).getAsJsonObject().addProperty("data", date);
-                        Log.e("Calendar", championships.get("campionati").getAsJsonArray().get(i).getAsJsonObject().get("calendario").getAsJsonArray().toString());
                     }
                 }
             }

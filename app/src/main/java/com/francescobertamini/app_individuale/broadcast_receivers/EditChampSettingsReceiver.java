@@ -17,9 +17,6 @@ public class EditChampSettingsReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-
-        Log.e("SettingsChanged", "Settings changed");
-
         int champId = intent.getIntExtra("champId", 1);
         String flags = intent.getStringExtra("flags");
         String fuelCons = intent.getStringExtra("fuelConsumption");

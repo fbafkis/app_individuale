@@ -124,13 +124,12 @@ public class NotificationService extends Service {
         if (settingsCursor.getInt(settingsCursor.getColumnIndex("racers_notifications")) == 0) {
             notificationManager.deleteNotificationChannel("racers_notification_channel");
         }
-        Toast.makeText(getApplicationContext(), "SimCareer Notification Service Started", Toast.LENGTH_SHORT).show();
         return START_STICKY;
     }
 
     @Override
     public void onDestroy() {
-        unregisterReceivers();
+       unregisterReceivers();
     }
 
     @Override
@@ -401,14 +400,41 @@ public class NotificationService extends Service {
         registerReceiver(resetReceiver, resetted);
     }
     private void unregisterReceivers() {
-        unregisterReceiver(addRacerReceiver);
-        unregisterReceiver(removeRacerReceiver);
-        unregisterReceiver(editChampSettingsReceiver);
-        unregisterReceiver(addEventReceiver);
-        unregisterReceiver(editEventReceiver);
-        unregisterReceiver(removeChampReceiver);
-        unregisterReceiver(resetReceiver);
+        try {
+            unregisterReceiver(addRacerReceiver);
+        } catch (Exception e ){
+            e.printStackTrace();
+        }
+        try {
+            unregisterReceiver(removeRacerReceiver);
+        } catch (Exception e ){
+            e.printStackTrace();
+        }
+        try {
+            unregisterReceiver(editChampSettingsReceiver);
+        } catch (Exception e ){
+            e.printStackTrace();
+        }
+        try {
+            unregisterReceiver(addEventReceiver);
+        } catch (Exception e ){
+            e.printStackTrace();
+        }
+        try {
+            unregisterReceiver(editEventReceiver);
+        } catch (Exception e ){
+            e.printStackTrace();
+        }
+        try {
+            unregisterReceiver(removeChampReceiver);
+        } catch (Exception e ){
+            e.printStackTrace();
+        }
+        try {
+            unregisterReceiver(resetReceiver);
+        } catch (Exception e ){
+            e.printStackTrace();
+        }
     }
-
 }
 

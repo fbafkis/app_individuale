@@ -18,9 +18,6 @@ public class AddEventReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-
-        Log.e("EventAddReceiver", "add event received");
-
         String seq = intent.getStringExtra("seq");
         String track = intent.getStringExtra("track");
         String date = intent.getStringExtra("date");
@@ -39,8 +36,6 @@ public class AddEventReceiver extends BroadcastReceiver {
         for (int i = 0; i < championships.get("campionati").getAsJsonArray().size(); i++) {
             if (championships.get("campionati").getAsJsonArray().get(i).getAsJsonObject().get("id").getAsString().equals(Integer.toString(champId))) {
                 championships.get("campionati").getAsJsonArray().get(i).getAsJsonObject().get("calendario").getAsJsonArray().add(newEvent);
-                Log.e("Calendar", championships.get("campionati").getAsJsonArray().get(i).getAsJsonObject().get("calendario").getAsJsonArray().toString());
-
             }
         }
         File file = new File(context.getFilesDir(), "campionati.json");

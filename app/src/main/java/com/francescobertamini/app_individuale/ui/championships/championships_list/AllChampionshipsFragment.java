@@ -51,15 +51,10 @@ public class AllChampionshipsFragment extends Fragment {
             public void onItemClick(View view, int position) {
                 String id = adapter.getItem(position).getAsJsonObject().get("id").getAsString();
                 JsonArray partecipants = adapter.getItem(position).getAsJsonObject().get("piloti-iscritti").getAsJsonArray();
-
-                Log.e("Partecipants", partecipants.toString());
-
                 DBManagerUser dbManagerUser = new DBManagerUser(getContext());
                 dbManagerUser.open();
                 Cursor cursor = dbManagerUser.fetchByUsername(MainActivity.username);
                 String complete_name = cursor.getString(cursor.getColumnIndex("name")) + " " + cursor.getString(cursor.getColumnIndex("lastname"));
-                Log.e("Database name", complete_name);
-
                 Boolean has_user_sub = false;
 
                 for (int i = 0; i < partecipants.size(); i++) {
@@ -67,10 +62,6 @@ public class AllChampionshipsFragment extends Fragment {
                         has_user_sub = true;
                     }
                 }
-
-                Log.e("Boolean sub", has_user_sub.toString());
-
-
                 if (has_user_sub) {
                     ChampionshipsDialog dialog = new ChampionshipsDialog();
                     FragmentManager fragmentManager = getParentFragmentManager();

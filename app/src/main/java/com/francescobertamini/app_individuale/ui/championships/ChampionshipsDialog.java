@@ -296,8 +296,6 @@ public class ChampionshipsDialog extends DialogFragment {
     }
 
     public void unsubscribe() throws IOException {
-        Log.e("daddy", "daddy");
-
         DBManagerUser dbManagerUser = new DBManagerUser(getContext());
         dbManagerUser.open();
         Cursor cursor = dbManagerUser.fetchByUsername(MainActivity.username);

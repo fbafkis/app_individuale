@@ -73,7 +73,6 @@ public class MyChampionshipsAdapter extends RecyclerView.Adapter<MyChampionships
 
     @Override
     public void onBindViewHolder(@NonNull MyChampionshipsAdapter.ViewHolder holder, int position) {
-        Log.e("CycleAdapterJson", relevantChampionships.get(position).toString());
         TextView _champListItemName = holder._champListItemName;
         TextView _champListItemNumber = holder._champListItemNumber;
         ImageView _champListItemLogo = holder._champListItemLogo;
